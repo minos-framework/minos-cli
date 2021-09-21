@@ -1,18 +1,20 @@
+from pathlib import Path
+from typing import Optional
+
 import typer
+
+from .generator import (
+    generate_microservice,
+)
 
 app = typer.Typer()
 
 
-@app.command("init")
-def init():
-    """TODO"""
-    typer.echo("Initializing...")
-
-
 @app.command("new")
-def new():
+def new() -> None:
     """TODO"""
     typer.echo("Creating new...")
+    generate_microservice(Path.cwd())
 
 
 @app.callback()
