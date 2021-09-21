@@ -4,6 +4,7 @@ import unittest
 from src import (
     {{ cookiecutter.aggregate }}QueryService,
 )
+
 from tests.utils import (
     build_dependency_injector,
 )

@@ -1,3 +1,3 @@
 from .services import (
-    {{ cookiecutter.aggregate }}QueryService
+    {{ cookiecutter.aggregate }}QueryService,
 )

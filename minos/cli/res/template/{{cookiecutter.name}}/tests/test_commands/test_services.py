@@ -4,6 +4,7 @@ import unittest
 from src import (
     {{ cookiecutter.aggregate }}CommandService,
 )
+
 from tests.utils import (
     build_dependency_injector,
 )

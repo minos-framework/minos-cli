@@ -5,7 +5,7 @@ __version__ = "{{ cookiecutter.version }}"
 from .aggregates import (
     {{ cookiecutter.aggregate }},
 )
-from .cli  import (
+from .cli import (
     main,
 )
 from .commands import (

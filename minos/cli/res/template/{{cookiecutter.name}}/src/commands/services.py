@@ -1,16 +1,17 @@
 from minos.cqrs import (
     CommandService,
 )
-
 from minos.networks import (
     Request,
     Response,
     ResponseException,
     enroute,
 )
+
 from ..aggregates import (
-    {{ cookiecutter.aggregate }}
+    {{ cookiecutter.aggregate }},
 )
+
 
 class {{ cookiecutter.aggregate }}CommandService(CommandService):
     """{{ cookiecutter.aggregate }}CommandService class."""
