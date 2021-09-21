@@ -7,6 +7,7 @@ exclude:
   - "**/*.in"
   - "Makefile"
   - ".github/workflows/**/*"
+  - "**/res/**/*"
 restylers:
   - name: black
     image: restyled/restyler-black:v19.10b0
