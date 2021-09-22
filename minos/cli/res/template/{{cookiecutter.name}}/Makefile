@@ -1,17 +1,20 @@
 install:
 	poetry install
 
-reformat: ## check code coverage quickly with the default Python
+update:
+	poetry update
+
+reformat:
 	poetry run black --line-length 120 src tests
 	poetry run isort src tests
 
-lint: ## check style with flake8
+lint:
 	poetry run flake8
 
-test: ## run tests quickly with the default Python
+test:
 	poetry run pytest
 
-coverage: ## check code coverage quickly with the default Python
+coverage:
 	poetry run coverage run -m pytest
 	poetry run coverage report -m
 	poetry run coverage xml
