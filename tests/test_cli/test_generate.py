@@ -15,7 +15,7 @@ from typer.testing import (
 )
 
 from minos.cli import (
-    TEMPLATE_PATH,
+    MICROSERVICE_TEMPLATE_PATH,
     MicroserviceGenerator,
 )
 
@@ -31,7 +31,7 @@ class TestGenerate(unittest.TestCase):
                 generator.build()
                 self.assertEqual(1, mock.call_count)
                 call_args = call(
-                    template=TEMPLATE_PATH,
+                    template=MICROSERVICE_TEMPLATE_PATH,
                     output_dir=path.parent,
                     extra_context={"name": "product"},
                     overwrite_if_exists=True,

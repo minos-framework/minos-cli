@@ -2,8 +2,10 @@ __author__ = """Clariteia Devs"""
 __email__ = "devs@clariteia.com"
 __version__ = "0.0.1"
 
+from .constants import (
+    MICROSERVICE_TEMPLATE_PATH,
+)
 from .generators import (
-    TEMPLATE_PATH,
     MicroserviceGenerator,
 )
 from .main import (

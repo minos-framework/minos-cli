@@ -4,32 +4,37 @@ from pathlib import (
 
 from cookiecutter import main as ccm
 
-TEMPLATE_PATH = Path(__file__).parent / "res" / "template"
+from .constants import (
+    MICROSERVICE_TEMPLATE_PATH,
+)
 
 
 class MicroserviceGenerator:
-    """TODO"""
+    """Microservice Generator class.
 
-    def __init__(self, output_dir: Path):
-        self.output_dir = output_dir
+    This class generates the microservice project structure on a given directory.
+    """
+
+    def __init__(self, target: Path):
+        self.target = target
 
     def build(self) -> None:
-        """TODO
+        """Performs the microservice building.
 
-        :return: TODO
+        :return: This method does not return anything.
         """
-        if not self.output_dir.exists():
-            self.output_dir.mkdir(parents=True, exist_ok=True)
+        if not self.target.exists():
+            self.target.mkdir(parents=True, exist_ok=True)
 
-        if not self.output_dir.is_dir():
-            raise ValueError(f"{self.output_dir!r} is not a directory!")
+        if not self.target.is_dir():
+            raise ValueError(f"{self.target!r} is not a directory!")
 
-        name = self.output_dir.name
-        output_dir = self.output_dir.parent
+        name = self.target.name
+        output_dir = self.target.parent
         extra_context = {"name": name}
 
         ccm.cookiecutter(
-            template=TEMPLATE_PATH,
+            template=MICROSERVICE_TEMPLATE_PATH,
             output_dir=output_dir,
             extra_context=extra_context,
             overwrite_if_exists=True,
