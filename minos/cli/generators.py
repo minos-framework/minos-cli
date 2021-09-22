@@ -18,7 +18,7 @@ class MicroserviceGenerator:
     def __init__(self, target: Path):
         self.target = target
 
-    def build(self) -> None:
+    def build(self, **kwargs) -> None:
         """Performs the microservice building.
 
         :return: This method does not return anything.
@@ -34,9 +34,10 @@ class MicroserviceGenerator:
         extra_context = {"name": name}
 
         ccm.cookiecutter(
-            template=MICROSERVICE_TEMPLATE_PATH,
-            output_dir=output_dir,
+            template=str(MICROSERVICE_TEMPLATE_PATH),
+            output_dir=str(output_dir),
             extra_context=extra_context,
             overwrite_if_exists=True,
             skip_if_file_exists=True,
+            **kwargs,
         )
