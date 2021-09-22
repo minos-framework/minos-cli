@@ -26,5 +26,6 @@ class Test{{cookiecutter.aggregate}}QueryService(unittest.IsolatedAsyncioTestCas
         obj = {{ cookiecutter.aggregate }}QueryService()
         self.assertIsInstance(obj, {{cookiecutter.aggregate}}QueryService)
 
+
 if __name__ == '__main__':
     unittest.main()

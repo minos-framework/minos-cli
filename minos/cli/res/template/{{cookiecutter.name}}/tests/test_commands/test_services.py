@@ -26,5 +26,6 @@ class Test{{cookiecutter.aggregate}}CommandService(unittest.IsolatedAsyncioTestC
         obj = {{ cookiecutter.aggregate }}CommandService()
         self.assertIsInstance(obj, {{cookiecutter.aggregate}}CommandService)
 
+
 if __name__ == '__main__':
     unittest.main()

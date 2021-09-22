@@ -4,7 +4,7 @@ from pathlib import (
 
 import typer
 
-from .generators import (
+from ..generators import (
     MicroserviceGenerator,
 )
 
@@ -30,8 +30,3 @@ def new(path: Path) -> None:
 @app.callback()
 def callback():
     """Minos microservice CLI."""
-
-
-def main():  # pragma: no cover
-    """CLI's main function."""
-    app()
