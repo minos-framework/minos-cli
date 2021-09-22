@@ -4,8 +4,8 @@ from pathlib import (
 
 import typer
 
-from .generator import (
-    generate_microservice,
+from .generators import (
+    MicroserviceGenerator,
 )
 
 app = typer.Typer()
@@ -16,7 +16,7 @@ def init() -> None:
     """Initialize a microservice on the current working directory."""
 
     typer.echo("Initializing...")
-    generate_microservice(Path.cwd())
+    MicroserviceGenerator(Path.cwd()).build()
 
 
 @app.command("new")
@@ -24,7 +24,7 @@ def new(path: Path) -> None:
     """Initialize a microservice on the given directory."""
 
     typer.echo("Creating new...")
-    generate_microservice(path)
+    MicroserviceGenerator(path).build()
 
 
 @app.callback()

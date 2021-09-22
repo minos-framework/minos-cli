@@ -60,7 +60,7 @@ test-all: ## run tests on every Python version with tox
 	poetry run tox
 
 coverage: ## check code coverage quickly with the default Python
-	poetry run coverage run --source minos -m pytest
+	poetry run coverage run -m pytest
 	poetry run coverage report -m
 	poetry run coverage xml
 	## $(BROWSER) htmlcov/index.html
