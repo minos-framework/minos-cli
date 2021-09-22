@@ -4,13 +4,13 @@ import unittest
 from src import (
     {{ cookiecutter.aggregate }}QueryService,
 )
+
 from tests.utils import (
     build_dependency_injector,
 )
 
 
 class Test{{cookiecutter.aggregate}}QueryService(unittest.IsolatedAsyncioTestCase):
-    """Test {{cookiecutter.aggregate}}"""
 
     def setUp(self) -> None:
         self.injector = build_dependency_injector()

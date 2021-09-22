@@ -1,13 +1,13 @@
 import sys
 import unittest
 
-from minos.networks import (
-    Response,
-)
-
 from src import (
     {{ cookiecutter.aggregate }},
     {{ cookiecutter.aggregate }}CommandService,
+)
+
+from minos.networks import (
+    Response,
 )
 from tests.utils import (
     _FakeRequest,
@@ -16,7 +16,6 @@ from tests.utils import (
 
 
 class Test{{cookiecutter.aggregate}}CommandService(unittest.IsolatedAsyncioTestCase):
-    """Test {{cookiecutter.aggregate}}"""
 
     def setUp(self) -> None:
         self.injector = build_dependency_injector()
