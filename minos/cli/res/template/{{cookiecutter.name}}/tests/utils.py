@@ -69,7 +69,7 @@ class _FakeSagaManager(MinosSagaManager):
         """For testing purposes."""
 
 
-def build_dependency_injector(config: MinosConfig = None) -> DependencyInjector:
+def build_dependency_injector() -> DependencyInjector:
     """For testing purposes"""
 
     return DependencyInjector(
