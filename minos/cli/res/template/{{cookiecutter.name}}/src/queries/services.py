@@ -16,7 +16,7 @@ class {{ cookiecutter.aggregate }}QueryService(QueryService):
     """{{ cookiecutter.aggregate }}QueryService class."""
 
     @enroute.rest.query("/{{ cookiecutter.aggregate.lower() }}s", "GET")
-    async def get_{{ cookiecutter.aggregate.lower() }}_created(self, request: Request) -> Response:
+    async def get_{{ cookiecutter.aggregate.lower() }}(self, request: Request) -> Response:
         """Get a {{ cookiecutter.aggregate }} instance.
 
         :param request: A request instance..
