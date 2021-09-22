@@ -24,8 +24,6 @@ class {{ cookiecutter.aggregate }}QueryService(QueryService):
         """
         raise ResponseException("Not implemented yet!")
 
-
-
     @enroute.broker.event("{{ cookiecutter.aggregate }}Created")
     async def {{ cookiecutter.aggregate.lower() }}_created(self, request: Request) -> None:
         """Handle the {{ cookiecutter.aggregate }} creation events.
