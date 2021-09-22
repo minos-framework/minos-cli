@@ -8,7 +8,7 @@ from .generators import (
     MicroserviceGenerator,
 )
 
-app = typer.Typer()
+app = typer.Typer(add_completion=False)
 
 
 @app.command("init")
