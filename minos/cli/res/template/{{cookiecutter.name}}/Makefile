@@ -12,6 +12,6 @@ test: ## run tests quickly with the default Python
 	poetry run pytest
 
 coverage: ## check code coverage quickly with the default Python
-	poetry run coverage run --source src -m pytest
+	poetry run coverage run -m pytest
 	poetry run coverage report -m
 	poetry run coverage xml
