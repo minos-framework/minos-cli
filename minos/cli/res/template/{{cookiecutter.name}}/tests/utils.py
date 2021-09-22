@@ -82,6 +82,8 @@ def build_dependency_injector(config: MinosConfig = None) -> DependencyInjector:
 
 
 def build_config() -> MinosConfig:
+    """For testing purposes"""
+
     return MinosConfig(DEFAULT_CONFIG_FILE_PATH)
 
 
