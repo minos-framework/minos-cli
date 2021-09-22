@@ -7,7 +7,6 @@ from cookiecutter.main import (
 )
 
 TEMPLATE_PATH = Path(__file__).parent / "res" / "template"
-CONFIG = Path(__file__).parent / "res" / "cookiecutter.json"
 
 
 def generate_microservice(output_dir: Path) -> None:

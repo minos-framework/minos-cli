@@ -13,14 +13,16 @@ app = typer.Typer()
 
 @app.command("init")
 def init() -> None:
-    """TODO"""
+    """Initialize a microservice on the current working directory."""
+
     typer.echo("Initializing...")
     generate_microservice(Path.cwd())
 
 
 @app.command("new")
 def new(path: Path) -> None:
-    """TODO"""
+    """Initialize a microservice on the given directory."""
+
     typer.echo("Creating new...")
     generate_microservice(path)
 
