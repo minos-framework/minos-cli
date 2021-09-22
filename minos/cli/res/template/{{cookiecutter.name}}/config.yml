@@ -1,6 +1,6 @@
 service:
-  name: {{ cookiecutter.microservice_name }}
-  aggregate: src.aggregates.{{ cookiecutter.aggregate_name }}
+  name: {{ cookiecutter.name }}
+  aggregate: src.aggregates.{{ cookiecutter.aggregate }}
   injections:
     postgresql_pool: minos.common.PostgreSqlPool
     command_broker: minos.networks.CommandBroker
@@ -27,7 +27,7 @@ broker:
   host: localhost
   port: 9092
   queue:
-    database: {{ cookiecutter.microservice_name }}_db
+    database: {{ cookiecutter.name }}_db
     user: minos
     password: min0s
     host: localhost
@@ -35,26 +35,26 @@ broker:
     records: 1000
     retry: 2
 repository:
-  database: {{ cookiecutter.microservice_name }}_db
+  database: {{ cookiecutter.name }}_db
   user: minos
   password: min0s
   host: localhost
   port: 5432
 snapshot:
-  database: {{ cookiecutter.microservice_name }}_db
+  database: {{ cookiecutter.name }}_db
   user: minos
   password: min0s
   host: localhost
   port: 5432
 events:
-  service: src.services.{{ cookiecutter.aggregate_name }}QueryService
+  service: src.queries.{{ cookiecutter.aggregate }}QueryService
 queries:
-  service: src.services.{{ cookiecutter.aggregate_name }}QueryService
+  service: src.queries.{{ cookiecutter.aggregate }}QueryService
 commands:
-  service: src.services.{{ cookiecutter.aggregate_name }}CommandService
+  service: src.commands.{{ cookiecutter.aggregate }}CommandService
 saga:
   storage:
-    path: ./{{ cookiecutter.microservice_name }}.lmdb
+    path: ./{{ cookiecutter.name }}.lmdb
 discovery:
   client: minos.networks.MinosDiscoveryClient
   host: localhost

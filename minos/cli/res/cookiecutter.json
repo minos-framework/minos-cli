@@ -1,6 +1,0 @@
-{
-    "microservice_name": null,
-    "microservice_version": "0.0.1",
-    "aggregate_name": "{{ cookiecutter.microservice_name.replace('_',' ').title().replace(' ', '') }}"
-}
-
