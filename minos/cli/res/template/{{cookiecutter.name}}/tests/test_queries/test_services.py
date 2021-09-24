@@ -11,7 +11,6 @@ from tests.utils import (
 
 
 class Test{{cookiecutter.aggregate}}QueryService(unittest.IsolatedAsyncioTestCase):
-    """Test {{cookiecutter.aggregate}}"""
 
     def setUp(self) -> None:
         self.injector = build_dependency_injector()
@@ -23,8 +22,8 @@ class Test{{cookiecutter.aggregate}}QueryService(unittest.IsolatedAsyncioTestCas
         await self.injector.unwire()
 
     def test_constructor(self):
-        obj = {{ cookiecutter.aggregate }}QueryService()
-        self.assertIsInstance(obj, {{cookiecutter.aggregate}}QueryService)
+        service = {{ cookiecutter.aggregate }}QueryService()
+        self.assertIsInstance(service, {{cookiecutter.aggregate}}QueryService)
 
 
 if __name__ == '__main__':

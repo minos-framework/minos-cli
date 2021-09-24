@@ -11,7 +11,6 @@ from tests.utils import (
 
 
 class Test{{cookiecutter.aggregate}}(unittest.IsolatedAsyncioTestCase):
-    """Test {{cookiecutter.aggregate}}"""
 
     def setUp(self) -> None:
         self.injector = build_dependency_injector()
