@@ -1,0 +1,7 @@
+minos.cli.res.template.\{\{cookiecutter.name\}\}.src.commands.services module
+=============================================================================
+
+.. automodule:: minos.cli.res.template.{{cookiecutter.name}}.src.commands.services
+   :members:
+   :undoc-members:
+   :show-inheritance:

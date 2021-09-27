@@ -1,0 +1,7 @@
+minos.cli.res.template.\{\{cookiecutter.name\}\}.tests.utils module
+===================================================================
+
+.. automodule:: minos.cli.res.template.{{cookiecutter.name}}.tests.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

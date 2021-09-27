@@ -1,0 +1,7 @@
+minos.cli.res.template.\{\{cookiecutter.name\}\}.src.aggregates module
+======================================================================
+
+.. automodule:: minos.cli.res.template.{{cookiecutter.name}}.src.aggregates
+   :members:
+   :undoc-members:
+   :show-inheritance:

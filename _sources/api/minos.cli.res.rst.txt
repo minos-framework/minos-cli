@@ -1,0 +1,4 @@
+minos.cli.res namespace
+=======================
+
+.. py:module:: minos.cli.res

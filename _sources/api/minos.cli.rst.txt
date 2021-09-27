@@ -1,0 +1,24 @@
+minos.cli package
+=================
+
+.. automodule:: minos.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   minos.cli.main
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   minos.cli.constants
+   minos.cli.generators

@@ -1,0 +1,13 @@
+minos.cli.res.template.\{\{cookiecutter.name\}\} namespace
+==========================================================
+
+.. py:module:: minos.cli.res.template.{{cookiecutter.name}}
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   minos.cli.res.template.{{cookiecutter.name}}.src
+   minos.cli.res.template.{{cookiecutter.name}}.tests
