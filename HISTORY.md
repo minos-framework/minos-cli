@@ -1,5 +1,6 @@
 # History
 
-## 0.0.1 (2021-09-21)
+## 0.0.1 (2021-09-27)
 
-* First release on PyPI.
+* Implement basic `minos microservice new` and `minos microservice init` commands.
+* First version on pypi.
