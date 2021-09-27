@@ -1,0 +1,9 @@
+{
+    "name": null,
+    "description": "This is the {{cookiecutter.name}} microservice.",
+    "version": "0.0.1",
+    "aggregate": "{{ cookiecutter.name.replace('_',' ').title().replace(' ', '') }}",
+    "author": "Clariteia Devs",
+    "email": "devs@clariteia.com"
+}
+

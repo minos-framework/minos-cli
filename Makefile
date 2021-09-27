@@ -60,13 +60,13 @@ test-all: ## run tests on every Python version with tox
 	poetry run tox
 
 coverage: ## check code coverage quickly with the default Python
-	poetry run coverage run --source minos -m pytest
+	poetry run coverage run -m pytest
 	poetry run coverage report -m
 	poetry run coverage xml
 	## $(BROWSER) htmlcov/index.html
 
 reformat: ## check code coverage quickly with the default Python
-	poetry run black --line-length 120 minos tests
+	poetry run black --line-length 120 minos tests --exclude=res
 	poetry run isort minos tests
 
 docs: ## generate Sphinx HTML documentation, including API docs
