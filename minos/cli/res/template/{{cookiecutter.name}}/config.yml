@@ -22,31 +22,31 @@ service:
     - minos.networks.ProducerService
     - minos.networks.PeriodicTaskSchedulerService
 rest:
-  host: 0.0.0.0
-  port: 8082
+  host: {{ cookiecutter.rest_host }}
+  port: {{ cookiecutter.rest_port }}
 broker:
-  host: localhost
-  port: 9092
+  host: {{ cookiecutter.broker_host }}
+  port: {{ cookiecutter.broker_port }}
   queue:
     database: {{ cookiecutter.name }}_db
-    user: minos
-    password: min0s
-    host: localhost
-    port: 5432
+    user: {{ cookiecutter.database_user }}
+    password: {{ cookiecutter.database_password }}
+    host: {{ cookiecutter.database_host }}
+    port: {{ cookiecutter.database_port }}
     records: 1000
     retry: 2
 repository:
   database: {{ cookiecutter.name }}_db
-  user: minos
-  password: min0s
-  host: localhost
-  port: 5432
+  user: {{ cookiecutter.database_user }}
+  password: {{ cookiecutter.database_password }}
+  host: {{ cookiecutter.database_host }}
+  port: {{ cookiecutter.database_port }}
 snapshot:
   database: {{ cookiecutter.name }}_db
-  user: minos
-  password: min0s
-  host: localhost
-  port: 5432
+  user: {{ cookiecutter.database_user }}
+  password: {{ cookiecutter.database_password }}
+  host: {{ cookiecutter.database_host }}
+  port: {{ cookiecutter.database_port }}
 events:
   service: src.queries.{{ cookiecutter.aggregate }}QueryService
 queries:
