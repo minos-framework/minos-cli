@@ -2,20 +2,40 @@ from __future__ import (
     annotations,
 )
 
+from contextlib import (
+    suppress,
+)
+from functools import (
+    partial,
+)
 from typing import (
     Any,
+    Callable,
     Optional,
+)
+
+from jinja2.sandbox import (
+    SandboxedEnvironment,
+)
+from rich.prompt import (
+    Confirm,
+    FloatPrompt,
+    IntPrompt,
+    Prompt,
 )
 
 from ..console import (
     console,
+    error_console,
 )
 
 
 class Question:
     """TODO"""
 
-    def __init__(self, name: str, type_: str, help_: Optional[str], choices: Optional, default: Optional):
+    def __init__(
+        self, name: str, type_: str, help_: Optional[str], choices: Optional, default: Optional,
+    ):
         self.name = name
         self.type_ = type_
         self.help_ = help_
@@ -33,24 +53,49 @@ class Question:
             default=raw.get("default", None),
         )
 
-    def ask(self) -> str:
+    def ask(self, context: dict[str, Any] = None, env: Optional[SandboxedEnvironment] = None) -> str:
         """TODO"""
-        answer = console.input(self.title)
-        if answer == "":
-            answer = self.default
+        if context is None:
+            context = dict()
+
+        title = self.title
+        default = self.default
+
+        if env is not None:
+            with suppress(TypeError):
+                title = env.from_string(title).render(**context)
+
+            with suppress(TypeError):
+                default = env.from_string(default).render(**context)
+
+        return self._ask(title, default)
+
+    def _ask(self, title, default):
+        answer = self._ask_fn(title, default=default)
+        while not self.valid(answer):
+            error_console.print(f"{answer!r} is invalid!")
+            answer = self._ask_fn(title, default=default)
         return answer
+
+    @property
+    def _ask_fn(self) -> Callable:
+        if self.type_ == "int":
+            fn = IntPrompt.ask
+        elif self.type_ == "float":
+            fn = FloatPrompt.ask
+        elif self.type_ == "bool":
+            fn = Confirm.ask
+        else:
+            fn = Prompt.ask
+        return partial(fn, console=console)
 
     @property
     def title(self) -> str:
         """TODO"""
-        title = str()
         if self.help_ is not None:
-            title += self.help_
-        else:
-            title += self.name
+            return self.help_
+        return self.name
 
-        if self.default is not None:
-            title += f" [ {self.default!r} ]"
-
-        title += '\n'
-        return title
+    def valid(self, value: Any) -> bool:
+        """TODO"""
+        return True

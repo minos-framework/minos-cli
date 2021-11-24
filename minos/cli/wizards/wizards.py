@@ -21,10 +21,11 @@ class Wizard:
     def from_raw(cls, raw: dict[str, Any]) -> Wizard:
         """TODO"""
         questions = [Question.from_raw(v) for v in raw["questions"]]
-
         return cls(questions)
 
-    def ask(self) -> dict[str, Any]:
+    def ask(self, **kwargs) -> dict[str, Any]:
         """TODO"""
-        answers = {question.name: question.ask() for question in self.questions}
+        answers = dict()
+        for question in self.questions:
+            answers[question.name] = question.ask(answers, **kwargs)
         return answers

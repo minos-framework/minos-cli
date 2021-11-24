@@ -11,11 +11,20 @@ from cached_property import (
 from copier import (
     copy,
 )
+from copier.config.objects import (
+    EnvOps,
+)
 from copier.config.user_data import (
     load_config_data,
 )
+from copier.tools import (
+    get_jinja_env,
+)
 from copier.vcs import (
     clone,
+)
+from jinja2.sandbox import (
+    SandboxedEnvironment,
 )
 
 from ..constants import (
@@ -56,13 +65,12 @@ class TemplateGenerator:
 
     @cached_property
     def _answers(self) -> dict[str, Any]:
-        return self._wizard.ask()
+        return self._wizard.ask(env=self._env)
 
     @cached_property
     def _wizard(self) -> Wizard:
-        data = load_config_data(self._src_path)
         questions = list()
-        for name, question in data.items():
+        for name, question in self._config_data.items():
             if name.startswith("_"):
                 continue
 
@@ -77,8 +85,15 @@ class TemplateGenerator:
             questions.append(question)
         raw = dict()
         raw["questions"] = questions
-
         return Wizard.from_raw(raw)
+
+    @cached_property
+    def _env(self) -> SandboxedEnvironment:
+        return get_jinja_env(EnvOps(**self._config_data.get("_envops", {})))
+
+    @cached_property
+    def _config_data(self):
+        return load_config_data(self._src_path)
 
     @cached_property
     def _src_path(self) -> Path:
