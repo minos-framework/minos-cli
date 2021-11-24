@@ -36,11 +36,21 @@ class Question:
     def ask(self) -> str:
         """TODO"""
         answer = console.input(self.title)
+        if answer == "":
+            answer = self.default
         return answer
 
     @property
     def title(self) -> str:
         """TODO"""
+        title = str()
         if self.help_ is not None:
-            return self.help_
-        return self.name
+            title += self.help_
+        else:
+            title += self.name
+
+        if self.default is not None:
+            title += f" [ {self.default!r} ]"
+
+        title += '\n'
+        return title
