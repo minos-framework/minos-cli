@@ -33,10 +33,10 @@ class TemplateGenerator:
     This class generates a scaffolding structure on a given directory.
     """
 
-    def __init__(self, target: Path, template_name: TemplateCategory, templates: str = TEMPLATES_REPOSITORY_URL):
+    def __init__(self, target: Path, template_category: TemplateCategory, templates: str = TEMPLATES_REPOSITORY_URL):
         self.target = target
         self.templates = templates
-        self.template_name = template_name
+        self.template_category = template_category
 
     def build(self, **kwargs) -> None:
         """Performs the microservice building.
@@ -82,7 +82,7 @@ class TemplateGenerator:
 
     @cached_property
     def _src_path(self) -> Path:
-        return self._clone_repository() / self.template_name
+        return self._clone_repository() / self.template_category.value
 
     def _clone_repository(self) -> Path:
         location = clone(self.templates)
