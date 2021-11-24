@@ -7,7 +7,7 @@ from typing import (
     Optional,
 )
 
-from .console import (
+from ..console import (
     console,
 )
 
@@ -23,10 +23,10 @@ class Question:
         self.default = default
 
     @classmethod
-    def from_raw(cls, name: str, raw: dict[str, Any]) -> Question:
+    def from_raw(cls, raw: dict[str, Any]) -> Question:
         """TODO"""
         return cls(
-            name,
+            name=raw.get("name"),
             type_=raw.get("type", None),
             help_=raw.get("help", None),
             choices=raw.get("choices", None),
@@ -36,7 +36,6 @@ class Question:
     def ask(self) -> str:
         """TODO"""
         answer = console.input(self.title)
-
         return answer
 
     @property

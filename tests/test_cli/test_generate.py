@@ -17,7 +17,7 @@ from typer.testing import (
 
 from minos.cli import (
     MICROSERVICE_TEMPLATE_PATH,
-    MicroserviceGenerator,
+    TemplateGenerator,
 )
 
 runner = CliRunner()
@@ -27,7 +27,7 @@ class TestGenerate(unittest.TestCase):
     def test_build(self) -> None:
         with TemporaryDirectory() as tmp_dir_name:
             path = Path(tmp_dir_name) / "product"
-            generator = MicroserviceGenerator(path)
+            generator = TemplateGenerator(path)
             with patch("cookiecutter.main.cookiecutter") as mock:
                 generator.build()
                 self.assertEqual(1, mock.call_count)
@@ -45,12 +45,12 @@ class TestGenerate(unittest.TestCase):
             path = Path(tmp_dir_name) / "product"
             path.touch()
             with self.assertRaises(ValueError):
-                MicroserviceGenerator(path).build()
+                TemplateGenerator(path).build()
 
     def test_template(self):
         with TemporaryDirectory() as tmp_dir_name:
             path = Path(tmp_dir_name) / "product"
-            MicroserviceGenerator(path).build(no_input=True)
+            TemplateGenerator(path).build(no_input=True)
 
             result = subprocess.Popen(["make", "install", "reformat", "lint", "coverage"], cwd=path)
             result.wait()
