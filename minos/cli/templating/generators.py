@@ -27,6 +27,9 @@ from jinja2.sandbox import (
     SandboxedEnvironment,
 )
 
+from ..consoles import (
+    console,
+)
 from ..constants import (
     TEMPLATES_REPOSITORY_URL,
     TemplateCategory,
@@ -61,7 +64,11 @@ class TemplateGenerator:
         self._render()
 
     def _render(self) -> None:
-        copy(src_path=str(self._src_path), dst_path=str(self._dst_path), data=self._answers)
+        src_path = str(self._src_path)
+        dst_path = str(self._dst_path)
+        answers = self._answers
+        with console.status("Rendering template...", spinner="monkey"):
+            copy(src_path=src_path, dst_path=dst_path, data=answers, quiet=True)
 
     @cached_property
     def _answers(self) -> dict[str, Any]:
@@ -100,7 +107,8 @@ class TemplateGenerator:
         return self._clone_repository() / self.template_category.value
 
     def _clone_repository(self) -> Path:
-        location = clone(self.templates)
+        with console.status("Downloading template...", spinner="monkey"):
+            location = clone(self.templates)
         return Path(location)
 
     @property

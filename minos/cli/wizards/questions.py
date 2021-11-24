@@ -24,7 +24,7 @@ from rich.prompt import (
     Prompt,
 )
 
-from ..console import (
+from ..consoles import (
     console,
     error_console,
 )

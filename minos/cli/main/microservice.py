@@ -4,7 +4,7 @@ from pathlib import (
 
 import typer
 
-from ..console import (
+from ..consoles import (
     console,
 )
 from ..constants import (
