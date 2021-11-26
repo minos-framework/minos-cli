@@ -21,7 +21,7 @@ app = typer.Typer(add_completion=False)
 def init() -> None:
     """Initialize a microservice on the current working directory."""
 
-    console.print("Initializing...")
+    console.print(":wrench: Initializing new Microservice...\n")
     TemplateGenerator(Path.cwd(), TemplateCategory.MICROSERVICE).build()
 
 
@@ -29,10 +29,11 @@ def init() -> None:
 def new(path: Path) -> None:
     """Initialize a microservice on the given directory."""
 
-    console.print("Creating new...")
+    console.print(":wrench: Creating new Microservice...\n")
     TemplateGenerator(path, TemplateCategory.MICROSERVICE).build()
 
 
 @app.callback()
 def callback():
     """Minos microservice CLI."""
+    console.print(":gift: Microservice Utilities :gift:\n")

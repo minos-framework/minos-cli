@@ -70,7 +70,9 @@ class Question:
             with suppress(TypeError):
                 default = env.from_string(default).render(**context)
 
-        return self._ask(title, default)
+        answer = self._ask(f":question: {title}\n", default)
+        console.print()
+        return answer
 
     def _ask(self, title: str, default: Any) -> Any:
         answer = self._ask_fn(title, default=default)

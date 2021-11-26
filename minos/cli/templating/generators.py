@@ -67,8 +67,9 @@ class TemplateGenerator:
         src_path = str(self._src_path)
         dst_path = str(self._dst_path)
         answers = self._answers
-        with console.status("Rendering template...", spinner="monkey"):
+        with console.status("Rendering template...", spinner="moon"):
             copy(src_path=src_path, dst_path=dst_path, data=answers, quiet=True)
+        console.print(":moon: Rendered template!\n")
 
     @cached_property
     def _answers(self) -> dict[str, Any]:
@@ -107,8 +108,9 @@ class TemplateGenerator:
         return self._clone_repository() / self.template_category.value
 
     def _clone_repository(self) -> Path:
-        with console.status("Downloading template...", spinner="monkey"):
+        with console.status("Downloading template...", spinner="moon"):
             location = clone(self.templates)
+        console.print(":moon: Downloaded template!\n")
         return Path(location)
 
     @property

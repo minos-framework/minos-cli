@@ -12,7 +12,7 @@ app.add_typer(microservices_app, name="microservice")
 @app.callback()
 def callback():
     """Minos CLI."""
-    console.rule("Welcome to the Minos CLI")
+    console.rule(":robot: Minos CLI :robot:")
 
 
 def main():  # pragma: no cover
