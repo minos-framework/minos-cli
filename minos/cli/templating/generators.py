@@ -20,9 +20,6 @@ from copier.config.user_data import (
 from copier.tools import (
     get_jinja_env,
 )
-from copier.vcs import (
-    clone,
-)
 from jinja2.sandbox import (
     SandboxedEnvironment,
 )
@@ -30,9 +27,8 @@ from jinja2.sandbox import (
 from ..consoles import (
     console,
 )
-from ..constants import (
-    TEMPLATES_REPOSITORY_URL,
-    TemplateCategory,
+from .templates import (
+    Template,
 )
 from ..wizards import (
     Wizard,
@@ -45,10 +41,9 @@ class TemplateGenerator:
     This class generates a scaffolding structure on a given directory.
     """
 
-    def __init__(self, target: Path, template_category: TemplateCategory, templates: str = TEMPLATES_REPOSITORY_URL):
+    def __init__(self, target: Path, template: Template):
         self.target = target
-        self.templates = templates
-        self.template_category = template_category
+        self.template = template
 
     def build(self, **kwargs) -> None:
         """Performs the microservice building.
@@ -103,15 +98,9 @@ class TemplateGenerator:
     def _config_data(self):
         return load_config_data(self._src_path)
 
-    @cached_property
+    @property
     def _src_path(self) -> Path:
-        return self._clone_repository() / self.template_category.value
-
-    def _clone_repository(self) -> Path:
-        with console.status("Downloading template...", spinner="moon"):
-            location = clone(self.templates)
-        console.print(":moon: Downloaded template!\n")
-        return Path(location)
+        return self.template.path
 
     @property
     def _name(self) -> str:
