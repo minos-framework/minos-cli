@@ -1,7 +1,7 @@
 from .generators import (
     TemplateGenerator,
 )
-from .templates import (
+from .fetchers import (
     MICROSERVICE_INIT_TEMPLATE,
     PROJECT_INIT_TEMPLATE,
     TemplateFetcher,

@@ -30,7 +30,7 @@ from ..consoles import (
 from ..wizards import (
     Wizard,
 )
-from .templates import (
+from .fetchers import (
     TemplateFetcher,
 )
 
