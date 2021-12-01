@@ -1,15 +1,38 @@
-from __future__ import annotations
+from __future__ import (
+    annotations,
+)
 
-from pathlib import Path
-from tempfile import TemporaryDirectory
+import tarfile
+import urllib.request
+from pathlib import (
+    Path,
+)
+from tempfile import (
+    TemporaryDirectory,
+)
 
-from .fetchers import fetch_tarfile
+from ..consoles import (
+    console,
+)
 
 TEMPLATE_VERSION = "0.0.1.dev0"
 TEMPLATE_ARTIFACT_URL = "https://github.com/Clariteia/minos-templates/releases/download/{version}/{name}.tar.gz"
 
 
-class Template:
+def fetch_tarfile(url: str, path: str) -> None:
+    """TODO"""
+
+    with console.status(f"Downloading template from {url!r}...", spinner="moon"):
+        stream = urllib.request.urlopen(url)
+    console.print(f":moon: Downloaded template from {url!r}!\n")
+
+    tar = tarfile.open(fileobj=stream, mode="r|gz")
+    with console.status(f"Extracting template into {path!r}...", spinner="moon"):
+        tar.extractall(path=path)
+    console.print(f":moon: Extracted template into {path!r}!\n")
+
+
+class TemplateFetcher:
     """TODO"""
 
     def __init__(self, name: str, version: str):
@@ -37,5 +60,5 @@ class Template:
         return self._tmp
 
 
-MICROSERVICE_INIT_TEMPLATE = Template("microservice-init", TEMPLATE_VERSION)
-PROJECT_INIT_TEMPLATE = Template("project-init", TEMPLATE_VERSION)
+MICROSERVICE_INIT_TEMPLATE = TemplateFetcher("microservice-init", TEMPLATE_VERSION)
+PROJECT_INIT_TEMPLATE = TemplateFetcher("project-init", TEMPLATE_VERSION)

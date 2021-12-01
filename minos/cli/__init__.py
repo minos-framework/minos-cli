@@ -10,7 +10,9 @@ from .main import (
     main,
 )
 from .templating import (
+    TemplateFetcher,
     TemplateGenerator,
+    fetch_tarfile,
 )
 from .wizards import (
     Question,

@@ -25,7 +25,7 @@ class TestMain(unittest.TestCase):
         with TemporaryDirectory() as tmp_dir_name:
             path = Path(tmp_dir_name) / "product"
             with patch("pathlib.Path.cwd", return_value=path):
-                with patch("minos.cli.MicroserviceGenerator.build") as mock:
+                with patch("minos.cli.TemplateGenerator.build") as mock:
                     result = CliRunner().invoke(app, ["microservice", "init"])
 
                     self.assertEqual(0, result.exit_code)
@@ -35,7 +35,7 @@ class TestMain(unittest.TestCase):
     def test_microservice_new(self) -> None:
         with TemporaryDirectory() as tmp_dir_name:
             path = Path(tmp_dir_name) / "product"
-            with patch("minos.cli.MicroserviceGenerator.build") as mock:
+            with patch("minos.cli.TemplateGenerator.build") as mock:
                 result = CliRunner().invoke(app, ["microservice", "new", str(path)])
 
                 self.assertEqual(0, result.exit_code)

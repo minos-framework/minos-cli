@@ -27,11 +27,11 @@ from jinja2.sandbox import (
 from ..consoles import (
     console,
 )
-from .templates import (
-    Template,
-)
 from ..wizards import (
     Wizard,
+)
+from .templates import (
+    TemplateFetcher,
 )
 
 
@@ -41,9 +41,9 @@ class TemplateGenerator:
     This class generates a scaffolding structure on a given directory.
     """
 
-    def __init__(self, target: Path, template: Template):
+    def __init__(self, target: Path, fetcher: TemplateFetcher):
         self.target = target
-        self.template = template
+        self.fetcher = fetcher
 
     def build(self, **kwargs) -> None:
         """Performs the microservice building.
@@ -100,7 +100,7 @@ class TemplateGenerator:
 
     @property
     def _src_path(self) -> Path:
-        return self.template.path
+        return self.fetcher.path
 
     @property
     def _name(self) -> str:

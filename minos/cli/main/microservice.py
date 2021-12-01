@@ -8,8 +8,8 @@ from ..consoles import (
     console,
 )
 from ..templating import (
-    TemplateGenerator,
     MICROSERVICE_INIT_TEMPLATE,
+    TemplateGenerator,
 )
 
 app = typer.Typer(add_completion=False)
