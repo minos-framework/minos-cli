@@ -2,13 +2,13 @@ __author__ = """Clariteia Devs"""
 __email__ = "devs@clariteia.com"
 __version__ = "0.0.1"
 
-from .consoles import (
-    console,
-    error_console,
-)
 from .api import (
     app,
     main,
+)
+from .consoles import (
+    console,
+    error_console,
 )
 from .templating import (
     TemplateFetcher,
