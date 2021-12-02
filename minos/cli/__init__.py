@@ -16,6 +16,6 @@ from .templating import (
     fetch_tarfile,
 )
 from .wizards import (
-    Question,
     Form,
+    Question,
 )
