@@ -13,7 +13,6 @@ from .main import (
 from .templating import (
     TemplateFetcher,
     TemplateGenerator,
-    fetch_tarfile,
 )
 from .wizards import (
     Form,

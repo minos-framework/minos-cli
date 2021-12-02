@@ -19,19 +19,6 @@ TEMPLATE_VERSION = "0.0.1.dev0"
 TEMPLATE_ARTIFACT_URL = "https://github.com/Clariteia/minos-templates/releases/download/{version}/{name}.tar.gz"
 
 
-def fetch_tarfile(url: str, path: str) -> None:
-    """TODO"""
-
-    with console.status(f"Downloading template from {url!r}...", spinner="moon"):
-        stream = urllib.request.urlopen(url)
-    console.print(f":moon: Downloaded template from {url!r}!\n")
-
-    tar = tarfile.open(fileobj=stream, mode="r|gz")
-    with console.status(f"Extracting template into {path!r}...", spinner="moon"):
-        tar.extractall(path=path)
-    console.print(f":moon: Extracted template into {path!r}!\n")
-
-
 class TemplateFetcher:
     """TODO"""
 
@@ -39,6 +26,16 @@ class TemplateFetcher:
         self._name = name
         self._version = version
         self._tmp = None
+
+    @property
+    def name(self) -> str:
+        """TODO"""
+        return self._name
+
+    @property
+    def version(self) -> str:
+        """TODO"""
+        return self._version
 
     @property
     def url(self) -> str:
@@ -55,9 +52,21 @@ class TemplateFetcher:
         """TODO"""
         if self._tmp is None:
             tmp = TemporaryDirectory()
-            fetch_tarfile(self.url, tmp.name)
+            self.fetch_tar(self.url, tmp.name)
             self._tmp = tmp
         return self._tmp
+
+    @staticmethod
+    def fetch_tar(url: str, path: str) -> None:
+        """TODO"""
+        with console.status(f"Downloading template from {url!r}...", spinner="moon"):
+            stream = urllib.request.urlopen(url)
+        console.print(f":moon: Downloaded template from {url!r}!\n")
+
+        tar = tarfile.open(fileobj=stream, mode="r|gz")
+        with console.status(f"Extracting template into {path!r}...", spinner="moon"):
+            tar.extractall(path=path)
+        console.print(f":moon: Extracted template into {path!r}!\n")
 
 
 MICROSERVICE_INIT_TEMPLATE = TemplateFetcher("microservice-init", TEMPLATE_VERSION)
