@@ -4,5 +4,5 @@ from .fetchers import (
     TemplateFetcher,
 )
 from .generators import (
-    TemplateGenerator,
+    TemplateProcessor,
 )

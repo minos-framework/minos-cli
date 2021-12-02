@@ -9,7 +9,7 @@ from ..consoles import (
 )
 from ..templating import (
     MICROSERVICE_INIT_TEMPLATE,
-    TemplateGenerator,
+    TemplateProcessor,
 )
 
 app = typer.Typer(add_completion=False)
@@ -20,7 +20,7 @@ def init() -> None:
     """Initialize a microservice on the current working directory."""
 
     console.print(":wrench: Initializing new Microservice...\n")
-    TemplateGenerator(Path.cwd(), MICROSERVICE_INIT_TEMPLATE).build()
+    TemplateProcessor.from_fetcher(MICROSERVICE_INIT_TEMPLATE, Path.cwd()).render()
 
 
 @app.command("new")
@@ -28,7 +28,7 @@ def new(path: Path) -> None:
     """Initialize a microservice on the given directory."""
 
     console.print(":wrench: Creating new Microservice...\n")
-    TemplateGenerator(path, MICROSERVICE_INIT_TEMPLATE).build()
+    TemplateProcessor.from_fetcher(MICROSERVICE_INIT_TEMPLATE).render()
 
 
 @app.callback()

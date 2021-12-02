@@ -16,20 +16,20 @@ from typer.testing import (
 )
 
 from minos.cli import (
-    TemplateGenerator,
+    TemplateProcessor,
 )
 
 runner = CliRunner()
 
 
-class TestTemplateGenerator(unittest.TestCase):
+class TestTemplateProcessor(unittest.TestCase):
     @unittest.skip("Failing test... FIXME!")
     def test_build(self) -> None:
         with TemporaryDirectory() as tmp_dir_name:
             path = Path(tmp_dir_name) / "product"
-            generator = TemplateGenerator(path)
+            generator = TemplateProcessor(path)
             with patch("cookiecutter.main.cookiecutter") as mock:
-                generator.build()
+                generator.render()
                 self.assertEqual(1, mock.call_count)
                 call_args = call(
                     # template=str(MICROSERVICE_TEMPLATE_PATH),
@@ -46,13 +46,13 @@ class TestTemplateGenerator(unittest.TestCase):
             path = Path(tmp_dir_name) / "product"
             path.touch()
             with self.assertRaises(ValueError):
-                TemplateGenerator(path).build()
+                TemplateProcessor(path).render()
 
     @unittest.skip("Failing test... FIXME!")
     def test_template(self):
         with TemporaryDirectory() as tmp_dir_name:
             path = Path(tmp_dir_name) / "product"
-            TemplateGenerator(path).build(no_input=True)
+            TemplateProcessor(path).render(no_input=True)
 
             result = subprocess.Popen(["make", "install", "reformat", "lint", "coverage"], cwd=path)
             result.wait()

@@ -12,7 +12,7 @@ from .main import (
 )
 from .templating import (
     TemplateFetcher,
-    TemplateGenerator,
+    TemplateProcessor,
 )
 from .wizards import (
     Form,
