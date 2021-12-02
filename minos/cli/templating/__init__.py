@@ -3,6 +3,6 @@ from .fetchers import (
     PROJECT_INIT_TEMPLATE,
     TemplateFetcher,
 )
-from .generators import (
+from .processors import (
     TemplateProcessor,
 )
