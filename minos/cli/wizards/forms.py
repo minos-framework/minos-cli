@@ -12,19 +12,27 @@ from .questions import (
 
 
 class Form:
-    """TODO"""
+    """Form class."""
 
     def __init__(self, questions: list[Question]):
         self.questions = questions
 
     @classmethod
     def from_raw(cls, raw: dict[str, Any]) -> Form:
-        """TODO"""
+        """Build a new instance from raw.
+
+        :param raw: A dictionary containing the form attributes.
+        :return: A new ``Form`` instance.
+        """
         questions = [Question.from_raw(v) for v in raw["questions"]]
         return cls(questions)
 
     def ask(self, **kwargs) -> dict[str, Any]:
-        """TODO"""
+        """Perform the asking process.
+
+        :param kwargs: Additional named arguments to be passed to each question.
+        :return: A mapping from the question names to the obtained answers.
+        """
         answers = dict()
         for question in self.questions:
             answers[question.name] = question.ask(answers, **kwargs)

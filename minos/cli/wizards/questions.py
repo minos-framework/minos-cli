@@ -30,7 +30,7 @@ from ..consoles import (
 
 
 class Question:
-    """TODO"""
+    """Question class."""
 
     def __init__(
         self,
@@ -50,7 +50,11 @@ class Question:
 
     @classmethod
     def from_raw(cls, raw: dict[str, Any]) -> Question:
-        """TODO"""
+        """Build a new instance from raw.
+
+        :param raw: A dictionary containing the question attributes.
+        :return: A new ``Question`` instance.
+        """
         return cls(
             name=raw.get("name"),
             type_=raw.get("type", None),
@@ -61,7 +65,12 @@ class Question:
         )
 
     def ask(self, context: dict[str, Any] = None, env: Optional[Environment] = None) -> str:
-        """TODO"""
+        """Perform the ask.
+
+        :param context: An optional context dictionary containing the variables to be used for question rendering.
+        :param env: An optional Jinja's environment to be used for question rendering.
+        :return: The obtained answer.
+        """
         if context is None:
             context = dict()
 
@@ -97,7 +106,10 @@ class Question:
 
     @property
     def title(self) -> str:
-        """TODO"""
+        """Get the title text to be shown during the asking process.
+
+        :return: A ``str`` value.
+        """
         if self.help_ is not None:
             return self.help_
         return self.name
