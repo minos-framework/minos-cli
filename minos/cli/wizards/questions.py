@@ -40,6 +40,7 @@ class Question:
         choices: Optional = None,
         default: Optional = None,
         secret: bool = False,
+        link: bool = False,
     ):
         self.name = name
         self.type_ = type_
@@ -47,6 +48,7 @@ class Question:
         self.choices = choices
         self.default = default
         self.secret = secret
+        self.link = link
 
     @classmethod
     def from_raw(cls, raw: dict[str, Any]) -> Question:
@@ -62,6 +64,7 @@ class Question:
             choices=raw.get("choices", None),
             default=raw.get("default", None),
             secret=raw.get("secret", False),
+            link=raw.get("link", False),
         )
 
     def ask(self, context: dict[str, Any] = None, env: Optional[Environment] = None) -> str:
@@ -85,6 +88,8 @@ class Question:
                 default = env.from_string(default).render(**context)
 
         answer = self._ask(f":question: {title}\n", default)
+        if isinstance(answer, str):
+            answer = answer.strip()
         console.print()
         return answer
 

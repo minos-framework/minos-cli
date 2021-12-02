@@ -49,13 +49,16 @@ class TemplateProcessor:
     This class generates a scaffolding structure on a given directory.
     """
 
-    def __init__(self, source: Union[Path, str], target: Union[Path, str]):
+    def __init__(self, source: Union[Path, str], target: Union[Path, str], context=None):
         if not isinstance(source, Path):
             source = Path(source)
         if not isinstance(target, Path):
             target = Path(target)
+        if context is None:
+            context = dict()
         self.source = source
         self.target = target
+        self.context = context
 
     @classmethod
     def from_fetcher(cls, fetcher: TemplateFetcher, *args, **kwargs) -> TemplateProcessor:
@@ -77,12 +80,17 @@ class TemplateProcessor:
         return self.target.parent
 
     @cached_property
+    def links(self) -> list[str]:
+        """TODO"""
+        return [self.answers[link] for link in self.form.links]
+
+    @cached_property
     def answers(self) -> dict[str, Any]:
         """Get the answers of the form.
 
         :return: A mapping from question name to the answer value.
         """
-        return self.form.ask(env=self.env)
+        return self.form.ask(self.context, env=self.env)
 
     @cached_property
     def form(self) -> Form:
@@ -123,6 +131,10 @@ class TemplateProcessor:
             raise ValueError(f"{self.target!r} is not a directory!")
 
         self.render_copier(self.source, self.destination, self.answers, **kwargs)
+
+        for link in self.links:
+            sub_processor = TemplateProcessor(link, self.target, context=self.answers)
+            sub_processor.render()
 
     @staticmethod
     def render_copier(
