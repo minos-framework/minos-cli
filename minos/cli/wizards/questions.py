@@ -14,8 +14,8 @@ from typing import (
     Optional,
 )
 
-from jinja2.sandbox import (
-    SandboxedEnvironment,
+from jinja2 import (
+    Environment,
 )
 from rich.prompt import (
     Confirm,
@@ -26,7 +26,6 @@ from rich.prompt import (
 
 from ..consoles import (
     console,
-    error_console,
 )
 
 
@@ -61,7 +60,7 @@ class Question:
             secret=raw.get("secret", False),
         )
 
-    def ask(self, context: dict[str, Any] = None, env: Optional[SandboxedEnvironment] = None) -> str:
+    def ask(self, context: dict[str, Any] = None, env: Optional[Environment] = None) -> str:
         """TODO"""
         if context is None:
             context = dict()
@@ -82,9 +81,6 @@ class Question:
 
     def _ask(self, title: str, default: Any) -> Any:
         answer = self._ask_fn(title, default=default)
-        while not self.is_valid(answer):
-            error_console.print(f"{answer!r} is invalid!")
-            answer = self._ask_fn(title, default=default)
         return answer
 
     @property
@@ -105,10 +101,6 @@ class Question:
         if self.help_ is not None:
             return self.help_
         return self.name
-
-    def is_valid(self, value: Any) -> bool:
-        """TODO"""
-        return True
 
     def __eq__(self, other: Any) -> bool:
         return (
