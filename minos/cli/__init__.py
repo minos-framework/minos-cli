@@ -16,5 +16,5 @@ from .templating import (
 )
 from .wizards import (
     Question,
-    Wizard,
+    Form,
 )

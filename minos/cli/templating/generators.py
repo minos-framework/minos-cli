@@ -28,7 +28,7 @@ from ..consoles import (
     console,
 )
 from ..wizards import (
-    Wizard,
+    Form,
 )
 from .fetchers import (
     TemplateFetcher,
@@ -68,10 +68,10 @@ class TemplateGenerator:
 
     @cached_property
     def _answers(self) -> dict[str, Any]:
-        return self._wizard.ask(env=self._env)
+        return self._form.ask(env=self._env)
 
     @cached_property
-    def _wizard(self) -> Wizard:
+    def _form(self) -> Form:
         questions = list()
         for name, question in self._config_data.items():
             if name.startswith("_"):
@@ -88,7 +88,7 @@ class TemplateGenerator:
             questions.append(question)
         raw = dict()
         raw["questions"] = questions
-        return Wizard.from_raw(raw)
+        return Form.from_raw(raw)
 
     @cached_property
     def _env(self) -> SandboxedEnvironment:

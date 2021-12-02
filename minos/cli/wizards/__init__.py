@@ -1,6 +1,6 @@
 from .questions import (
     Question,
 )
-from .wizards import (
-    Wizard,
+from .forms import (
+    Form,
 )

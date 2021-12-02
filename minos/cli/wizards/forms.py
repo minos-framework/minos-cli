@@ -11,14 +11,14 @@ from .questions import (
 )
 
 
-class Wizard:
+class Form:
     """TODO"""
 
     def __init__(self, questions: list[Question]):
         self.questions = questions
 
     @classmethod
-    def from_raw(cls, raw: dict[str, Any]) -> Wizard:
+    def from_raw(cls, raw: dict[str, Any]) -> Form:
         """TODO"""
         questions = [Question.from_raw(v) for v in raw["questions"]]
         return cls(questions)
