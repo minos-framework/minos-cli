@@ -32,7 +32,7 @@ class TestTemplateProcessor(unittest.TestCase):
             source = Path(tmp_dir_name) / "source"
             target = Path(tmp_dir_name) / "target"
 
-            processor = TemplateProcessor(source, target)
+            processor = TemplateProcessor(str(source), str(target))
 
         self.assertEqual(source, processor.source)
         self.assertEqual(target, processor.target)

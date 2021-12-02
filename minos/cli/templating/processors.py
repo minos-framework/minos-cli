@@ -49,7 +49,11 @@ class TemplateProcessor:
     This class generates a scaffolding structure on a given directory.
     """
 
-    def __init__(self, source: Path, target: Path):
+    def __init__(self, source: Union[Path, str], target: Union[Path, str]):
+        if not isinstance(source, Path):
+            source = Path(source)
+        if not isinstance(target, Path):
+            target = Path(target)
         self.source = source
         self.target = target
 
@@ -88,7 +92,8 @@ class TemplateProcessor:
         """
         questions = list()
         for name, question in filter_config(self._config_data)[1].items():
-            if name == "name" and question.get("default", None) is None:
+            question["name"] = name
+            if question["name"] == "name" and question.get("default", None) is None:
                 question["default"] = self.target.name
             questions.append(question)
         return Form.from_raw({"questions": questions})
