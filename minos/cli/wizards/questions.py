@@ -34,7 +34,13 @@ class Question:
     """TODO"""
 
     def __init__(
-        self, name: str, type_: str, help_: Optional[str], choices: Optional, default: Optional, secret: bool = False
+        self,
+        name: str,
+        type_: str,
+        help_: Optional[str] = None,
+        choices: Optional = None,
+        default: Optional = None,
+        secret: bool = False,
     ):
         self.name = name
         self.type_ = type_
@@ -103,3 +109,13 @@ class Question:
     def is_valid(self, value: Any) -> bool:
         """TODO"""
         return True
+
+    def __eq__(self, other: Any) -> bool:
+        return (
+            isinstance(other, type(self))
+            and self.name == other.name
+            and self.type_ == other.type_
+            and self.help_ == other.help_
+            and self.choices == other.choices
+            and self.default == other.default
+        )

@@ -29,3 +29,6 @@ class Form:
         for question in self.questions:
             answers[question.name] = question.ask(answers, **kwargs)
         return answers
+
+    def __eq__(self, other: Any) -> bool:
+        return isinstance(other, type(self)) and self.questions == other.questions
