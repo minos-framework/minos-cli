@@ -89,5 +89,5 @@ class TemplateFetcher:
         console.print(f":moon: Extracted template into {path!r}!\n")
 
 
-MICROSERVICE_INIT_TEMPLATE = TemplateFetcher("microservice-init", TEMPLATE_VERSION)
-PROJECT_INIT_TEMPLATE = TemplateFetcher("project-init", TEMPLATE_VERSION)
+MICROSERVICE_INIT = TemplateFetcher("microservice-init", TEMPLATE_VERSION)
+PROJECT_INIT = TemplateFetcher("project-init", TEMPLATE_VERSION)

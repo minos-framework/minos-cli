@@ -1,3 +1,7 @@
+from __future__ import (
+    annotations,
+)
+
 from pathlib import (
     Path,
 )
@@ -6,11 +10,9 @@ from typing import (
     Union,
 )
 
+import copier
 from cached_property import (
     cached_property,
-)
-from copier import (
-    copy,
 )
 # noinspection PyProtectedMember
 from copier.config.factory import (
@@ -52,14 +54,15 @@ class TemplateProcessor:
         self.target = target
 
     @classmethod
-    def from_fetcher(cls, fetcher: TemplateFetcher, target: Path):
-        """TODO
+    def from_fetcher(cls, fetcher: TemplateFetcher, *args, **kwargs) -> TemplateProcessor:
+        """Build a new instance from a fetcher.
 
-        :param fetcher:
-        :param target:
-        :return:
+        :param fetcher: The template fetcher instance.
+        :param args: Additional positional arguments.
+        :param kwargs: Additional named arguments.
+        :return: A new ``TemplateProcessor`` instance.
         """
-        return cls(fetcher.path, target)
+        return cls(fetcher.path, *args, **kwargs)
 
     @property
     def destination(self) -> Path:
@@ -87,6 +90,7 @@ class TemplateProcessor:
         for name, question in filter_config(self._config_data)[1].items():
             if name == "name" and question.get("default", None) is None:
                 question["default"] = self.target.name
+            questions.append(question)
         return Form.from_raw({"questions": questions})
 
     @cached_property
@@ -132,5 +136,5 @@ class TemplateProcessor:
         if not isinstance(destination, str):
             destination = str(destination)
         with console.status("Rendering template...", spinner="moon"):
-            copy(src_path=source, dst_path=destination, data=answers, quiet=True, **kwargs)
+            copier.copy(src_path=source, dst_path=destination, data=answers, quiet=True, **kwargs)
         console.print(":moon: Rendered template!\n")

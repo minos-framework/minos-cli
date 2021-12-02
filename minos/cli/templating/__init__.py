@@ -1,6 +1,6 @@
 from .fetchers import (
-    MICROSERVICE_INIT_TEMPLATE,
-    PROJECT_INIT_TEMPLATE,
+    MICROSERVICE_INIT,
+    PROJECT_INIT,
     TemplateFetcher,
 )
 from .processors import (
