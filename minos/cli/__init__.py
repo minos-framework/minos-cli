@@ -6,7 +6,7 @@ from .consoles import (
     console,
     error_console,
 )
-from .main import (
+from .api import (
     app,
     main,
 )
