@@ -75,7 +75,7 @@ class Question:
             context = dict()
 
         title = self.title
-        default = self.default
+        default = self.default_title
 
         if env is not None:
             with suppress(TypeError):
@@ -90,6 +90,8 @@ class Question:
 
     def _ask(self, title: str, default: Any) -> Any:
         answer = self._ask_fn(title, default=default)
+        if self.choices is not None and isinstance(self.choices, dict):
+            answer = self.choices[answer]
         return answer
 
     @property
@@ -113,6 +115,20 @@ class Question:
         if self.help_ is not None:
             return self.help_
         return self.name
+
+    @property
+    def default_title(self) -> Any:
+        """TODO"""
+        if self.default is None:
+            return None
+
+        if self.choices is not None and isinstance(self.choices, dict):
+            for key, value in self.choices.items():
+                if value == self.default:
+                    return key
+            raise Exception("TODO")
+
+        return self.default
 
     def __eq__(self, other: Any) -> bool:
         return (
