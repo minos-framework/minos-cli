@@ -28,7 +28,7 @@ def new(path: Path) -> None:
     """Initialize a microservice on the given directory."""
 
     console.print(":wrench: Creating new Microservice...\n")
-    TemplateProcessor.from_fetcher(MICROSERVICE_INIT_TEMPLATE).render()
+    TemplateProcessor.from_fetcher(MICROSERVICE_INIT_TEMPLATE, path).render()
 
 
 @app.callback()
