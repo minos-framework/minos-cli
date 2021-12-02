@@ -4,6 +4,7 @@ __version__ = "0.0.1"
 
 from .consoles import (
     console,
+    error_console,
 )
 from .main import (
     app,
