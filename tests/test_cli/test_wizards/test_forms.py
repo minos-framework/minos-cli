@@ -32,7 +32,7 @@ class TestForm(unittest.TestCase):
             observed = self.form.ask()
 
         self.assertEqual({"foo": "one", "bar": "two"}, observed)
-        self.assertEqual([call(observed), call(observed)], mock.call_args_list)
+        self.assertEqual([call(context=observed), call(context=observed)], mock.call_args_list)
 
 
 if __name__ == "__main__":

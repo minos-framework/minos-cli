@@ -39,7 +39,7 @@ class Form:
 
         for question in self.questions:
             if question.name not in answers:
-                answers[question.name] = question.ask(answers, **kwargs)
+                answers[question.name] = question.ask(context=answers, **kwargs)
 
         return answers
 

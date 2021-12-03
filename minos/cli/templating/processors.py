@@ -90,7 +90,7 @@ class TemplateProcessor:
 
         :return: A mapping from question name to the answer value.
         """
-        return self.form.ask(self.context, env=self.env)
+        return self.form.ask(context=self.context, env=self.env)
 
     @cached_property
     def form(self) -> Form:

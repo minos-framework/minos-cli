@@ -12,6 +12,7 @@ from typing import (
     Any,
     Callable,
     Optional,
+    Union,
 )
 
 from jinja2 import (
@@ -37,8 +38,8 @@ class Question:
         name: str,
         type_: str,
         help_: Optional[str] = None,
-        choices: Optional = None,
-        default: Optional = None,
+        choices: Optional[Union[list[Any], dict[str, Any]]] = None,
+        default: Optional[Any] = None,
         secret: bool = False,
         link: bool = False,
     ):
@@ -67,56 +68,86 @@ class Question:
             link=raw.get("link", False),
         )
 
-    def ask(self, context: dict[str, Any] = None, env: Optional[Environment] = None) -> str:
+    def ask(self, *args, **kwargs) -> str:
         """Perform the ask.
 
-        :param context: An optional context dictionary containing the variables to be used for question rendering.
-        :param env: An optional Jinja's environment to be used for question rendering.
+        :param args: Additional positional arguments.
+        :param kwargs: Additional named arguments.
         :return: The obtained answer.
         """
-        if context is None:
-            context = dict()
-
-        title = self.title
-        default = self.default_title
-        choices = self.choices
-
-        if env is not None:
-            with suppress(TypeError):
-                title = env.from_string(title).render(**context)
-
-            with suppress(TypeError):
-                default = env.from_string(default).render(**context)
-
-            if choices is not None:
-                if isinstance(choices, dict):
-                    new = dict()
-                    for k, v in choices.items():
-                        with suppress(TypeError):
-                            k = env.from_string(k).render(**context)
-                        with suppress(TypeError):
-                            v = env.from_string(v).render(**context)
-                        new[k] = v
-                    choices = new
-
-                else:
-                    new = list()
-                    for choice in choices:
-                        with suppress(TypeError):
-                            choice = env.from_string(choice).render(**context)
-                        new.append(choice)
-                    choices = new
+        title = self.render_title(*args, **kwargs)
+        default = self.render_default(*args, **kwargs)
+        choices = self.render_choices(*args, **kwargs)
 
         answer = self._ask(f":question: {title}\n", default, choices)
-        if isinstance(answer, str):
-            answer = answer.strip()
         console.print()
         return answer
 
-    def _ask(self, title: str, default: Any, choices) -> Any:
+    def render_title(self, *args, **kwargs) -> str:
+        """Render the title value.
+
+        :param args: Additional positional arguments.
+        :param kwargs: Additional named arguments.
+        :return: A ``str`` value.
+        """
+        return self._render_value(self.title, *args, **kwargs)
+
+    def render_default(self, *args, **kwargs) -> Any:
+        """Render the default value.
+
+        :param args: Additional positional arguments.
+        :param kwargs: Additional named arguments.
+        :return: A ``str`` value.
+        """
+        if self.default is None:
+            return None
+
+        if self.choices is None or not isinstance(self.choices, dict):
+            return self._render_value(self.default, *args, **kwargs)
+
+        for key, value in self.choices.items():
+            if value == self.default:
+                return self._render_value(key, *args, **kwargs)
+
+        raise ValueError("The default attribute must match with one of the choices.")
+
+    def render_choices(self, *args, **kwargs) -> Optional[Union[list[Any], dict[Any]]]:
+        """Render the choices value.
+
+        :param args: Additional positional arguments.
+        :param kwargs: Additional named arguments.
+        :return: A ``str`` value.
+        """
+        if not self.choices:
+            return self.choices
+
+        if isinstance(self.choices, dict):
+            return self._render_dict(self.choices, *args, **kwargs)
+        else:
+            return self._render_list(self.choices, *args, **kwargs)
+
+    def _render_dict(self, data: dict[str, Any], *args, **kwargs) -> dict[str, Any]:
+        return {self._render_value(k, *args, **kwargs): self._render_value(v, *args, **kwargs) for k, v in data.items()}
+
+    def _render_list(self, data: list[str], *args, **kwargs) -> list[Any]:
+        return [self._render_value(value, *args, **kwargs) for value in data]
+
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def _render_value(
+        value: Any, env: Optional[Environment] = None, context: Optional[dict[str, Any]] = None, **kwargs
+    ) -> Any:
+        if env and context:
+            with suppress(TypeError):
+                value = env.from_string(value).render(**context)
+        return value
+
+    def _ask(self, title: str, default: Any, choices: Union[list[Any], dict[str, Any]]) -> Any:
         answer = self._ask_fn(title, default=default, choices=choices)
         if choices is not None and isinstance(choices, dict):
             answer = choices[answer]
+        if isinstance(answer, str):
+            answer = answer.strip()
         return answer
 
     @property
@@ -140,20 +171,6 @@ class Question:
         if self.help_ is not None:
             return self.help_
         return self.name
-
-    @property
-    def default_title(self) -> Any:
-        """TODO"""
-        if self.default is None:
-            return None
-
-        if self.choices is not None and isinstance(self.choices, dict):
-            for key, value in self.choices.items():
-                if value == self.default:
-                    return key
-            raise Exception("TODO")
-
-        return self.default
 
     def __eq__(self, other: Any) -> bool:
         return (

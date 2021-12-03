@@ -69,7 +69,7 @@ class TestTemplateProcessor(unittest.TestCase):
             processor = TemplateProcessor.from_fetcher(self.fetcher, target)
             with patch("minos.cli.Form.ask", return_value={"foo": "bar"}) as mock:
                 self.assertEqual({"foo": "bar"}, processor.answers)
-                self.assertEqual([call(dict(), env=processor.env)], mock.call_args_list)
+                self.assertEqual([call(context=dict(), env=processor.env)], mock.call_args_list)
 
     def test_render(self):
         with TemporaryDirectory() as tmp_dir_name:
