@@ -19,7 +19,7 @@ from ..consoles import (
 )
 
 TEMPLATE_URL: Final[str] = "https://github.com/Clariteia/minos-templates/releases/download"
-TEMPLATE_VERSION: Final[str] = "0.0.1.dev2"
+TEMPLATE_VERSION: Final[str] = "0.0.1.dev3"
 
 TEMPLATE_ROOT_URL = "/".join([TEMPLATE_URL, TEMPLATE_VERSION])
 
@@ -83,5 +83,5 @@ class TemplateFetcher:
         console.print(f":moon: Extracted template into {path!r}!\n")
 
 
-MICROSERVICE_INIT = TemplateFetcher.from_name("microservice-python-skeleton", TEMPLATE_VERSION)
+MICROSERVICE_INIT = TemplateFetcher.from_name("microservice-init", TEMPLATE_VERSION)
 PROJECT_INIT = TemplateFetcher.from_name("project-init", TEMPLATE_VERSION)
