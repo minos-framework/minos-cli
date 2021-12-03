@@ -74,6 +74,7 @@ class TestTemplateProcessor(unittest.TestCase):
     def test_render(self):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
+            source.mkdir()
             target = Path(tmp_dir_name) / "target"
             processor = TemplateProcessor(source, target)
             with patch("minos.cli.TemplateProcessor.render_copier") as render_mock, patch(
@@ -82,7 +83,15 @@ class TestTemplateProcessor(unittest.TestCase):
                 processor.render()
             self.assertEqual([call(source, target.parent, {"foo": "bar"})], render_mock.call_args_list)
 
-    def test_render_raises(self):
+    def test_render_raises_source(self):
+        with TemporaryDirectory() as tmp_dir_name:
+            source = Path(tmp_dir_name) / "source"
+            target = Path(tmp_dir_name) / "target"
+            processor = TemplateProcessor(source, target)
+            with self.assertRaises(ValueError):
+                processor.render()
+
+    def test_render_raises_target(self):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
             target = Path(tmp_dir_name) / "target"

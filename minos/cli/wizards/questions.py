@@ -79,6 +79,7 @@ class Question:
 
         title = self.title
         default = self.default_title
+        choices = self.choices
 
         if env is not None:
             with suppress(TypeError):
@@ -87,16 +88,35 @@ class Question:
             with suppress(TypeError):
                 default = env.from_string(default).render(**context)
 
-        answer = self._ask(f":question: {title}\n", default)
+            if choices is not None:
+                if isinstance(choices, dict):
+                    new = dict()
+                    for k, v in choices.items():
+                        with suppress(TypeError):
+                            k = env.from_string(k).render(**context)
+                        with suppress(TypeError):
+                            v = env.from_string(v).render(**context)
+                        new[k] = v
+                    choices = new
+
+                else:
+                    new = list()
+                    for choice in choices:
+                        with suppress(TypeError):
+                            choice = env.from_string(choice).render(**context)
+                        new.append(choice)
+                    choices = new
+
+        answer = self._ask(f":question: {title}\n", default, choices)
         if isinstance(answer, str):
             answer = answer.strip()
         console.print()
         return answer
 
-    def _ask(self, title: str, default: Any) -> Any:
-        answer = self._ask_fn(title, default=default)
-        if self.choices is not None and isinstance(self.choices, dict):
-            answer = self.choices[answer]
+    def _ask(self, title: str, default: Any, choices) -> Any:
+        answer = self._ask_fn(title, default=default, choices=choices)
+        if choices is not None and isinstance(choices, dict):
+            answer = choices[answer]
         return answer
 
     @property
@@ -109,7 +129,7 @@ class Question:
             fn = Confirm.ask
         else:
             fn = Prompt.ask
-        return partial(fn, console=console, choices=self.choices, password=self.secret)
+        return partial(fn, console=console, password=self.secret)
 
     @property
     def title(self) -> str:

@@ -10,46 +10,38 @@ from pathlib import (
 from tempfile import (
     TemporaryDirectory,
 )
+from typing import (
+    Final,
+)
 
 from ..consoles import (
     console,
 )
 
-TEMPLATE_VERSION = "0.0.1.dev0"
-TEMPLATE_ARTIFACT_URL = "https://github.com/Clariteia/minos-templates/releases/download/{version}/{name}.tar.gz"
+TEMPLATE_URL: Final[str] = "https://github.com/Clariteia/minos-templates/releases/download"
+TEMPLATE_VERSION: Final[str] = "0.0.1.dev2"
+
+TEMPLATE_ROOT_URL = "/".join([TEMPLATE_URL, TEMPLATE_VERSION])
 
 
 class TemplateFetcher:
     """Template Fetcher class."""
 
-    def __init__(self, name: str, version: str):
-        self._name = name
-        self._version = version
+    def __init__(self, url: str):
+        self.url = url
         self._tmp = None
 
-    @property
-    def name(self) -> str:
-        """Get the name of the template.
+    @classmethod
+    def from_name(cls, name: str, version: str) -> TemplateFetcher:
+        """TODO
 
-        :return: A ``str`` value.
+        :param name: TODO
+        :param version: TODO
+        :return: TODO
         """
-        return self._name
-
-    @property
-    def version(self) -> str:
-        """Get the version of the template.
-
-        :return: A ``str`` value.
-        """
-        return self._version
-
-    @property
-    def url(self) -> str:
-        """Get the url of the template.
-
-        :return: A ``str`` value.
-        """
-        return TEMPLATE_ARTIFACT_URL.format(name=self._name, version=self._version)
+        pattern = "/".join([TEMPLATE_URL, "{version}/{name}.tar.gz"])
+        url = pattern.format(name=name, version=version)
+        return cls(url)
 
     @property
     def path(self) -> Path:
@@ -66,7 +58,9 @@ class TemplateFetcher:
         :return: A ``TemporaryDirectory`` instance.
         """
         if self._tmp is None:
-            tmp = TemporaryDirectory()
+            cache_dir = Path.home() / ".minos" / "tmp"
+            cache_dir.mkdir(parents=True, exist_ok=True)
+            tmp = TemporaryDirectory(dir=str(cache_dir))
             self.fetch_tar(self.url, tmp.name)
             self._tmp = tmp
         return self._tmp
@@ -89,5 +83,5 @@ class TemplateFetcher:
         console.print(f":moon: Extracted template into {path!r}!\n")
 
 
-MICROSERVICE_INIT = TemplateFetcher("microservice-init", TEMPLATE_VERSION)
-PROJECT_INIT = TemplateFetcher("project-init", TEMPLATE_VERSION)
+MICROSERVICE_INIT = TemplateFetcher.from_name("microservice-python-skeleton", TEMPLATE_VERSION)
+PROJECT_INIT = TemplateFetcher.from_name("project-init", TEMPLATE_VERSION)

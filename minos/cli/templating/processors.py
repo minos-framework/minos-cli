@@ -124,6 +124,9 @@ class TemplateProcessor:
         :param kwargs: Additional named arguments.
         :return: This method does not return anything.
         """
+        if not self.source.exists():
+            raise ValueError(f"The source {self.source!r} does not exits!")
+
         if not self.target.exists():
             self.target.mkdir(parents=True, exist_ok=True)
 
@@ -132,9 +135,11 @@ class TemplateProcessor:
 
         self.render_copier(self.source, self.destination, self.answers, **kwargs)
 
+        context = {k: v for k, v in self.answers.items() if k not in self.form.links}
         for link in self.links:
-            sub_processor = TemplateProcessor(link, self.target, context=self.answers)
-            sub_processor.render()
+            fetcher = TemplateFetcher(link)
+            sub = TemplateProcessor.from_fetcher(fetcher, self.target, context=context)
+            sub.render()
 
     @staticmethod
     def render_copier(

@@ -18,11 +18,7 @@ from minos.cli import (
 
 class TestTemplateFetcher(unittest.TestCase):
     def setUp(self) -> None:
-        self.fetcher = TemplateFetcher("foo", "0.1.0")
-
-    def test_constructor(self):
-        self.assertEqual("foo", self.fetcher.name)
-        self.assertEqual("0.1.0", self.fetcher.version)
+        self.fetcher = TemplateFetcher.from_name("foo", "0.1.0")
 
     def test_url(self):
         self.assertEqual(
