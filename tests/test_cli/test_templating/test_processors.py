@@ -106,6 +106,25 @@ class TestTemplateProcessor(unittest.TestCase):
                 processor.render()
             self.assertEqual([call(source, target.parent, {"foo": "bar"})], render_mock.call_args_list)
 
+    def test_render_linked_templates(self):
+        with TemporaryDirectory() as tmp_dir_name:
+            source = Path(tmp_dir_name) / "source"
+            source.mkdir()
+            target = Path(tmp_dir_name) / "target"
+            processor = TemplateProcessor(source, target)
+            context = {"foo": "www.foo.com", "bar": "www.bar.com", "foobar": ""}
+            with patch("minos.cli.TemplateProcessor.render_copier"), patch(
+                "minos.cli.TemplateProcessor.linked_questions", new_callable=PropertyMock, return_value=["foo", "bar"]
+            ), patch("minos.cli.TemplateProcessor.answers", new_callable=PropertyMock, return_value=context,), patch(
+                "minos.cli.TemplateProcessor.from_fetcher"
+            ) as from_fetcher_mock:
+                processor.render()
+            expected = [
+                call(TemplateFetcher("www.foo.com"), target, context=context),
+                call(TemplateFetcher("www.bar.com"), target, context=context),
+            ]
+            self.assertEqual(expected, from_fetcher_mock.call_args_list)
+
     def test_render_raises_source(self):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
