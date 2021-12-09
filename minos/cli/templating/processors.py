@@ -80,9 +80,20 @@ class TemplateProcessor:
         return self.target.parent
 
     @cached_property
-    def links(self) -> list[str]:
-        """TODO"""
-        return [self.answers[link] for link in self.form.links]
+    def linked_template_fetchers(self) -> list[TemplateFetcher]:
+        """Get the list of linked template fetchers.
+
+        :return: A list of ``TemplateFetcher`` instances.
+        """
+        return [TemplateFetcher(self.answers[link]) for link in self.linked_questions]
+
+    @property
+    def linked_questions(self) -> list[str]:
+        """Get the list of questions that are links.
+
+        :return: A list of ``str`` values.
+        """
+        return self.form.links
 
     @cached_property
     def answers(self) -> dict[str, Any]:
@@ -135,11 +146,8 @@ class TemplateProcessor:
 
         self.render_copier(self.source, self.destination, self.answers, **kwargs)
 
-        context = {k: v for k, v in self.answers.items() if k not in self.form.links}
-        for link in self.links:
-            fetcher = TemplateFetcher(link)
-            sub = TemplateProcessor.from_fetcher(fetcher, self.target, context=context)
-            sub.render()
+        for fetcher in self.linked_template_fetchers:
+            TemplateProcessor.from_fetcher(fetcher, self.target, context=self.answers).render()
 
     @staticmethod
     def render_copier(

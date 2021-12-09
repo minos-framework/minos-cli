@@ -31,7 +31,7 @@ class Form:
     def ask(self, context: Optional[dict[str, Any]] = None, **kwargs) -> dict[str, Any]:
         """Perform the asking process.
 
-        :param context: TODO
+        :param context: A mapping containing already answered questions and environment variables for rendering.
         :param kwargs: Additional named arguments to be passed to each question.
         :return: A mapping from the question names to the obtained answers.
         """
@@ -45,7 +45,10 @@ class Form:
 
     @property
     def links(self) -> list[str]:
-        """TODO"""
+        """Get the list of question names that are links to another templates.
+
+        :return: A list of ``str`` values.
+        """
         return [question.name for question in self.questions if question.link]
 
     def __eq__(self, other: Any) -> bool:

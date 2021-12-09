@@ -11,6 +11,7 @@ from tempfile import (
     TemporaryDirectory,
 )
 from typing import (
+    Any,
     Final,
 )
 
@@ -33,11 +34,11 @@ class TemplateFetcher:
 
     @classmethod
     def from_name(cls, name: str, version: str) -> TemplateFetcher:
-        """TODO
+        """Build a new instance from name and version.
 
-        :param name: TODO
-        :param version: TODO
-        :return: TODO
+        :param name: The name of the template.
+        :param version: The version of the template.
+        :return: A ``TemplateFetcher`` instance.
         """
         pattern = "/".join([TEMPLATE_URL, "{version}/{name}.tar.gz"])
         url = pattern.format(name=name, version=version)
@@ -64,6 +65,12 @@ class TemplateFetcher:
             self.fetch_tar(self.url, tmp.name)
             self._tmp = tmp
         return self._tmp
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self.url!r})"
+
+    def __eq__(self, other: Any) -> bool:
+        return isinstance(other, type(self)) and self.url == other.url
 
     @staticmethod
     def fetch_tar(url: str, path: str) -> None:

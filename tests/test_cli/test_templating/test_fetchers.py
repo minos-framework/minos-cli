@@ -44,6 +44,13 @@ class TestTemplateFetcher(unittest.TestCase):
         self.assertEqual(self.fetcher.tmp.name, str(path))
         self.assertEqual(True, path.exists())
 
+    def test_eq(self):
+        self.assertEqual(TemplateFetcher("www.foo.com"), TemplateFetcher("www.foo.com"))
+        self.assertNotEqual(TemplateFetcher("www.bar.com"), TemplateFetcher("www.foo.com"))
+
+    def test_repr(self):
+        self.assertEqual("TemplateFetcher('www.foo.com')", repr(TemplateFetcher("www.foo.com")))
+
     def test_fetch_tar(self):
         with patch("urllib.request.urlopen", return_value="file") as url_mock, patch("tarfile.open") as tar_mock:
             TemplateFetcher.fetch_tar("foo", "bar")

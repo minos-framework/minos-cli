@@ -26,9 +26,10 @@ class TestQuestion(unittest.TestCase):
         self.assertEqual(None, question.choices)
         self.assertEqual(None, question.default)
         self.assertEqual(False, question.secret)
+        self.assertEqual(False, question.link)
 
     def test_constructor_extended(self) -> None:
-        question = Question("foo", "str", "bar", ["one", "two", "three"], "one", True)
+        question = Question("foo", "str", "bar", ["one", "two", "three"], "one", True, True)
 
         self.assertIsInstance(question, Question)
         self.assertEqual("foo", question.name)
@@ -37,9 +38,10 @@ class TestQuestion(unittest.TestCase):
         self.assertEqual(["one", "two", "three"], question.choices)
         self.assertEqual("one", question.default)
         self.assertEqual(True, question.secret)
+        self.assertEqual(True, question.link)
 
     def test_from_raw(self):
-        expected = Question("foo", "str", "bar", ["one", "two", "three"], "one", True)
+        expected = Question("foo", "str", "bar", ["one", "two", "three"], "one", True, True)
         observed = Question.from_raw(
             {
                 "name": "foo",
@@ -48,6 +50,7 @@ class TestQuestion(unittest.TestCase):
                 "choices": ["one", "two", "three"],
                 "default": "one",
                 "secret": True,
+                "link": True,
             }
         )
         self.assertEqual(expected, observed)

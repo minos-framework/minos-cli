@@ -18,6 +18,7 @@ from jinja2 import (
 from minos.cli import (
     MICROSERVICE_INIT,
     Form,
+    TemplateFetcher,
     TemplateProcessor,
 )
 
@@ -71,6 +72,28 @@ class TestTemplateProcessor(unittest.TestCase):
                 self.assertEqual({"foo": "bar"}, processor.answers)
                 self.assertEqual([call(context=dict(), env=processor.env)], mock.call_args_list)
 
+    def test_linked_questions(self):
+        with TemporaryDirectory() as tmp_dir_name:
+            target = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, target)
+            with patch("minos.cli.Form.links", new_callable=PropertyMock, return_value=["foo", "bar"]):
+                self.assertEqual(["foo", "bar"], processor.linked_questions)
+
+    def test_linked_template_fetchers(self):
+        with TemporaryDirectory() as tmp_dir_name:
+            target = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, target)
+
+            expected = [TemplateFetcher("www.foo.com"), TemplateFetcher("www.bar.com")]
+            with patch(
+                "minos.cli.TemplateProcessor.linked_questions", new_callable=PropertyMock, return_value=["foo", "bar"]
+            ), patch(
+                "minos.cli.TemplateProcessor.answers",
+                new_callable=PropertyMock,
+                return_value={"foo": "www.foo.com", "bar": "www.bar.com", "foobar": ""},
+            ):
+                self.assertEqual(expected, processor.linked_template_fetchers)
+
     def test_render(self):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
@@ -94,6 +117,7 @@ class TestTemplateProcessor(unittest.TestCase):
     def test_render_raises_target(self):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
+            source.mkdir()
             target = Path(tmp_dir_name) / "target"
             target.touch()
             processor = TemplateProcessor(source, target)
