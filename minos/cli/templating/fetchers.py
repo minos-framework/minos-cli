@@ -20,7 +20,7 @@ from ..consoles import (
 )
 
 TEMPLATE_URL: Final[str] = "https://github.com/Clariteia/minos-templates/releases/download"
-TEMPLATE_VERSION: Final[str] = "0.0.1.dev3"
+TEMPLATE_VERSION: Final[str] = "0.0.1.dev4"
 
 TEMPLATE_ROOT_URL = "/".join([TEMPLATE_URL, TEMPLATE_VERSION])
 

@@ -49,15 +49,15 @@ class TemplateProcessor:
     This class generates a scaffolding structure on a given directory.
     """
 
-    def __init__(self, source: Union[Path, str], target: Union[Path, str], context=None):
+    def __init__(self, source: Union[Path, str], destination: Union[Path, str], context=None):
         if not isinstance(source, Path):
             source = Path(source)
-        if not isinstance(target, Path):
-            target = Path(target)
+        if not isinstance(destination, Path):
+            destination = Path(destination)
         if context is None:
             context = dict()
         self.source = source
-        self.target = target
+        self.destination = destination
         self.context = context
 
     @classmethod
@@ -70,14 +70,6 @@ class TemplateProcessor:
         :return: A new ``TemplateProcessor`` instance.
         """
         return cls(fetcher.path, *args, **kwargs)
-
-    @property
-    def destination(self) -> Path:
-        """Get the location of the rendered template.
-
-        :return: A ``Path`` instance.
-        """
-        return self.target.parent
 
     @cached_property
     def linked_template_fetchers(self) -> list[TemplateFetcher]:
@@ -113,7 +105,7 @@ class TemplateProcessor:
         for name, question in filter_config(self._config_data)[1].items():
             question["name"] = name
             if question["name"] == "name" and question.get("default", None) is None:
-                question["default"] = self.target.name
+                question["default"] = self.destination.name
             questions.append(question)
         return Form.from_raw({"questions": questions})
 
@@ -138,16 +130,16 @@ class TemplateProcessor:
         if not self.source.exists():
             raise ValueError(f"The source {self.source!r} does not exits!")
 
-        if not self.target.exists():
-            self.target.mkdir(parents=True, exist_ok=True)
+        if not self.destination.exists():
+            self.destination.mkdir(parents=True, exist_ok=True)
 
-        if not self.target.is_dir():
-            raise ValueError(f"{self.target!r} is not a directory!")
+        if not self.destination.is_dir():
+            raise ValueError(f"{self.destination!r} is not a directory!")
 
         self.render_copier(self.source, self.destination, self.answers, **kwargs)
 
         for fetcher in self.linked_template_fetchers:
-            TemplateProcessor.from_fetcher(fetcher, self.target, context=self.answers).render()
+            TemplateProcessor.from_fetcher(fetcher, self.destination, context=self.answers).render()
 
     @staticmethod
     def render_copier(
@@ -165,6 +157,6 @@ class TemplateProcessor:
             source = str(source)
         if not isinstance(destination, str):
             destination = str(destination)
-        with console.status("Rendering template...", spinner="moon"):
+        with console.status(f"Rendering template into {destination!r}!...", spinner="moon"):
             copier.copy(src_path=source, dst_path=destination, data=answers, quiet=True, **kwargs)
-        console.print(":moon: Rendered template!\n")
+        console.print(f":moon: Rendered template into {destination!r}!\n")

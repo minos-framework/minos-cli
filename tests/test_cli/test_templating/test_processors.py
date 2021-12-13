@@ -31,58 +31,51 @@ class TestTemplateProcessor(unittest.TestCase):
     def test_constructor(self):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
-            target = Path(tmp_dir_name) / "target"
+            destination = Path(tmp_dir_name) / "destination"
 
-            processor = TemplateProcessor(str(source), str(target))
+            processor = TemplateProcessor(str(source), str(destination))
 
         self.assertEqual(source, processor.source)
-        self.assertEqual(target, processor.target)
-
-    def test_destination(self):
-        with TemporaryDirectory() as tmp_dir_name:
-            source = Path(tmp_dir_name) / "source"
-            target = Path(tmp_dir_name) / "target"
-            processor = TemplateProcessor(source, target)
-            self.assertEqual(target.parent, processor.destination)
+        self.assertEqual(destination, processor.destination)
 
     def test_from_fetcher(self):
         with TemporaryDirectory() as tmp_dir_name:
-            target = Path(tmp_dir_name)
-            processor = TemplateProcessor.from_fetcher(self.fetcher, target)
+            destination = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
             self.assertEqual(self.fetcher.path, processor.source)
 
     def test_env(self):
         with TemporaryDirectory() as tmp_dir_name:
-            target = Path(tmp_dir_name)
-            processor = TemplateProcessor.from_fetcher(self.fetcher, target)
+            destination = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
             self.assertIsInstance(processor.env, Environment)
 
     def test_form(self):
         with TemporaryDirectory() as tmp_dir_name:
-            target = Path(tmp_dir_name)
-            processor = TemplateProcessor.from_fetcher(self.fetcher, target)
+            destination = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
             self.assertIsInstance(processor.form, Form)
             self.assertGreater(len(processor.form.questions), 0)
 
     def test_answers(self):
         with TemporaryDirectory() as tmp_dir_name:
-            target = Path(tmp_dir_name)
-            processor = TemplateProcessor.from_fetcher(self.fetcher, target)
+            destination = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
             with patch("minos.cli.Form.ask", return_value={"foo": "bar"}) as mock:
                 self.assertEqual({"foo": "bar"}, processor.answers)
                 self.assertEqual([call(context=dict(), env=processor.env)], mock.call_args_list)
 
     def test_linked_questions(self):
         with TemporaryDirectory() as tmp_dir_name:
-            target = Path(tmp_dir_name)
-            processor = TemplateProcessor.from_fetcher(self.fetcher, target)
+            destination = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
             with patch("minos.cli.Form.links", new_callable=PropertyMock, return_value=["foo", "bar"]):
                 self.assertEqual(["foo", "bar"], processor.linked_questions)
 
     def test_linked_template_fetchers(self):
         with TemporaryDirectory() as tmp_dir_name:
-            target = Path(tmp_dir_name)
-            processor = TemplateProcessor.from_fetcher(self.fetcher, target)
+            destination = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
 
             expected = [TemplateFetcher("www.foo.com"), TemplateFetcher("www.bar.com")]
             with patch(
@@ -98,20 +91,20 @@ class TestTemplateProcessor(unittest.TestCase):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
             source.mkdir()
-            target = Path(tmp_dir_name) / "target"
-            processor = TemplateProcessor(source, target)
+            destination = Path(tmp_dir_name) / "destination"
+            processor = TemplateProcessor(source, destination)
             with patch("minos.cli.TemplateProcessor.render_copier") as render_mock, patch(
                 "minos.cli.TemplateProcessor.answers", new_callable=PropertyMock, return_value={"foo": "bar"}
             ):
                 processor.render()
-            self.assertEqual([call(source, target.parent, {"foo": "bar"})], render_mock.call_args_list)
+            self.assertEqual([call(source, destination, {"foo": "bar"})], render_mock.call_args_list)
 
     def test_render_linked_templates(self):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
             source.mkdir()
-            target = Path(tmp_dir_name) / "target"
-            processor = TemplateProcessor(source, target)
+            destination = Path(tmp_dir_name) / "destination"
+            processor = TemplateProcessor(source, destination)
             context = {"foo": "www.foo.com", "bar": "www.bar.com", "foobar": ""}
             with patch("minos.cli.TemplateProcessor.render_copier"), patch(
                 "minos.cli.TemplateProcessor.linked_questions", new_callable=PropertyMock, return_value=["foo", "bar"]
@@ -120,26 +113,26 @@ class TestTemplateProcessor(unittest.TestCase):
             ) as from_fetcher_mock:
                 processor.render()
             expected = [
-                call(TemplateFetcher("www.foo.com"), target, context=context),
-                call(TemplateFetcher("www.bar.com"), target, context=context),
+                call(TemplateFetcher("www.foo.com"), destination, context=context),
+                call(TemplateFetcher("www.bar.com"), destination, context=context),
             ]
             self.assertEqual(expected, from_fetcher_mock.call_args_list)
 
     def test_render_raises_source(self):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
-            target = Path(tmp_dir_name) / "target"
-            processor = TemplateProcessor(source, target)
+            destination = Path(tmp_dir_name) / "destination"
+            processor = TemplateProcessor(source, destination)
             with self.assertRaises(ValueError):
                 processor.render()
 
-    def test_render_raises_target(self):
+    def test_render_raises_destination(self):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
             source.mkdir()
-            target = Path(tmp_dir_name) / "target"
-            target.touch()
-            processor = TemplateProcessor(source, target)
+            destination = Path(tmp_dir_name) / "destination"
+            destination.touch()
+            processor = TemplateProcessor(source, destination)
             with self.assertRaises(ValueError):
                 processor.render()
 
