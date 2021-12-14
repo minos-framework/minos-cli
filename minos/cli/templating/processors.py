@@ -2,11 +2,13 @@ from __future__ import (
     annotations,
 )
 
+import logging
 from pathlib import (
     Path,
 )
 from typing import (
     Any,
+    Optional,
     Union,
 )
 
@@ -42,6 +44,8 @@ from .fetchers import (
     TemplateFetcher,
 )
 
+logger = logging.getLogger(__name__)
+
 
 class TemplateProcessor:
     """Template Processor class.
@@ -49,7 +53,9 @@ class TemplateProcessor:
     This class generates a scaffolding structure on a given directory.
     """
 
-    def __init__(self, source: Union[Path, str], destination: Union[Path, str], context=None):
+    def __init__(
+        self, source: Union[Path, str], destination: Union[Path, str], context: Optional[dict[str, Any]] = None
+    ):
         if not isinstance(source, Path):
             source = Path(source)
         if not isinstance(destination, Path):
@@ -61,15 +67,20 @@ class TemplateProcessor:
         self.context = context
 
     @classmethod
-    def from_fetcher(cls, fetcher: TemplateFetcher, *args, **kwargs) -> TemplateProcessor:
+    def from_fetcher(
+        cls, fetcher: TemplateFetcher, *args, context: Optional[dict[str, Any]] = None, **kwargs
+    ) -> TemplateProcessor:
         """Build a new instance from a fetcher.
 
         :param fetcher: The template fetcher instance.
         :param args: Additional positional arguments.
+        :param context: A mapping containing already answered questions and environment variables for rendering.
         :param kwargs: Additional named arguments.
         :return: A new ``TemplateProcessor`` instance.
         """
-        return cls(fetcher.path, *args, **kwargs)
+        if context is None:
+            context = dict()
+        return cls(fetcher.path, context=fetcher.metadata | context, *args, **kwargs)
 
     @cached_property
     def linked_template_fetchers(self) -> list[TemplateFetcher]:
@@ -136,7 +147,8 @@ class TemplateProcessor:
         if not self.destination.is_dir():
             raise ValueError(f"{self.destination!r} is not a directory!")
 
-        self.render_copier(self.source, self.destination, self.answers, **kwargs)
+        context = self.answers | {"destination": self.destination}
+        self.render_copier(self.source, self.destination, context, **kwargs)
 
         for fetcher in self.linked_template_fetchers:
             TemplateProcessor.from_fetcher(fetcher, self.destination, context=self.answers).render()
@@ -158,5 +170,15 @@ class TemplateProcessor:
         if not isinstance(destination, str):
             destination = str(destination)
         with console.status(f"Rendering template into {destination!r}!...", spinner="moon"):
-            copier.copy(src_path=source, dst_path=destination, data=answers, quiet=True, **kwargs)
+            logger.debug(f"Rendering a template located at {source!r} to {destination!r} with {answers!r} context...")
+            copier.copy(
+                src_path=source,
+                dst_path=destination,
+                data=answers,
+                quiet=True,
+                force=True,
+                extra_paths=["/"],
+                cleanup_on_error=False,
+                **kwargs,
+            )
         console.print(f":moon: Rendered template into {destination!r}!\n")

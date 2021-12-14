@@ -21,6 +21,10 @@ from minos.cli import (
     TemplateFetcher,
     TemplateProcessor,
 )
+from minos.cli.templating.fetchers import (
+    TEMPLATE_URL,
+    TEMPLATE_VERSION,
+)
 
 
 class TestTemplateProcessor(unittest.TestCase):
@@ -63,7 +67,19 @@ class TestTemplateProcessor(unittest.TestCase):
             processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
             with patch("minos.cli.Form.ask", return_value={"foo": "bar"}) as mock:
                 self.assertEqual({"foo": "bar"}, processor.answers)
-                self.assertEqual([call(context=dict(), env=processor.env)], mock.call_args_list)
+                self.assertEqual(
+                    [
+                        call(
+                            context={
+                                "template_registry": f"{TEMPLATE_URL}/{TEMPLATE_VERSION}",
+                                "template_version": TEMPLATE_VERSION,
+                                "template_name": "microservice-init",
+                            },
+                            env=processor.env,
+                        )
+                    ],
+                    mock.call_args_list,
+                )
 
     def test_linked_questions(self):
         with TemporaryDirectory() as tmp_dir_name:
@@ -97,7 +113,9 @@ class TestTemplateProcessor(unittest.TestCase):
                 "minos.cli.TemplateProcessor.answers", new_callable=PropertyMock, return_value={"foo": "bar"}
             ):
                 processor.render()
-            self.assertEqual([call(source, destination, {"foo": "bar"})], render_mock.call_args_list)
+            self.assertEqual(
+                [call(source, destination, {"foo": "bar", "destination": destination})], render_mock.call_args_list
+            )
 
     def test_render_linked_templates(self):
         with TemporaryDirectory() as tmp_dir_name:
@@ -144,7 +162,17 @@ class TestTemplateProcessor(unittest.TestCase):
                 TemplateProcessor.render_copier(source, destination, {"foo": "bar"})
 
             self.assertEqual(
-                [call(src_path=str(source), dst_path=str(destination), data={"foo": "bar"}, quiet=True)],
+                [
+                    call(
+                        src_path=str(source),
+                        dst_path=str(destination),
+                        data={"foo": "bar"},
+                        quiet=True,
+                        force=True,
+                        extra_paths=["/"],
+                        cleanup_on_error=False,
+                    )
+                ],
                 mock.call_args_list,
             )
 

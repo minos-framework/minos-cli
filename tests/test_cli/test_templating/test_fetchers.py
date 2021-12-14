@@ -25,6 +25,14 @@ class TestTemplateFetcher(unittest.TestCase):
             "https://github.com/Clariteia/minos-templates/releases/download/0.1.0/foo.tar.gz", self.fetcher.url
         )
 
+    def test_metadata(self):
+        expected = {
+            "template_name": "foo",
+            "template_registry": "https://github.com/Clariteia/minos-templates/releases/download/0.1.0",
+            "template_version": "0.1.0",
+        }
+        self.assertEqual(expected, self.fetcher.metadata)
+
     def test_tmp(self):
         mock = MagicMock()
         self.fetcher.fetch_tar = mock

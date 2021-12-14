@@ -13,6 +13,7 @@ from tempfile import (
 from typing import (
     Any,
     Final,
+    Optional,
 )
 
 from ..consoles import (
@@ -20,16 +21,17 @@ from ..consoles import (
 )
 
 TEMPLATE_URL: Final[str] = "https://github.com/Clariteia/minos-templates/releases/download"
-TEMPLATE_VERSION: Final[str] = "0.0.1.dev6"
-
-TEMPLATE_ROOT_URL = "/".join([TEMPLATE_URL, TEMPLATE_VERSION])
+TEMPLATE_VERSION: Final[str] = "0.0.1.dev11"
 
 
 class TemplateFetcher:
     """Template Fetcher class."""
 
-    def __init__(self, url: str):
+    def __init__(self, url: str, metadata: Optional[dict[str, Any]] = None):
+        if metadata is None:
+            metadata = dict()
         self.url = url
+        self.metadata = metadata
         self._tmp = None
 
     @classmethod
@@ -40,9 +42,10 @@ class TemplateFetcher:
         :param version: The version of the template.
         :return: A ``TemplateFetcher`` instance.
         """
-        pattern = "/".join([TEMPLATE_URL, "{version}/{name}.tar.gz"])
-        url = pattern.format(name=name, version=version)
-        return cls(url)
+        registry = f"{TEMPLATE_URL}/{version}"
+        url = f"{registry}/{name}.tar.gz"
+        metadata = {"template_registry": registry, "template_version": version, "template_name": name}
+        return cls(url, metadata)
 
     @property
     def path(self) -> Path:

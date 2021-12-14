@@ -9,7 +9,6 @@ from ..consoles import (
 )
 from ..templating import (
     MICROSERVICE_INIT,
-    TEMPLATE_ROOT_URL,
     TemplateProcessor,
 )
 
@@ -21,9 +20,7 @@ def init() -> None:
     """Initialize a microservice on the current working directory."""
 
     console.print(":wrench: Initializing new Microservice...\n")
-    processor = TemplateProcessor.from_fetcher(
-        MICROSERVICE_INIT, Path.cwd(), context={"template_root": TEMPLATE_ROOT_URL}
-    )
+    processor = TemplateProcessor.from_fetcher(MICROSERVICE_INIT, Path.cwd())
     processor.render()
 
 
@@ -32,7 +29,7 @@ def new(path: Path) -> None:
     """Initialize a microservice on the given directory."""
 
     console.print(":wrench: Creating new Microservice...\n")
-    processor = TemplateProcessor.from_fetcher(MICROSERVICE_INIT, path, context={"template_root": TEMPLATE_ROOT_URL})
+    processor = TemplateProcessor.from_fetcher(MICROSERVICE_INIT, path.absolute())
     processor.render()
 
 
