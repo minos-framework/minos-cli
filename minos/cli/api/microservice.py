@@ -20,7 +20,7 @@ def init() -> None:
     """Initialize a microservice on the current working directory."""
 
     console.print(":wrench: Initializing new Microservice...\n")
-    processor = TemplateProcessor.from_fetcher(MICROSERVICE_INIT, Path.cwd())
+    processor = TemplateProcessor.from_fetcher(MICROSERVICE_INIT, Path.cwd(), defaults={"name": Path.cwd().name})
     processor.render()
 
 
@@ -29,7 +29,7 @@ def new(path: Path) -> None:
     """Initialize a microservice on the given directory."""
 
     console.print(":wrench: Creating new Microservice...\n")
-    processor = TemplateProcessor.from_fetcher(MICROSERVICE_INIT, path.absolute())
+    processor = TemplateProcessor.from_fetcher(MICROSERVICE_INIT, path.absolute(), defaults={"name": path.name})
     processor.render()
 
 

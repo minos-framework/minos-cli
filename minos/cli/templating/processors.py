@@ -54,7 +54,11 @@ class TemplateProcessor:
     """
 
     def __init__(
-        self, source: Union[Path, str], destination: Union[Path, str], context: Optional[dict[str, Any]] = None
+        self,
+        source: Union[Path, str],
+        destination: Union[Path, str],
+        context: Optional[dict[str, Any]] = None,
+        defaults: Optional[dict[str, Any]] = None,
     ):
         if not isinstance(source, Path):
             source = Path(source)
@@ -65,22 +69,31 @@ class TemplateProcessor:
         self.source = source
         self.destination = destination
         self.context = context
+        self.defaults = defaults
 
     @classmethod
     def from_fetcher(
-        cls, fetcher: TemplateFetcher, *args, context: Optional[dict[str, Any]] = None, **kwargs
+        cls,
+        fetcher: TemplateFetcher,
+        *args,
+        context: Optional[dict[str, Any]] = None,
+        defaults: Optional[dict[str, Any]] = None,
+        **kwargs,
     ) -> TemplateProcessor:
         """Build a new instance from a fetcher.
 
         :param fetcher: The template fetcher instance.
         :param args: Additional positional arguments.
         :param context: A mapping containing already answered questions and environment variables for rendering.
+        :param defaults: A mapping containing additional default values for questions.
         :param kwargs: Additional named arguments.
         :return: A new ``TemplateProcessor`` instance.
         """
         if context is None:
             context = dict()
-        return cls(fetcher.path, context=fetcher.metadata | context, *args, **kwargs)
+        if defaults is None:
+            defaults = dict()
+        return cls(fetcher.path, context=fetcher.metadata | context, defaults=defaults, *args, **kwargs)
 
     @cached_property
     def linked_template_fetchers(self) -> list[TemplateFetcher]:
@@ -117,9 +130,9 @@ class TemplateProcessor:
         """
         questions = list()
         for name, question in filter_config(self._config_data)[1].items():
+            if name in self.defaults:
+                question["default"] = self.defaults[name]
             question["name"] = name
-            if question["name"] == "name" and question.get("default", None) is None:
-                question["default"] = self.destination.name
             questions.append(question)
         return Form.from_raw({"questions": questions})
 
