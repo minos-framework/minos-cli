@@ -122,9 +122,13 @@ class Question:
             return self.choices
 
         if isinstance(self.choices, dict):
-            return self._render_dict(self.choices, *args, **kwargs)
+            rendered = self._render_dict(self.choices, *args, **kwargs)
+            rendered = {str(k): v for k, v in rendered.items()}
         else:
-            return self._render_list(self.choices, *args, **kwargs)
+            rendered = self._render_list(self.choices, *args, **kwargs)
+            rendered = [str(v) for v in rendered]
+
+        return rendered
 
     def _render_dict(self, data: dict[str, Any], *args, **kwargs) -> dict[str, Any]:
         return {self._render_value(k, *args, **kwargs): self._render_value(v, *args, **kwargs) for k, v in data.items()}
