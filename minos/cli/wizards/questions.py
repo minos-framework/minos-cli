@@ -107,7 +107,7 @@ class Question:
 
         for key, value in self.choices.items():
             if value == self.default:
-                return self._render_value(key, *args, **kwargs)
+                return str(self._render_value(key, *args, **kwargs))
 
         raise ValueError("The default attribute must match with one of the choices.")
 
