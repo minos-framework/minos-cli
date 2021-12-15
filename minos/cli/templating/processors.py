@@ -88,7 +88,10 @@ class TemplateProcessor:
 
         :return: A list of ``TemplateFetcher`` instances.
         """
-        return [TemplateFetcher(self.answers[link]) for link in self.linked_questions]
+        urls = map(lambda name: self.answers[name], self.linked_questions)
+        urls = filter(lambda url: url != "", urls)
+        fetchers = map(TemplateFetcher, urls)
+        return list(fetchers)
 
     @property
     def linked_questions(self) -> list[str]:
