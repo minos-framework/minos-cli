@@ -61,6 +61,15 @@ class TestTemplateProcessor(unittest.TestCase):
             self.assertIsInstance(processor.form, Form)
             self.assertGreater(len(processor.form.questions), 0)
 
+    def test_form_with_defaults(self):
+        with TemporaryDirectory() as tmp_dir_name:
+            destination = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, destination, defaults={"name": "foo"})
+            form = processor.form
+            question = next((q for q in form.questions if q.name == "name"), None)
+            self.assertIsNotNone(question)
+            self.assertEqual("foo", question.default)
+
     def test_answers(self):
         with TemporaryDirectory() as tmp_dir_name:
             destination = Path(tmp_dir_name)
