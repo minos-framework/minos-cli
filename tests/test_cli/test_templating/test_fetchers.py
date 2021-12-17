@@ -18,20 +18,51 @@ from minos.cli import (
 
 class TestTemplateFetcher(unittest.TestCase):
     def setUp(self) -> None:
-        self.fetcher = TemplateFetcher.from_name("foo", "0.1.0")
-
-    def test_url(self):
-        self.assertEqual(
-            "https://github.com/Clariteia/minos-templates/releases/download/0.1.0/foo.tar.gz", self.fetcher.url
-        )
-
-    def test_metadata(self):
-        expected = {
+        self.uri = "https://github.com/Clariteia/minos-templates/releases/download/0.1.0/foo.tar.gz"
+        self.metadata = {
             "template_name": "foo",
             "template_registry": "https://github.com/Clariteia/minos-templates/releases/download/0.1.0",
             "template_version": "0.1.0",
         }
-        self.assertEqual(expected, self.fetcher.metadata)
+        self.fetcher = TemplateFetcher(self.uri, self.metadata)
+
+    def test_uri(self):
+        self.assertEqual(self.uri, self.fetcher.uri)
+
+    def test_metadata(self):
+        self.assertEqual(self.metadata, self.fetcher.metadata)
+
+    def test_from_url(self):
+        fetcher = TemplateFetcher.from_url(
+            "https://github.com/Clariteia/minos-templates/releases/download/0.1.0/foo.tar.gz"
+        )
+        self.assertEqual("https://github.com/Clariteia/minos-templates/releases/download/0.1.0/foo.tar.gz", fetcher.uri)
+        self.assertEqual(
+            {
+                "template_name": "foo",
+                "template_registry": "https://github.com/Clariteia/minos-templates/releases/download/0.1.0",
+            },
+            fetcher.metadata,
+        )
+
+    def test_from_path(self):
+        fetcher = TemplateFetcher.from_path(Path("/path/to/registry/template.tar.gz"))
+        self.assertEqual("file:///path/to/registry/template.tar.gz", fetcher.uri)
+        self.assertEqual(
+            {"template_name": "template", "template_registry": "file:///path/to/registry"}, fetcher.metadata,
+        )
+
+    def test_from_name(self):
+        fetcher = TemplateFetcher.from_name("foo", "0.1.0")
+        self.assertEqual("https://github.com/Clariteia/minos-templates/releases/download/0.1.0/foo.tar.gz", fetcher.uri)
+        self.assertEqual(
+            {
+                "template_name": "foo",
+                "template_registry": "https://github.com/Clariteia/minos-templates/releases/download/0.1.0",
+                "template_version": "0.1.0",
+            },
+            fetcher.metadata,
+        )
 
     def test_tmp(self):
         mock = MagicMock()
@@ -41,7 +72,7 @@ class TestTemplateFetcher(unittest.TestCase):
 
         self.assertIsInstance(observed, TemporaryDirectory)
 
-        self.assertEqual([call(self.fetcher.url, self.fetcher._tmp.name)], mock.call_args_list)
+        self.assertEqual([call(self.fetcher.uri, self.fetcher._tmp.name)], mock.call_args_list)
 
     def test_path(self):
         self.fetcher.fetch_tar = MagicMock()
@@ -57,7 +88,7 @@ class TestTemplateFetcher(unittest.TestCase):
         self.assertNotEqual(TemplateFetcher("www.bar.com"), TemplateFetcher("www.foo.com"))
 
     def test_repr(self):
-        self.assertEqual("TemplateFetcher('www.foo.com')", repr(TemplateFetcher("www.foo.com")))
+        self.assertEqual("TemplateFetcher('www.foo.com', {})", repr(TemplateFetcher("www.foo.com")))
 
     def test_fetch_tar(self):
         with patch("urllib.request.urlopen", return_value="file") as url_mock, patch("tarfile.open") as tar_mock:

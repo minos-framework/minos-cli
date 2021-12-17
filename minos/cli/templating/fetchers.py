@@ -27,12 +27,34 @@ TEMPLATE_VERSION: Final[str] = "0.0.1.dev20"
 class TemplateFetcher:
     """Template Fetcher class."""
 
-    def __init__(self, url: str, metadata: Optional[dict[str, Any]] = None):
+    def __init__(self, uri: str, metadata: Optional[dict[str, Any]] = None):
         if metadata is None:
             metadata = dict()
-        self.url = url
+        self.uri = uri
         self.metadata = metadata
         self._tmp = None
+
+    @classmethod
+    def from_url(cls, url: str) -> TemplateFetcher:
+        """Build a new instance from url.
+
+        :param url: The url of the template.
+        :return: A ``TemplateFetcher`` instance.
+        """
+        registry, name = url.rsplit("/", 1)
+        stem = name.split(".", 1)[0]
+        metadata = {"template_registry": registry, "template_name": stem}
+        return cls(url, metadata)
+
+    @classmethod
+    def from_path(cls, path: Path) -> TemplateFetcher:
+        """Build a new instance from path.
+
+        :param path: The path of the template.
+        :return: A ``TemplateFetcher`` instance.
+        """
+        metadata = {"template_registry": path.parent.as_uri(), "template_name": path.name.split(".", 1)[0]}
+        return cls(path.as_uri(), metadata)
 
     @classmethod
     def from_name(cls, name: str, version: str) -> TemplateFetcher:
@@ -65,15 +87,15 @@ class TemplateFetcher:
             cache_dir = Path.home() / ".minos" / "tmp"
             cache_dir.mkdir(parents=True, exist_ok=True)
             tmp = TemporaryDirectory(dir=str(cache_dir))
-            self.fetch_tar(self.url, tmp.name)
+            self.fetch_tar(self.uri, tmp.name)
             self._tmp = tmp
         return self._tmp
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}({self.url!r})"
+        return f"{type(self).__name__}({self.uri!r}, {self.metadata!r})"
 
     def __eq__(self, other: Any) -> bool:
-        return isinstance(other, type(self)) and self.url == other.url
+        return isinstance(other, type(self)) and self.uri == other.uri and self.metadata == other.metadata
 
     @staticmethod
     def fetch_tar(url: str, path: str) -> None:
