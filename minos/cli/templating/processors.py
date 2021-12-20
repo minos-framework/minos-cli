@@ -3,6 +3,9 @@ from __future__ import (
 )
 
 import logging
+from collections.abc import (
+    Callable,
+)
 from pathlib import (
     Path,
 )
@@ -163,11 +166,22 @@ class TemplateProcessor:
         if not self.destination.is_dir():
             raise ValueError(f"{self.destination!r} is not a directory!")
 
-        context = self.answers | {"destination": self.destination}
+        context = self.answers | self.functions | {"destination": self.destination}
         self.render_copier(self.source, self.destination, context, **kwargs)
 
         for fetcher in self.linked_template_fetchers:
             TemplateProcessor.from_fetcher(fetcher, self.destination, context=self.answers).render()
+
+    @property
+    def functions(self) -> dict[str, Callable]:
+        """TODO"""
+        ans = dict()
+
+        for name in self._config_data.get("_functions", list()):
+            module_name, func_name = name.rsplit(".", 1)
+            module = _module_from_file(module_name, str(self.source / f"{module_name}.py"))
+            ans[func_name] = getattr(module, func_name)
+        return ans
 
     @staticmethod
     def render_copier(
@@ -198,3 +212,12 @@ class TemplateProcessor:
                 **kwargs,
             )
         console.print(f":moon: Rendered template into {destination!r}!\n")
+
+
+def _module_from_file(module_name, file_path):
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
