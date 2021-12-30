@@ -41,8 +41,11 @@ class Question:
         choices: Optional[Union[list[Any], dict[str, Any]]] = None,
         default: Optional[Any] = None,
         secret: bool = False,
-        link: bool = False,
+        link: dict[Any, str] = None,
     ):
+        if link is None:
+            link = dict()
+
         self.name = name
         self.type_ = type_
         self.help_ = help_
@@ -65,8 +68,17 @@ class Question:
             choices=raw.get("choices", None),
             default=raw.get("default", None),
             secret=raw.get("secret", False),
-            link=raw.get("link", False),
+            link=raw.get("link", None),
         )
+
+    def get_link(self, answer: Any, *args, **kwargs) -> Optional[str]:
+        """TODO
+
+        :param answer: TODO
+        :return: TODO
+        """
+        template = self.link.get(answer)
+        return self._render_value(template, *args, **kwargs)
 
     def ask(self, *args, **kwargs) -> str:
         """Perform the ask.
