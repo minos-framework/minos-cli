@@ -71,7 +71,7 @@ class Question:
             link=raw.get("link", None),
         )
 
-    def get_link(self, answer: Any, *args, **kwargs) -> Optional[str]:
+    def get_template_uri(self, answer: Any, *args, **kwargs) -> Optional[str]:
         """TODO
 
         :param answer: TODO

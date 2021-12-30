@@ -107,13 +107,7 @@ class TemplateProcessor:
 
         :return: A list of ``TemplateFetcher`` instances.
         """
-        uris = map(
-            lambda question: question.get_link(self.answers[question.name], context=self.answers, env=self.env),
-            self.form.questions,
-        )
-        uris = filter(lambda uri: uri is not None, uris)
-        fetchers = map(TemplateFetcher, uris)
-        return list(fetchers)
+        return [TemplateFetcher(uri) for uri in self.form.get_template_uris(self.answers, env=self.env)]
 
     @property
     def linked_questions(self) -> list[str]:

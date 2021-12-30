@@ -51,5 +51,20 @@ class Form:
         """
         return [question.name for question in self.questions if question.link]
 
+    def get_template_uris(self, answers: dict[str, Any], *args, **kwargs) -> list[str]:
+        """TODO
+
+        :param answers: TODO
+        :param args: TODO
+        :param kwargs: TODO
+        :return: TODO
+        """
+        uris = (
+            question.get_template_uri(answers[question.name], context=answers, *args, **kwargs)
+            for question in self.questions
+        )
+        uris = filter(lambda uri: uri is not None, uris)
+        return list(uris)
+
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, type(self)) and self.questions == other.questions
