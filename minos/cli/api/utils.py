@@ -38,7 +38,7 @@ def render_template(
         error_console.print(":x: One of '--path' or '--url' must be provided")
         raise typer.Exit(code=2)
 
-    processor = TemplateProcessor.from_fetcher(fetcher, destination)
+    processor = TemplateProcessor.from_fetcher(fetcher, destination.absolute())
     processor.render()
 
 

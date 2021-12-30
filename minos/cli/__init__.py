@@ -10,6 +10,9 @@ from .consoles import (
     console,
     error_console,
 )
+from .importlib import (
+    FunctionLoader,
+)
 from .templating import (
     MICROSERVICE_INIT,
     PROJECT_INIT,
