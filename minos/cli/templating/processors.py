@@ -40,6 +40,9 @@ from jinja2 import (
 from ..consoles import (
     console,
 )
+from ..importlib import (
+    FunctionLoader,
+)
 from ..wizards import (
     Form,
 )
@@ -172,16 +175,14 @@ class TemplateProcessor:
         for fetcher in self.linked_template_fetchers:
             TemplateProcessor.from_fetcher(fetcher, self.destination, context=self.answers).render()
 
-    @property
+    @cached_property
     def functions(self) -> dict[str, Callable]:
-        """TODO"""
-        ans = dict()
+        """Get custom functions to be used by template rendering.
 
-        for name in self._config_data.get("_functions", list()):
-            module_name, func_name = name.rsplit(".", 1)
-            module = _module_from_file(module_name, str(self.source / f"{module_name}.py"))
-            ans[func_name] = getattr(module, func_name)
-        return ans
+        :return: A mapping from function name to function itself.
+        """
+        names = self._config_data.get("_functions", list())
+        return FunctionLoader.load_many_from_directory(names, self.source)
 
     @staticmethod
     def render_copier(
@@ -212,12 +213,3 @@ class TemplateProcessor:
                 **kwargs,
             )
         console.print(f":moon: Rendered template into {destination!r}!\n")
-
-
-def _module_from_file(module_name, file_path):
-    import importlib.util
-
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module

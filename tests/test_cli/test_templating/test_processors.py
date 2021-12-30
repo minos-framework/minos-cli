@@ -126,6 +126,24 @@ class TestTemplateProcessor(unittest.TestCase):
                 [call(source, destination, {"foo": "bar", "destination": destination})], render_mock.call_args_list
             )
 
+    def test_functions(self):
+        with TemporaryDirectory() as tmp_dir_name:
+            source = Path(tmp_dir_name) / "source"
+            source.mkdir()
+            destination = Path(tmp_dir_name) / "destination"
+            processor = TemplateProcessor(source, destination)
+            with patch(
+                "minos.cli.TemplateProcessor._config_data",
+                new_callable=PropertyMock,
+                return_value={"_functions": ["builtins.int"]},
+            ), patch(
+                "minos.cli.importlib.FunctionLoader.load_many_from_directory", return_value={"int": int}
+            ) as load_functions_mock:
+                observed = processor.functions
+
+            self.assertEqual({"int": int}, observed)
+            self.assertEqual([call(["builtins.int"], source)], load_functions_mock.call_args_list)
+
     def test_render_linked_templates(self):
         with TemporaryDirectory() as tmp_dir_name:
             source = Path(tmp_dir_name) / "source"
