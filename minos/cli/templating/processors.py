@@ -3,6 +3,9 @@ from __future__ import (
 )
 
 import logging
+from collections.abc import (
+    Callable,
+)
 from pathlib import (
     Path,
 )
@@ -36,6 +39,9 @@ from jinja2 import (
 
 from ..consoles import (
     console,
+)
+from ..importlib import (
+    FunctionLoader,
 )
 from ..wizards import (
     Form,
@@ -163,11 +169,20 @@ class TemplateProcessor:
         if not self.destination.is_dir():
             raise ValueError(f"{self.destination!r} is not a directory!")
 
-        context = self.answers | {"destination": self.destination}
+        context = self.answers | self.functions | {"destination": self.destination}
         self.render_copier(self.source, self.destination, context, **kwargs)
 
         for fetcher in self.linked_template_fetchers:
             TemplateProcessor.from_fetcher(fetcher, self.destination, context=self.answers).render()
+
+    @cached_property
+    def functions(self) -> dict[str, Callable]:
+        """Get custom functions to be used by template rendering.
+
+        :return: A mapping from function name to function itself.
+        """
+        names = self._config_data.get("_functions", list())
+        return FunctionLoader.load_many_from_directory(names, self.source)
 
     @staticmethod
     def render_copier(
