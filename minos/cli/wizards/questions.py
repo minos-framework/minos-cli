@@ -72,10 +72,10 @@ class Question:
         )
 
     def get_template_uri(self, answer: Any, *args, **kwargs) -> Optional[str]:
-        """TODO
+        """Get template uri for the given answer.
 
-        :param answer: TODO
-        :return: TODO
+        :param answer: The answer value.
+        :return: The template uri. It can be ``None`` if the given response does not have any associated template.
         """
         template = self.link.get(answer)
         return self._render_value(template, *args, **kwargs)

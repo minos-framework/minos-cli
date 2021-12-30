@@ -52,12 +52,12 @@ class Form:
         return [question.name for question in self.questions if question.link]
 
     def get_template_uris(self, answers: dict[str, Any], *args, **kwargs) -> list[str]:
-        """TODO
+        """Get template uris.
 
-        :param answers: TODO
-        :param args: TODO
-        :param kwargs: TODO
-        :return: TODO
+        :param answers: A mapping from question name to answer value.
+        :param args: Additional positional arguments.
+        :param kwargs: Additional named arguments.
+        :return: A list of strings representing template uris.
         """
         uris = (
             question.get_template_uri(answers[question.name], context=answers, *args, **kwargs)
