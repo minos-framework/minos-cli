@@ -3,10 +3,14 @@ import typer
 from ..consoles import (
     console,
 )
-from .microservice import app as microservices_app
+from .microservice import app as microservice_app
+from .project import app as project_app
+from .utils import app as utils_app
 
 app = typer.Typer(add_completion=False)
-app.add_typer(microservices_app, name="microservice")
+app.add_typer(microservice_app, name="microservice")
+app.add_typer(project_app, name="project")
+app.add_typer(utils_app, name="utils")
 
 
 @app.callback()

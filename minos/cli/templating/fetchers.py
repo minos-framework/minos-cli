@@ -10,46 +10,64 @@ from pathlib import (
 from tempfile import (
     TemporaryDirectory,
 )
+from typing import (
+    Any,
+    Final,
+    Optional,
+)
 
 from ..consoles import (
     console,
 )
 
-TEMPLATE_VERSION = "0.0.1.dev0"
-TEMPLATE_ARTIFACT_URL = "https://github.com/Clariteia/minos-templates/releases/download/{version}/{name}.tar.gz"
+TEMPLATE_URL: Final[str] = "https://github.com/Clariteia/minos-templates/releases/download"
+TEMPLATE_VERSION: Final[str] = "0.0.1.dev20"
 
 
 class TemplateFetcher:
     """Template Fetcher class."""
 
-    def __init__(self, name: str, version: str):
-        self._name = name
-        self._version = version
+    def __init__(self, uri: str, metadata: Optional[dict[str, Any]] = None):
+        if metadata is None:
+            metadata = dict()
+        self.uri = uri
+        self.metadata = metadata
         self._tmp = None
 
-    @property
-    def name(self) -> str:
-        """Get the name of the template.
+    @classmethod
+    def from_url(cls, url: str) -> TemplateFetcher:
+        """Build a new instance from url.
 
-        :return: A ``str`` value.
+        :param url: The url of the template.
+        :return: A ``TemplateFetcher`` instance.
         """
-        return self._name
+        registry, name = url.rsplit("/", 1)
+        stem = name.split(".", 1)[0]
+        metadata = {"template_registry": registry, "template_name": stem}
+        return cls(url, metadata)
 
-    @property
-    def version(self) -> str:
-        """Get the version of the template.
+    @classmethod
+    def from_path(cls, path: Path) -> TemplateFetcher:
+        """Build a new instance from path.
 
-        :return: A ``str`` value.
+        :param path: The path of the template.
+        :return: A ``TemplateFetcher`` instance.
         """
-        return self._version
+        metadata = {"template_registry": path.parent.as_uri(), "template_name": path.name.split(".", 1)[0]}
+        return cls(path.as_uri(), metadata)
 
-    @property
-    def url(self) -> str:
-        """Get the url of the template.
+    @classmethod
+    def from_name(cls, name: str, version: str) -> TemplateFetcher:
+        """Build a new instance from name and version.
 
-        :return: A ``str`` value.
+        :param name: The name of the template.
+        :param version: The version of the template.
+        :return: A ``TemplateFetcher`` instance.
         """
-        return TEMPLATE_ARTIFACT_URL.format(name=self._name, version=self._version)
+        registry = f"{TEMPLATE_URL}/{version}"
+        url = f"{registry}/{name}.tar.gz"
+        metadata = {"template_registry": registry, "template_version": version, "template_name": name}
+        return cls(url, metadata)
 
     @property
     def path(self) -> Path:
@@ -66,10 +84,18 @@ class TemplateFetcher:
         :return: A ``TemporaryDirectory`` instance.
         """
         if self._tmp is None:
-            tmp = TemporaryDirectory()
-            self.fetch_tar(self.url, tmp.name)
+            cache_dir = Path.home() / ".minos" / "tmp"
+            cache_dir.mkdir(parents=True, exist_ok=True)
+            tmp = TemporaryDirectory(dir=str(cache_dir))
+            self.fetch_tar(self.uri, tmp.name)
             self._tmp = tmp
         return self._tmp
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self.uri!r}, {self.metadata!r})"
+
+    def __eq__(self, other: Any) -> bool:
+        return isinstance(other, type(self)) and self.uri == other.uri and self.metadata == other.metadata
 
     @staticmethod
     def fetch_tar(url: str, path: str) -> None:
@@ -89,5 +115,5 @@ class TemplateFetcher:
         console.print(f":moon: Extracted template into {path!r}!\n")
 
 
-MICROSERVICE_INIT = TemplateFetcher("microservice-init", TEMPLATE_VERSION)
-PROJECT_INIT = TemplateFetcher("project-init", TEMPLATE_VERSION)
+MICROSERVICE_INIT = TemplateFetcher.from_name("microservice-init", TEMPLATE_VERSION)
+PROJECT_INIT = TemplateFetcher.from_name("project-init", TEMPLATE_VERSION)

@@ -2,11 +2,13 @@ from __future__ import (
     annotations,
 )
 
+import logging
 from pathlib import (
     Path,
 )
 from typing import (
     Any,
+    Optional,
     Union,
 )
 
@@ -42,6 +44,8 @@ from .fetchers import (
     TemplateFetcher,
 )
 
+logger = logging.getLogger(__name__)
+
 
 class TemplateProcessor:
     """Template Processor class.
@@ -49,32 +53,66 @@ class TemplateProcessor:
     This class generates a scaffolding structure on a given directory.
     """
 
-    def __init__(self, source: Union[Path, str], target: Union[Path, str]):
+    def __init__(
+        self,
+        source: Union[Path, str],
+        destination: Union[Path, str],
+        context: Optional[dict[str, Any]] = None,
+        defaults: Optional[dict[str, Any]] = None,
+    ):
         if not isinstance(source, Path):
             source = Path(source)
-        if not isinstance(target, Path):
-            target = Path(target)
+        if not isinstance(destination, Path):
+            destination = Path(destination)
+        if context is None:
+            context = dict()
         self.source = source
-        self.target = target
+        self.destination = destination
+        self.context = context
+        self.defaults = defaults
 
     @classmethod
-    def from_fetcher(cls, fetcher: TemplateFetcher, *args, **kwargs) -> TemplateProcessor:
+    def from_fetcher(
+        cls,
+        fetcher: TemplateFetcher,
+        *args,
+        context: Optional[dict[str, Any]] = None,
+        defaults: Optional[dict[str, Any]] = None,
+        **kwargs,
+    ) -> TemplateProcessor:
         """Build a new instance from a fetcher.
 
         :param fetcher: The template fetcher instance.
         :param args: Additional positional arguments.
+        :param context: A mapping containing already answered questions and environment variables for rendering.
+        :param defaults: A mapping containing additional default values for questions.
         :param kwargs: Additional named arguments.
         :return: A new ``TemplateProcessor`` instance.
         """
-        return cls(fetcher.path, *args, **kwargs)
+        if context is None:
+            context = dict()
+        if defaults is None:
+            defaults = dict()
+        return cls(fetcher.path, context=fetcher.metadata | context, defaults=defaults, *args, **kwargs)
+
+    @cached_property
+    def linked_template_fetchers(self) -> list[TemplateFetcher]:
+        """Get the list of linked template fetchers.
+
+        :return: A list of ``TemplateFetcher`` instances.
+        """
+        uris = map(lambda name: self.answers[name], self.linked_questions)
+        uris = filter(lambda uri: uri != "", uris)
+        fetchers = map(TemplateFetcher, uris)
+        return list(fetchers)
 
     @property
-    def destination(self) -> Path:
-        """Get the location of the rendered template.
+    def linked_questions(self) -> list[str]:
+        """Get the list of questions that are links.
 
-        :return: A ``Path`` instance.
+        :return: A list of ``str`` values.
         """
-        return self.target.parent
+        return self.form.links
 
     @cached_property
     def answers(self) -> dict[str, Any]:
@@ -82,7 +120,7 @@ class TemplateProcessor:
 
         :return: A mapping from question name to the answer value.
         """
-        return self.form.ask(env=self.env)
+        return self.form.ask(context=self.context, env=self.env)
 
     @cached_property
     def form(self) -> Form:
@@ -92,9 +130,9 @@ class TemplateProcessor:
         """
         questions = list()
         for name, question in filter_config(self._config_data)[1].items():
+            if name in self.defaults:
+                question["default"] = self.defaults[name]
             question["name"] = name
-            if question["name"] == "name" and question.get("default", None) is None:
-                question["default"] = self.target.name
             questions.append(question)
         return Form.from_raw({"questions": questions})
 
@@ -116,13 +154,20 @@ class TemplateProcessor:
         :param kwargs: Additional named arguments.
         :return: This method does not return anything.
         """
-        if not self.target.exists():
-            self.target.mkdir(parents=True, exist_ok=True)
+        if not self.source.exists():
+            raise ValueError(f"The source {self.source!r} does not exits!")
 
-        if not self.target.is_dir():
-            raise ValueError(f"{self.target!r} is not a directory!")
+        if not self.destination.exists():
+            self.destination.mkdir(parents=True, exist_ok=True)
 
-        self.render_copier(self.source, self.destination, self.answers, **kwargs)
+        if not self.destination.is_dir():
+            raise ValueError(f"{self.destination!r} is not a directory!")
+
+        context = self.answers | {"destination": self.destination}
+        self.render_copier(self.source, self.destination, context, **kwargs)
+
+        for fetcher in self.linked_template_fetchers:
+            TemplateProcessor.from_fetcher(fetcher, self.destination, context=self.answers).render()
 
     @staticmethod
     def render_copier(
@@ -140,6 +185,16 @@ class TemplateProcessor:
             source = str(source)
         if not isinstance(destination, str):
             destination = str(destination)
-        with console.status("Rendering template...", spinner="moon"):
-            copier.copy(src_path=source, dst_path=destination, data=answers, quiet=True, **kwargs)
-        console.print(":moon: Rendered template!\n")
+        with console.status(f"Rendering template into {destination!r}!...", spinner="moon"):
+            logger.debug(f"Rendering a template located at {source!r} to {destination!r} with {answers!r} context...")
+            copier.copy(
+                src_path=source,
+                dst_path=destination,
+                data=answers,
+                quiet=True,
+                force=True,
+                extra_paths=["/"],
+                cleanup_on_error=False,
+                **kwargs,
+            )
+        console.print(f":moon: Rendered template into {destination!r}!\n")

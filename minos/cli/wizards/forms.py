@@ -4,6 +4,7 @@ from __future__ import (
 
 from typing import (
     Any,
+    Optional,
 )
 
 from .questions import (
@@ -27,16 +28,28 @@ class Form:
         questions = [Question.from_raw(v) for v in raw["questions"]]
         return cls(questions)
 
-    def ask(self, **kwargs) -> dict[str, Any]:
+    def ask(self, context: Optional[dict[str, Any]] = None, **kwargs) -> dict[str, Any]:
         """Perform the asking process.
 
+        :param context: A mapping containing already answered questions and environment variables for rendering.
         :param kwargs: Additional named arguments to be passed to each question.
         :return: A mapping from the question names to the obtained answers.
         """
-        answers = dict()
+        answers = dict() if context is None else context.copy()
+
         for question in self.questions:
-            answers[question.name] = question.ask(answers, **kwargs)
+            if question.name not in answers:
+                answers[question.name] = question.ask(context=answers, **kwargs)
+
         return answers
+
+    @property
+    def links(self) -> list[str]:
+        """Get the list of question names that are links to another templates.
+
+        :return: A list of ``str`` values.
+        """
+        return [question.name for question in self.questions if question.link]
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, type(self)) and self.questions == other.questions
