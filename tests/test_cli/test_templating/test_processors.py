@@ -102,13 +102,13 @@ class TestTemplateProcessor(unittest.TestCase):
             destination = Path(tmp_dir_name)
             processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
 
-            expected = [TemplateFetcher("www.foo.com"), TemplateFetcher("www.bar.com")]
+            expected = [TemplateFetcher("/microservice-python-init.tar.gz")]
             with patch(
                 "minos.cli.TemplateProcessor.linked_questions", new_callable=PropertyMock, return_value=["foo", "bar"]
             ), patch(
                 "minos.cli.TemplateProcessor.answers",
                 new_callable=PropertyMock,
-                return_value={"foo": "www.foo.com", "bar": "www.bar.com", "foobar": ""},
+                return_value={"language": "python", "name": "foo"},
             ):
                 self.assertEqual(expected, processor.linked_template_fetchers)
 
@@ -146,20 +146,17 @@ class TestTemplateProcessor(unittest.TestCase):
 
     def test_render_linked_templates(self):
         with TemporaryDirectory() as tmp_dir_name:
-            source = Path(tmp_dir_name) / "source"
-            source.mkdir()
             destination = Path(tmp_dir_name) / "destination"
-            processor = TemplateProcessor(source, destination)
-            context = {"foo": "www.foo.com", "bar": "www.bar.com", "foobar": ""}
+            processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
+            context = {"language": "python", "name": "foo"}
             with patch("minos.cli.TemplateProcessor.render_copier"), patch(
                 "minos.cli.TemplateProcessor.linked_questions", new_callable=PropertyMock, return_value=["foo", "bar"]
-            ), patch("minos.cli.TemplateProcessor.answers", new_callable=PropertyMock, return_value=context,), patch(
+            ), patch("minos.cli.TemplateProcessor.answers", new_callable=PropertyMock, return_value=context), patch(
                 "minos.cli.TemplateProcessor.from_fetcher"
             ) as from_fetcher_mock:
                 processor.render()
             expected = [
-                call(TemplateFetcher("www.foo.com"), destination, context=context),
-                call(TemplateFetcher("www.bar.com"), destination, context=context),
+                call(TemplateFetcher("/microservice-python-init.tar.gz"), destination, context=context),
             ]
             self.assertEqual(expected, from_fetcher_mock.call_args_list)
 

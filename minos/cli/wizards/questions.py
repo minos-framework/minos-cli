@@ -41,8 +41,11 @@ class Question:
         choices: Optional[Union[list[Any], dict[str, Any]]] = None,
         default: Optional[Any] = None,
         secret: bool = False,
-        link: bool = False,
+        link: dict[Any, str] = None,
     ):
+        if link is None:
+            link = dict()
+
         self.name = name
         self.type_ = type_
         self.help_ = help_
@@ -65,8 +68,17 @@ class Question:
             choices=raw.get("choices", None),
             default=raw.get("default", None),
             secret=raw.get("secret", False),
-            link=raw.get("link", False),
+            link=raw.get("link", None),
         )
+
+    def get_template_uri(self, answer: Any, *args, **kwargs) -> Optional[str]:
+        """Get template uri for the given answer.
+
+        :param answer: The answer value.
+        :return: The template uri. It can be ``None`` if the given response does not have any associated template.
+        """
+        template = self.link.get(answer)
+        return self._render_value(template, *args, **kwargs)
 
     def ask(self, *args, **kwargs) -> str:
         """Perform the ask.

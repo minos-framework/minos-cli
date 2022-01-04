@@ -21,7 +21,7 @@ from ..consoles import (
 )
 
 TEMPLATE_URL: Final[str] = "https://github.com/Clariteia/minos-templates/releases/download"
-TEMPLATE_VERSION: Final[str] = "0.0.1.dev20"
+TEMPLATE_VERSION: Final[str] = "v0.1.0.dev1"
 
 
 class TemplateFetcher:
