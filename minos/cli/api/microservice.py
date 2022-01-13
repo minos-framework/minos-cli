@@ -1,11 +1,17 @@
 from pathlib import (
     Path,
 )
+from typing import (
+    Optional,
+)
 
 import typer
 
 from ..consoles import (
     console,
+)
+from ..deploying import (
+    MicroserviceDeployer,
 )
 from ..templating import (
     MICROSERVICE_INIT,
@@ -31,6 +37,16 @@ def new(path: Path) -> None:
     console.print(":wrench: Creating new Microservice...\n")
     processor = TemplateProcessor.from_fetcher(MICROSERVICE_INIT, path.absolute(), defaults={"name": path.name})
     processor.render()
+
+
+@app.command("deploy")
+def deploy(
+    name: Optional[str] = typer.Argument(None, help="TODO"), path: Path = typer.Option(Path.cwd(), help="TODO")
+) -> None:
+    """TODO"""
+    console.print(":wrench: Deploying the microservice...\n")
+    deployer = MicroserviceDeployer(name, path)
+    deployer.deploy()
 
 
 @app.callback()

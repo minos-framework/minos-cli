@@ -7,6 +7,9 @@ import typer
 from ..consoles import (
     console,
 )
+from ..deploying import (
+    ProjectDeployer,
+)
 from ..templating import (
     PROJECT_INIT,
     TemplateProcessor,
@@ -31,6 +34,15 @@ def new(path: Path) -> None:
     console.print(":wrench: Creating new Project...\n")
     processor = TemplateProcessor.from_fetcher(PROJECT_INIT, path.absolute(), defaults={"project_name": path.name})
     processor.render()
+
+
+@app.command("deploy")
+def deploy(path: Path = typer.Option(Path.cwd(), help="TODO")) -> None:
+    """TODO"""
+    console.print(":wrench: Deploying the Project...\n")
+
+    deployer = ProjectDeployer(path)
+    deployer.deploy()
 
 
 @app.callback()
