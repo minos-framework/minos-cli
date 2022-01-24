@@ -31,13 +31,16 @@ def database(
 
     with path.open() as project_file:
         data = yaml.load(project_file, Loader=yaml.FullLoader)
+        if "services" in data and not data["services"]:
+            data["services"] = dict()
 
-    if "database" in data:
+    if "services" in data and "database" in data["services"]:
         console.print("Database already set")
         raise typer.Exit()
     else:
         console.print(":wrench: Setting database config\n")
-        fetcher = TemplateFetcher.from_name(f"project-database-{backend}-init", "v0.1.0.dev1")
+        version = "v0.1.0.dev3"
+        fetcher = TemplateFetcher.from_name(f"project-database-{backend}-init", version)
         processor = TemplateProcessor.from_fetcher(
             fetcher,
             Path.cwd(),

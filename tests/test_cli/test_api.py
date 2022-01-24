@@ -103,9 +103,9 @@ class TestAPI(unittest.TestCase):
 
             self.assertEqual(2, result.exit_code)
 
-    def test_set_database(self) -> None:
+    def test_set_database_postgres(self) -> None:
         with patch("minos.cli.TemplateProcessor.render") as mock:
-            result = CliRunner().invoke(app, ["set", "database"])
+            result = CliRunner().invoke(app, ["set", "database", "postgres"])
 
             self.assertEqual(0, result.exit_code)
 
