@@ -6,10 +6,10 @@ from pathlib import (
 import typer
 import yaml
 
-from ..templating import TemplateFetcher
 from ..consoles import (
     console,
 )
+from ..templating import TemplateFetcher
 from ..templating import (
     TemplateProcessor,
 )
