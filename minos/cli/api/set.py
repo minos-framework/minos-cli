@@ -27,14 +27,14 @@ def database(
     if not path.exists():
         console.print(Path.cwd().name)
         console.print("No Minos project found. Consider 'minos project init'")
-        raise ValueError
+        raise typer.Exit()
 
     with path.open() as project_file:
         data = yaml.load(project_file, Loader=yaml.FullLoader)
 
     if "database" in data:
         console.print("Database already set")
-        raise ValueError
+        raise typer.Exit()
     else:
         console.print(":wrench: Setting database config\n")
         fetcher = TemplateFetcher.from_name(f"project-database-{backend}-init", "v0.1.0.dev1")
