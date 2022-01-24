@@ -23,7 +23,7 @@ def database() -> None:
     path = Path(os.getcwd()) / ".minos-project.yaml"
 
     if not path.exists():
-        console.print(os.getcwd())
+        console.print(Path.cwd().name)
         console.print("No Minos project found. Consider 'minos project create'")
         raise ValueError
 
@@ -42,6 +42,9 @@ def database() -> None:
             defaults={"project_name": Path.cwd().name}
         )
         processor.render()
+
+        data["database"] = "postgres"
+        yaml.dump(data, sort_keys=False)
 
 
 @app.callback()
