@@ -103,6 +103,14 @@ class TestAPI(unittest.TestCase):
 
             self.assertEqual(2, result.exit_code)
 
+    def test_set_database(self) -> None:
+        with patch("minos.cli.TemplateProcessor.render") as mock:
+            result = CliRunner().invoke(app, ["set", "database"])
+
+            self.assertEqual(0, result.exit_code)
+
+            self.assertEqual(1, mock.call_count)
+
 
 if __name__ == "__main__":
     unittest.main()

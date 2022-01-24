@@ -14,6 +14,7 @@ app.add_typer(project_app, name="project")
 app.add_typer(utils_app, name="utils")
 app.add_typer(set_app, name="set")
 
+
 @app.callback()
 def callback():
     """Minos CLI."""

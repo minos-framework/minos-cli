@@ -1,14 +1,16 @@
+import os
 from pathlib import (
     Path,
 )
 
 import typer
+import yaml
 
+from ..templating import TemplateFetcher
 from ..consoles import (
     console,
 )
 from ..templating import (
-    PROJECT_INIT,
     TemplateProcessor,
 )
 
@@ -18,10 +20,29 @@ app = typer.Typer(add_completion=False)
 @app.command("database")
 def database() -> None:
     """Set database configuration"""
+    path = Path(os.getcwd()) / ".minos-project.yaml"
 
-    console.print(":wrench: Setting database config\n")
-    processor = TemplateProcessor.from_fetcher(PROJECT_INIT, Path.cwd(), defaults={"project_name": Path.cwd().name})
-    processor.render()
+    if not path.exists():
+        console.print(os.getcwd())
+        console.print("No Minos project found. Consider 'minos project create'")
+        raise ValueError
+
+    with path.open() as project_file:
+        data = yaml.load(project_file, Loader=yaml.FullLoader)
+
+    if "database" in data:
+        console.print("Database already set")
+        raise ValueError
+    else:
+        console.print(":wrench: Setting database config\n")
+        fetcher = TemplateFetcher.from_name("project-database-postgres-init", "v0.1.0.dev1")
+        processor = TemplateProcessor.from_fetcher(
+            fetcher,
+            Path.cwd(),
+            defaults={"project_name": Path.cwd().name}
+        )
+        processor.render()
+
 
 @app.callback()
 def callback():
