@@ -45,7 +45,7 @@ def database(
         )
         processor.render()
 
-        data["database"] = "postgres"
+        data["database"] = backend
         yaml.dump(data, sort_keys=False)
 
 
