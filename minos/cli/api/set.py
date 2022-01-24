@@ -18,13 +18,15 @@ app = typer.Typer(add_completion=False)
 
 
 @app.command("database")
-def database() -> None:
+def database(
+    backend: str = typer.Argument(...),
+) -> None:
     """Set database configuration"""
     path = Path(os.getcwd()) / ".minos-project.yaml"
 
     if not path.exists():
         console.print(Path.cwd().name)
-        console.print("No Minos project found. Consider 'minos project create'")
+        console.print("No Minos project found. Consider 'minos project init'")
         raise ValueError
 
     with path.open() as project_file:
@@ -35,7 +37,7 @@ def database() -> None:
         raise ValueError
     else:
         console.print(":wrench: Setting database config\n")
-        fetcher = TemplateFetcher.from_name("project-database-postgres-init", "v0.1.0.dev1")
+        fetcher = TemplateFetcher.from_name(f"project-database-{backend}-init", "v0.1.0.dev1")
         processor = TemplateProcessor.from_fetcher(
             fetcher,
             Path.cwd(),
