@@ -1,12 +1,18 @@
 import os
-from pathlib import Path
+from pathlib import (
+    Path,
+)
 
 import typer
 import yaml
 
-from ..consoles import console
-from ..templating import TemplateFetcher
-from ..templating import TemplateProcessor
+from ..consoles import (
+    console,
+)
+from ..templating import (
+    TemplateFetcher,
+    TemplateProcessor,
+)
 
 VERSION = "v0.1.0.dev6"
 

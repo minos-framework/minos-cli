@@ -1,6 +1,8 @@
 import typer
 
-from ..consoles import console
+from ..consoles import (
+    console,
+)
 from .microservice import app as microservice_app
 from .project import app as project_app
 from .set import app as set_app
