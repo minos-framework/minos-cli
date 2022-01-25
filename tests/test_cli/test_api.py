@@ -111,6 +111,30 @@ class TestAPI(unittest.TestCase):
 
             self.assertEqual(1, mock.call_count)
 
+    def test_set_broker_kafka(self) -> None:
+        with patch("minos.cli.TemplateProcessor.render") as mock:
+            result = CliRunner().invoke(app, ["set", "broker", "kafka"])
+
+            self.assertEqual(0, result.exit_code)
+
+            self.assertEqual(1, mock.call_count)
+
+    def test_set_apigateway_minos(self) -> None:
+        with patch("minos.cli.TemplateProcessor.render") as mock:
+            result = CliRunner().invoke(app, ["set", "api-gateway", "minos"])
+
+            self.assertEqual(0, result.exit_code)
+
+            self.assertEqual(1, mock.call_count)
+
+    def test_set_discovery_minos(self) -> None:
+        with patch("minos.cli.TemplateProcessor.render") as mock:
+            result = CliRunner().invoke(app, ["set", "discovery", "minos"])
+
+            self.assertEqual(0, result.exit_code)
+
+            self.assertEqual(1, mock.call_count)
+
 
 if __name__ == "__main__":
     unittest.main()

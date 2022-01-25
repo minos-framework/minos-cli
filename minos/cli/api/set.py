@@ -20,25 +20,25 @@ app = typer.Typer(add_completion=False)
 
 
 @app.command("database")
-def database(backend: str = typer.Argument(...),) -> None:
+def database(backend: str = typer.Argument(...)) -> None:
     """Set database configuration"""
     set_service("database", backend)
 
 
 @app.command("discovery")
-def discovery(backend: str = typer.Argument(...),) -> None:
+def discovery(backend: str = typer.Argument(...)) -> None:
     """Set discovery configuration"""
     set_service("discovery", backend)
 
 
 @app.command("broker")
-def broker(backend: str = typer.Argument(...),) -> None:
+def broker(backend: str = typer.Argument(...)) -> None:
     """Set broker configuration"""
     set_service("broker", backend)
 
 
 @app.command("api-gateway")
-def apigateway(backend: str = typer.Argument(...),) -> None:
+def apigateway(backend: str = typer.Argument(...)) -> None:
     """Set api-gateway configuration"""
     set_service("apigateway", backend)
 
@@ -48,12 +48,11 @@ def set_service(service: str, backend: str) -> None:
     path = Path(os.getcwd()) / ".minos-project.yaml"
 
     if not path.exists():
-        console.print(Path.cwd().name)
         console.print("No Minos project found. Consider 'minos project init'")
         raise typer.Exit()
 
     with path.open() as project_file:
-        data = yaml.load(project_file, Loader=yaml.FullLoader)
+        data = yaml.safe_load(project_file)
         if "services" in data and not data["services"]:
             data["services"] = dict()
 
