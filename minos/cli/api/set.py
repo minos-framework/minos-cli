@@ -1,18 +1,12 @@
 import os
-from pathlib import (
-    Path,
-)
+from pathlib import Path
 
 import typer
 import yaml
 
-from ..consoles import (
-    console,
-)
+from ..consoles import console
 from ..templating import TemplateFetcher
-from ..templating import (
-    TemplateProcessor,
-)
+from ..templating import TemplateProcessor
 
 VERSION = "v0.1.0.dev6"
 
@@ -20,9 +14,7 @@ app = typer.Typer(add_completion=False)
 
 
 @app.command("database")
-def database(
-    backend: str = typer.Argument(...),
-) -> None:
+def database(backend: str = typer.Argument(...),) -> None:
     """Set database configuration"""
     path = Path(os.getcwd()) / ".minos-project.yaml"
 
@@ -42,11 +34,7 @@ def database(
     else:
         console.print(":wrench: Setting database config\n")
         fetcher = TemplateFetcher.from_name(f"project-database-{backend}-init", VERSION)
-        processor = TemplateProcessor.from_fetcher(
-            fetcher,
-            Path.cwd(),
-            defaults={"project_name": Path.cwd().name}
-        )
+        processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
         processor.render()
 
         data["database"] = backend
@@ -54,9 +42,7 @@ def database(
 
 
 @app.command("discovery")
-def discovery(
-    backend: str = typer.Argument(...),
-) -> None:
+def discovery(backend: str = typer.Argument(...),) -> None:
     """Set discovery configuration"""
     path = Path(os.getcwd()) / ".minos-project.yaml"
 
@@ -76,11 +62,7 @@ def discovery(
     else:
         console.print(":wrench: Setting discovery config\n")
         fetcher = TemplateFetcher.from_name(f"project-discovery-{backend}-init", VERSION)
-        processor = TemplateProcessor.from_fetcher(
-            fetcher,
-            Path.cwd(),
-            defaults={"project_name": Path.cwd().name}
-        )
+        processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
         processor.render()
 
         data["discovery"] = backend
@@ -88,9 +70,7 @@ def discovery(
 
 
 @app.command("broker")
-def broker(
-    backend: str = typer.Argument(...),
-) -> None:
+def broker(backend: str = typer.Argument(...),) -> None:
     """Set broker configuration"""
     path = Path(os.getcwd()) / ".minos-project.yaml"
 
@@ -110,11 +90,7 @@ def broker(
     else:
         console.print(":wrench: Setting broker config\n")
         fetcher = TemplateFetcher.from_name(f"project-broker-{backend}-init", VERSION)
-        processor = TemplateProcessor.from_fetcher(
-            fetcher,
-            Path.cwd(),
-            defaults={"project_name": Path.cwd().name}
-        )
+        processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
         processor.render()
 
         data["broker"] = backend
@@ -122,9 +98,7 @@ def broker(
 
 
 @app.command("api-gateway")
-def apigateway(
-    backend: str = typer.Argument(...),
-) -> None:
+def apigateway(backend: str = typer.Argument(...),) -> None:
     """Set api-gateway configuration"""
     path = Path(os.getcwd()) / ".minos-project.yaml"
 
@@ -144,11 +118,7 @@ def apigateway(
     else:
         console.print(":wrench: Setting api-gateway config\n")
         fetcher = TemplateFetcher.from_name(f"project-apigateway-{backend}-init", VERSION)
-        processor = TemplateProcessor.from_fetcher(
-            fetcher,
-            Path.cwd(),
-            defaults={"project_name": Path.cwd().name}
-        )
+        processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
         processor.render()
 
         data["broker"] = backend
