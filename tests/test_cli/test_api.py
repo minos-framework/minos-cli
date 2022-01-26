@@ -9,6 +9,7 @@ from unittest.mock import (
     patch,
 )
 
+import yaml
 from typer.testing import (
     CliRunner,
 )
@@ -104,36 +105,63 @@ class TestAPI(unittest.TestCase):
             self.assertEqual(2, result.exit_code)
 
     def test_set_database_postgres(self) -> None:
-        with patch("minos.cli.TemplateProcessor.render") as mock:
-            result = CliRunner().invoke(app, ["set", "database", "postgres"])
+        with TemporaryDirectory() as tmp_dir_name:
+            tmp_config_file: Path = Path(tmp_dir_name) / ".minos-project.yaml"
+            with open(tmp_config_file, "w") as config:
+                data = {"services": None}
+                yaml.dump(data, config)
 
-            self.assertEqual(0, result.exit_code)
+            with patch("pathlib.Path.cwd", return_value=Path(tmp_dir_name)):
+                with patch("minos.cli.TemplateProcessor.render") as mock:
+                    result = CliRunner().invoke(app, ["set", "database", "postgres"])
 
-            self.assertEqual(1, mock.call_count)
+                    self.assertEqual(0, result.exit_code)
+
+                    self.assertEqual(1, mock.call_count)
 
     def test_set_broker_kafka(self) -> None:
-        with patch("minos.cli.TemplateProcessor.render") as mock:
-            result = CliRunner().invoke(app, ["set", "broker", "kafka"])
+        with TemporaryDirectory() as tmp_dir_name:
+            tmp_config_file: Path = Path(tmp_dir_name) / ".minos-project.yaml"
+            with open(tmp_config_file, "w") as config:
+                data = {"services": None}
+                yaml.dump(data, config)
 
-            self.assertEqual(0, result.exit_code)
+            with patch("pathlib.Path.cwd", return_value=Path(tmp_dir_name)):
+                with patch("minos.cli.TemplateProcessor.render") as mock:
+                    result = CliRunner().invoke(app, ["set", "broker", "kafka"])
 
-            self.assertEqual(1, mock.call_count)
+                    self.assertEqual(0, result.exit_code)
+
+                    self.assertEqual(1, mock.call_count)
 
     def test_set_apigateway_minos(self) -> None:
-        with patch("minos.cli.TemplateProcessor.render") as mock:
-            result = CliRunner().invoke(app, ["set", "api-gateway", "minos"])
+        with TemporaryDirectory() as tmp_dir_name:
+            tmp_config_file: Path = Path(tmp_dir_name) / ".minos-project.yaml"
+            with open(tmp_config_file, "w") as config:
+                data = {"services": None}
+                yaml.dump(data, config)
 
-            self.assertEqual(0, result.exit_code)
+            with patch("pathlib.Path.cwd", return_value=Path(tmp_dir_name)):
+                with patch("minos.cli.TemplateProcessor.render") as mock:
+                    result = CliRunner().invoke(app, ["set", "api-gateway", "minos"])
 
-            self.assertEqual(1, mock.call_count)
+                    self.assertEqual(0, result.exit_code)
 
-    def stest_set_discovery_minos(self) -> None:
-        with patch("minos.cli.TemplateProcessor.render") as mock:
-            result = CliRunner().invoke(app, ["set", "discovery", "minos"])
+                    self.assertEqual(1, mock.call_count)
 
-            self.assertEqual(0, result.exit_code)
+    def test_set_discovery_minos(self) -> None:
+        with TemporaryDirectory() as tmp_dir_name:
+            tmp_config_file: Path = Path(tmp_dir_name) / ".minos-project.yaml"
+            with open(tmp_config_file, "w") as config:
+                data = {"services": None}
+                yaml.dump(data, config)
+            with patch("pathlib.Path.cwd", return_value=Path(tmp_dir_name)):
+                with patch("minos.cli.TemplateProcessor.render") as mock:
+                    result = CliRunner().invoke(app, ["set", "discovery", "minos"])
 
-            self.assertEqual(1, mock.call_count)
+                    self.assertEqual(0, result.exit_code)
+
+                    self.assertEqual(1, mock.call_count)
 
 
 if __name__ == "__main__":
