@@ -14,7 +14,7 @@ from ..templating import (
     TemplateProcessor,
 )
 
-VERSION = "v0.1.0.dev6"
+VERSION = "v0.1.0.dev7"
 
 app = typer.Typer(add_completion=False)
 
@@ -45,7 +45,7 @@ def apigateway(backend: str = typer.Argument(...)) -> None:
 
 def set_service(service: str, backend: str) -> None:
     """Set configuration"""
-    path = Path(os.getcwd()) / ".minos-project.yaml"
+    path = Path.cwd() / ".minos-project.yaml"
 
     if not path.exists():
         console.print("No Minos project found. Consider 'minos project init'")
@@ -65,7 +65,7 @@ def set_service(service: str, backend: str) -> None:
         processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
         processor.render()
 
-        data[service] = backend
+        data["services"][service] = backend
         yaml.dump(data, sort_keys=False)
 
 
