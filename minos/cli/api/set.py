@@ -1,4 +1,3 @@
-import os
 from pathlib import (
     Path,
 )
@@ -56,17 +55,17 @@ def set_service(service: str, backend: str) -> None:
         if "services" in data and not data["services"]:
             data["services"] = dict()
 
-    if "services" in data and service in data["services"]:
-        console.print(f"{service} already set")
-        raise typer.Exit()
-    else:
-        console.print(f":wrench: Setting {service} config\n")
-        fetcher = TemplateFetcher.from_name(f"project-{service}-{backend}-init", VERSION)
-        processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
-        processor.render()
+        if "services" in data and service in data["services"]:
+            console.print(f"{service} already set")
+            raise typer.Exit()
+        else:
+            console.print(f":wrench: Setting {service} config\n")
+            fetcher = TemplateFetcher.from_name(f"project-{service}-{backend}-init", VERSION)
+            processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
+            processor.render()
 
-        data["services"][service] = backend
-        yaml.dump(data, sort_keys=False)
+            data["services"][service] = backend
+            yaml.dump(data, project_file, sort_keys=False)
 
 
 @app.callback()
