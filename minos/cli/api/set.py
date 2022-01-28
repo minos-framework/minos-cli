@@ -65,7 +65,7 @@ def set_service(service: str, backend: str) -> None:
             processor.render()
 
             data["services"][service] = backend
-            yaml.dump(data, project_file, sort_keys=False)
+            yaml.dump(data, sort_keys=False)
 
 
 @app.callback()
