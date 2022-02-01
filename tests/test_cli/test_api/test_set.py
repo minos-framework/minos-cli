@@ -19,7 +19,9 @@ from minos.cli import (
     app,
     main,
 )
-from minos.cli.api.set import set_service
+from minos.cli.api.set import (
+    set_service,
+)
 
 
 class TestSet(unittest.TestCase):
