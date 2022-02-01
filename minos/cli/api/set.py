@@ -37,7 +37,7 @@ def broker(backend: str = typer.Argument(...)) -> None:
 
 
 @app.command("api-gateway")
-def apigateway(backend: str = typer.Argument(...)) -> None:
+def api_gateway(backend: str = typer.Argument(...)) -> None:
     """Set api-gateway configuration"""
     set_service("apigateway", backend)
 
@@ -64,8 +64,9 @@ def set_service(service: str, backend: str) -> None:
             processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
             processor.render()
 
-            data["services"][service] = backend
-            yaml.dump(data, sort_keys=False)
+            with path.open("w") as project_file_write:
+                data["services"][service] = backend
+                yaml.dump(data, project_file_write, sort_keys=False)
 
 
 @app.callback()

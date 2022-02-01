@@ -19,11 +19,31 @@ from minos.cli import (
     app,
     main,
 )
+from minos.cli.api.set import set_service
 
 
-class TestAPI(unittest.TestCase):
+class TestSet(unittest.TestCase):
     def test_main(self):
         self.assertEqual(__main__.main, main)
+
+    def test_set_service(self):
+        service = "database"
+        backend = "postgres"
+
+        with TemporaryDirectory() as tmp_dir_name:
+            tmp_config_file: Path = Path(tmp_dir_name) / ".minos-project.yaml"
+            with open(tmp_config_file, "w") as config:
+                data = {"services": None}
+                yaml.dump(data, config)
+
+            with patch("pathlib.Path.cwd", return_value=Path(tmp_dir_name)):
+                with patch("minos.cli.TemplateProcessor.render"):
+                    set_service(service, backend)
+
+                    with open(tmp_config_file, "r") as result_config_file:
+                        data = yaml.safe_load(result_config_file)
+
+        self.assertEqual(backend, data["services"][service])
 
     def set(self, service: str, backend: str):
         with TemporaryDirectory() as tmp_dir_name:
