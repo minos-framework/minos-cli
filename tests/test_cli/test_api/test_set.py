@@ -45,7 +45,7 @@ class TestSet(unittest.TestCase):
 
         self.assertEqual(backend, data["services"][service])
 
-    def set(self, service: str, backend: str):
+    def minos_set(self, service: str, backend: str):
         with TemporaryDirectory() as tmp_dir_name:
             tmp_config_file: Path = Path(tmp_dir_name) / ".minos-project.yaml"
             with open(tmp_config_file, "w") as config:
@@ -61,16 +61,16 @@ class TestSet(unittest.TestCase):
                     self.assertEqual(1, mock.call_count)
 
     def test_set_database_postgres(self) -> None:
-        self.set("database", "postgres")
+        self.minos_set("database", "postgres")
 
     def test_set_broker_kafka(self) -> None:
-        self.set("broker", "kafka")
+        self.minos_set("broker", "kafka")
 
     def test_set_api_gateway_minos(self) -> None:
-        self.set("api-gateway", "minos")
+        self.minos_set("api-gateway", "minos")
 
     def test_set_discovery_minos(self) -> None:
-        self.set("discovery", "minos")
+        self.minos_set("discovery", "minos")
 
     def test_no_config_file(self):
         with TemporaryDirectory() as tmp_dir_name:
