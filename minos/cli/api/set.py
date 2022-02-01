@@ -48,7 +48,7 @@ def set_service(service: str, backend: str) -> None:
 
     if not path.exists():
         console.print("No Minos project found. Consider 'minos project init'")
-        raise typer.Exit()
+        raise typer.Exit(code=1)
 
     with path.open() as project_file:
         data = yaml.safe_load(project_file)
@@ -57,7 +57,7 @@ def set_service(service: str, backend: str) -> None:
 
         if "services" in data and service in data["services"]:
             console.print(f"{service} already set")
-            raise typer.Exit()
+            raise typer.Exit(code=1)
         else:
             console.print(f":wrench: Setting {service} config\n")
             fetcher = TemplateFetcher.from_name(f"project-{service}-{backend}-init", VERSION)
