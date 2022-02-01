@@ -1,24 +1,16 @@
-from __future__ import (
-    annotations,
-)
+from __future__ import annotations
 
 import tarfile
 import urllib.request
-from pathlib import (
-    Path,
-)
-from tempfile import (
-    TemporaryDirectory,
-)
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import (
     Any,
     Final,
     Optional,
 )
 
-from ..consoles import (
-    console,
-)
+from ..consoles import console
 
 TEMPLATE_URL: Final[str] = "https://github.com/Clariteia/minos-templates/releases/download"
 TEMPLATE_VERSION: Final[str] = "v0.1.0.dev7"

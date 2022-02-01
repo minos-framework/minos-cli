@@ -1,13 +1,9 @@
-from pathlib import (
-    Path,
-)
+from pathlib import Path
 
 import typer
 import yaml
 
-from ..consoles import (
-    console,
-)
+from ..consoles import console
 from ..templating import (
     TemplateFetcher,
     TemplateProcessor,
