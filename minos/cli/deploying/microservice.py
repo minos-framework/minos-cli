@@ -33,7 +33,6 @@ class MicroserviceDeployer(Deployer):
                 target = current / "microservices" / self._name
                 if (target / ".minos-microservice.yaml").exists():
                     return target
-                break
             current = current.parent
 
         raise ValueError(f"Unable to find the target directory from {self.path} origin.")
