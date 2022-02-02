@@ -14,8 +14,8 @@ from .abc import (
 class MicroserviceDeployer(Deployer):
     """Microservice Deployer class."""
 
-    def __init__(self, name: Optional[str], *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, path: Path, name: Optional[str], **kwargs):
+        super().__init__(path, **kwargs)
         self._name = name
 
     @property
@@ -24,7 +24,7 @@ class MicroserviceDeployer(Deployer):
 
         :return: A ``Path`` instance.
         """
-        current = self._path
+        current = self.path
         while current != current.parent:
             if (current / ".minos-microservice.yaml").exists():
                 return current
@@ -36,7 +36,7 @@ class MicroserviceDeployer(Deployer):
                 break
             current = current.parent
 
-        raise ValueError("Cannot be found the target directory.")
+        raise ValueError(f"Unable to find the target directory from {self.path} origin.")
 
     def deploy(self) -> None:
         """Deploy target.

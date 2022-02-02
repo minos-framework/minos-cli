@@ -17,13 +17,13 @@ class ProjectDeployer(Deployer):
 
         :return: A ``Path`` instance.
         """
-        current = self._path
+        current = self.path
         while current != current.parent:
             if (current / ".minos-project.yaml").exists():
                 return current
             current = current.parent
 
-        raise ValueError("TODO")
+        raise ValueError(f"Unable to find the target directory from {self.path} origin.")
 
     def deploy(self) -> None:
         """Deploy target.
