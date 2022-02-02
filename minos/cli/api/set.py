@@ -71,5 +71,4 @@ def set_service(service: str, backend: str) -> None:
 
 @app.callback()
 def callback():
-    """Minos project CLI."""
-    console.print(":gift: Set configuration variables :gift:\n")
+    """Sets project services such as database or broker"""

@@ -8,6 +8,7 @@ from ..consoles import (
     console,
 )
 from ..templating import (
+    MICROSERVICE_INIT,
     PROJECT_INIT,
     TemplateProcessor,
 )
@@ -15,8 +16,8 @@ from ..templating import (
 app = typer.Typer(add_completion=False)
 
 
-@app.command("init")
-def init() -> None:
+@app.command("project")
+def init_project() -> None:
     """Initialize a project on the current working directory."""
 
     console.print(":wrench: Initializing new Project...\n")
@@ -24,16 +25,15 @@ def init() -> None:
     processor.render()
 
 
-@app.command("new")
-def new(path: Path) -> None:
-    """Initialize a project on the given directory."""
+@app.command("microservice")
+def init_microservice() -> None:
+    """Initialize a microservice on the current working directory."""
 
-    console.print(":wrench: Creating new Project...\n")
-    processor = TemplateProcessor.from_fetcher(PROJECT_INIT, path.absolute(), defaults={"project_name": path.name})
+    console.print(":wrench: Initializing new Microservice...\n")
+    processor = TemplateProcessor.from_fetcher(MICROSERVICE_INIT, Path.cwd(), defaults={"name": Path.cwd().name})
     processor.render()
 
 
 @app.callback()
 def callback():
-    """Minos project CLI."""
-    console.print(":gift: Project Utilities :gift:\n")
+    """Initializes a new project or microservice in the current path"""
