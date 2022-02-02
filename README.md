@@ -18,17 +18,11 @@ structure, you'll get your microservices up and running as fast as you've coded 
 
 ## Quickstart
 
-First, create a new directory to hold your project
+First, we need to create a project to host our microservices
 
 ```shell
-mkdir minos_project
+minos new project minos_project
 cd minos_project
-```
-
-Now the structure of a minos project can be created
-
-```shell
-minos init project
 ```
 
 We need to set some services that our project needs
@@ -44,7 +38,7 @@ Once we've gone through all of these steps, the project is ready to accept a new
 
 ```shell
 cd microservices
-minos init microservice
+minos new microservice minos_microservice
 ```
 
 Time to start coding! Yes, already!
