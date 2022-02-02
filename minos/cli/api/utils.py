@@ -8,7 +8,6 @@ from typing import (
 import typer
 
 from ..consoles import (
-    console,
     error_console,
 )
 from ..templating import (
