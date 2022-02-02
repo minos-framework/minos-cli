@@ -1,9 +1,17 @@
 import unittest
-from pathlib import Path
-from tempfile import TemporaryDirectory
-from unittest.mock import patch
+from pathlib import (
+    Path,
+)
+from tempfile import (
+    TemporaryDirectory,
+)
+from unittest.mock import (
+    patch,
+)
 
-from typer.testing import CliRunner
+from typer.testing import (
+    CliRunner,
+)
 
 from minos.cli import (
     __main__,
