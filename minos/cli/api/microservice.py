@@ -39,16 +39,6 @@ def new(path: Path) -> None:
     processor.render()
 
 
-@app.command("deploy")
-def deploy(
-    name: Optional[str] = typer.Argument(None, help="TODO"), path: Path = typer.Option(Path.cwd(), help="TODO")
-) -> None:
-    """TODO"""
-    console.print(":wrench: Deploying the microservice...\n")
-    deployer = MicroserviceDeployer(name, path)
-    deployer.deploy()
-
-
 @app.callback()
 def callback():
     """Minos microservice CLI."""

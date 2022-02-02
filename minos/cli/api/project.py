@@ -36,15 +36,6 @@ def new(path: Path) -> None:
     processor.render()
 
 
-@app.command("deploy")
-def deploy(path: Path = typer.Option(Path.cwd(), help="TODO")) -> None:
-    """TODO"""
-    console.print(":wrench: Deploying the Project...\n")
-
-    deployer = ProjectDeployer(path)
-    deployer.deploy()
-
-
 @app.callback()
 def callback():
     """Minos project CLI."""
