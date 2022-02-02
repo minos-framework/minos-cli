@@ -7,9 +7,6 @@ import typer
 from ..consoles import (
     console,
 )
-from ..deploying import (
-    ProjectDeployer,
-)
 from ..templating import (
     PROJECT_INIT,
     TemplateProcessor,

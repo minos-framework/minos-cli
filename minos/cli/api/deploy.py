@@ -1,7 +1,9 @@
 from pathlib import (
     Path,
 )
-from typing import Optional
+from typing import (
+    Optional,
+)
 
 import typer
 
@@ -9,14 +11,15 @@ from ..consoles import (
     console,
 )
 from ..deploying import (
-    ProjectDeployer, MicroserviceDeployer,
+    MicroserviceDeployer,
+    ProjectDeployer,
 )
 
 app = typer.Typer(add_completion=False)
 
 
 @app.command("microservice")
-def deploy(
+def deploy_microservice(
     name: Optional[str] = typer.Argument(None, help="TODO"), path: Path = typer.Option(Path.cwd(), help="TODO")
 ) -> None:
     """Deploy a Microservice."""
@@ -27,7 +30,7 @@ def deploy(
 
 
 @app.command("project")
-def deploy(path: Path = typer.Option(Path.cwd(), help="TODO")) -> None:
+def deploy_project(path: Path = typer.Option(Path.cwd(), help="TODO")) -> None:
     """Deploy a Project."""
 
     console.print(":wrench: Deploying the Project...\n")

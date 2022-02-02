@@ -1,17 +1,11 @@
 from pathlib import (
     Path,
 )
-from typing import (
-    Optional,
-)
 
 import typer
 
 from ..consoles import (
     console,
-)
-from ..deploying import (
-    MicroserviceDeployer,
 )
 from ..templating import (
     MICROSERVICE_INIT,

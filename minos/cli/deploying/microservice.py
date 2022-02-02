@@ -12,7 +12,7 @@ from .abc import (
 
 
 class MicroserviceDeployer(Deployer):
-    """TODO"""
+    """Microservice Deployer class."""
 
     def __init__(self, name: Optional[str], *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -20,22 +20,27 @@ class MicroserviceDeployer(Deployer):
 
     @property
     def target_directory(self) -> Path:
-        """TODO"""
+        """Get the target directory.
 
+        :return: A ``Path`` instance.
+        """
         current = self._path
         while current != current.parent:
-            if (current / "minos-microservice.lock").exists():
+            if (current / ".minos-microservice.yaml").exists():
                 return current
 
-            if (current / "minos-project.lock").exists():
+            if (current / ".minos-project.yaml").exists():
                 target = current / "microservices" / self._name
-                if (target / "minos-microservice.lock").exists():
+                if (target / ".minos-microservice.yaml").exists():
                     return target
                 break
             current = current.parent
 
-        raise ValueError("TODO")
+        raise ValueError("Cannot be found the target directory.")
 
     def deploy(self) -> None:
-        """TODO"""
+        """Deploy target.
+
+        :return: This method does not return anything.
+        """
         subprocess.run("ansible-playbook playbooks/deploy.yaml", shell=True, cwd=str(self.target_directory))

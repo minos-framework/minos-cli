@@ -8,11 +8,14 @@ from pathlib import (
 
 
 class Deployer(ABC):
-    """TODO"""
+    """Deployer class."""
 
     def __init__(self, path: Path):
         self._path = path
 
     @abstractmethod
     def deploy(self) -> None:
-        """TODO"""
+        """Deploy target.
+
+        :return: This method does not return anything.
+        """
