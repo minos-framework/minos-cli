@@ -39,5 +39,4 @@ def deploy_project(path: Path = typer.Option(Path.cwd())) -> None:
 
 @app.callback()
 def callback():
-    """Minos project CLI."""
-    console.print(":gift: Project Utilities :gift:\n")
+    """Deploys the project"""
