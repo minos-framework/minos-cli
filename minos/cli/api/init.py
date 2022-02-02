@@ -1,12 +1,8 @@
-from pathlib import (
-    Path,
-)
+from pathlib import Path
 
 import typer
 
-from ..consoles import (
-    console,
-)
+from ..consoles import console
 from ..templating import (
     MICROSERVICE_INIT,
     PROJECT_INIT,

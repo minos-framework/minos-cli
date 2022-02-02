@@ -1,8 +1,6 @@
 import typer
 
-from ..consoles import (
-    console,
-)
+from ..consoles import console
 from .init import app as init_app
 from .new import app as new_app
 from .deploy import app as deploy_app

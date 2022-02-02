@@ -1,15 +1,9 @@
-from pathlib import (
-    Path,
-)
-from typing import (
-    Optional,
-)
+from pathlib import Path
+from typing import Optional
 
 import typer
 
-from ..consoles import (
-    error_console,
-)
+from ..consoles import error_console
 from ..templating import (
     TemplateFetcher,
     TemplateProcessor,
