@@ -5,12 +5,14 @@ from ..consoles import (
 )
 from .init import app as init_app
 from .new import app as new_app
+from .deploy import app as deploy_app
 from .set import app as set_app
 from .utils import app as utils_app
 
 app = typer.Typer(add_completion=False)
 app.add_typer(init_app, name="init")
 app.add_typer(new_app, name="new")
+app.add_typer(deploy_app, name="deploy")
 app.add_typer(utils_app, name="utils")
 app.add_typer(set_app, name="set")
 
