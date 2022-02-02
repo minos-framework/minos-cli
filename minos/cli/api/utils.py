@@ -44,5 +44,4 @@ def render_template(
 
 @app.callback()
 def callback():
-    """Minos project CLI."""
-    console.print(":gift: Minos Utilities :gift:\n")
+    """Minos utils for devs"""

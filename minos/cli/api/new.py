@@ -36,5 +36,4 @@ def new_microservice(path: Path) -> None:
 
 @app.callback()
 def callback():
-    """Minos microservice CLI."""
-    console.print(":gift: Microservice Utilities :gift:\n")
+    """Creates a new project or microservice in a given path"""
