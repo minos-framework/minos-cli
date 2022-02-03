@@ -1,4 +1,3 @@
-import pathlib
 import unittest
 from unittest.mock import (
     call,
@@ -17,11 +16,6 @@ from minos.cli import (
 
 
 class TestQuestion(unittest.TestCase):
-    def tearDown(self) -> None:
-        answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
-        if answers_file_path.exists():
-            answers_file_path.unlink()
-
     def test_constructor(self) -> None:
         question = Question("foo", "str")
 

@@ -2,13 +2,10 @@ from __future__ import (
     annotations,
 )
 
-import pathlib
 from typing import (
     Any,
     Optional,
 )
-
-import yaml
 
 from .questions import (
     Question,
@@ -39,23 +36,12 @@ class Form:
         :return: A mapping from the question names to the obtained answers.
         """
         answers = dict() if context is None else context.copy()
-        previous_answers = self._read_previous_answers()
-        answers.update(previous_answers)
 
-        new_answers = dict()
         for question in self.questions:
             if question.name not in answers:
-                new_answers[question.name] = question.ask(context=answers, **kwargs)
+                answers[question.name] = question.ask(context=answers, **kwargs)
 
-        self._store_new_answers(new_answers)
-
-        answers.update(new_answers)
         return answers
-
-    def _store_new_answers(self, new_answers) -> None:
-        answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
-        with answers_file_path.open("a") as answers_file:
-            yaml.dump(new_answers, answers_file)
 
     @property
     def links(self) -> list[str]:
@@ -65,27 +51,24 @@ class Form:
         """
         return [question.name for question in self.questions if question.link]
 
-    def _read_previous_answers(self) -> dict[str, str]:
-        answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
-
-        previous_answers = dict()
-        if answers_file_path.exists():
-            with answers_file_path.open("r") as answers_file:
-                previous_answers = yaml.safe_load(answers_file)
-
-        return previous_answers
-
-    def get_template_uris(self, answers: dict[str, Any], *args, **kwargs) -> list[str]:
+    def get_template_uris(
+        self, answers: dict[str, Any], context: Optional[dict[str, Any]] = None, *args, **kwargs
+    ) -> list[str]:
         """Get template uris.
 
         :param answers: A mapping from question name to answer value.
+        :param context: Additional context variables.
         :param args: Additional positional arguments.
         :param kwargs: Additional named arguments.
         :return: A list of strings representing template uris.
         """
+        if context is None:
+            context = dict()
+
         uris = (
-            question.get_template_uri(answers[question.name], context=answers, *args, **kwargs)
+            question.get_template_uri(answers[question.name], context=context | answers, *args, **kwargs)
             for question in self.questions
+            if question.name in answers
         )
         uris = filter(lambda uri: uri is not None, uris)
         return list(uris)

@@ -11,6 +11,7 @@ from unittest.mock import (
     patch,
 )
 
+import yaml
 from jinja2 import (
     Environment,
 )
@@ -88,6 +89,40 @@ class TestTemplateProcessor(unittest.TestCase):
                     ],
                     mock.call_args_list,
                 )
+
+    def test_answers_with_previous_answers(self):
+        expected_answers = {"foo": "foo_answer", "bar": "bar_answer"}
+        with TemporaryDirectory() as tmp_dir_name:
+            destination = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
+
+            with (destination / ".minos-answers.yml").open("w") as file:
+                yaml.dump(expected_answers, file)
+
+            with patch("minos.cli.Form.ask", return_value=expected_answers) as mock:
+                self.assertEqual(expected_answers, processor.answers)
+
+            self.assertEqual(
+                [call(context=processor.context | expected_answers, env=processor.env)], mock.call_args_list,
+            )
+
+            with (destination / ".minos-answers.yml").open() as file:
+                answers = yaml.safe_load(file)
+                self.assertEqual(expected_answers, answers)
+
+    def test_answers_without_previous_answers(self):
+        with TemporaryDirectory() as tmp_dir_name:
+            destination = Path(tmp_dir_name)
+            processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
+
+            with patch("minos.cli.Form.ask", return_value={"foo": "bar"}) as mock:
+                self.assertEqual({"foo": "bar"}, processor.answers)
+
+            self.assertEqual([call(context=processor.context, env=processor.env)], mock.call_args_list)
+
+            with (destination / ".minos-answers.yml").open() as file:
+                answers = yaml.safe_load(file)
+                self.assertEqual({"foo": "bar"}, answers)
 
     def test_linked_questions(self):
         with TemporaryDirectory() as tmp_dir_name:
