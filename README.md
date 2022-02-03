@@ -1,66 +1,70 @@
-# Minos CLI
+<p align="center">
+  <a href="http://minos.run" target="_blank"><img src="https://raw.githubusercontent.com/minos-framework/.github/main/images/logo.png" alt="Minos logo"></a>
+</p>
 
-[![codecov](https://codecov.io/gh/Clariteia/minos_cli/branch/main/graph/badge.svg)](https://codecov.io/gh/Clariteia/minos_cli)
-![Tests](https://github.com/Clariteia/minos_cli/actions/workflows/python-tests.yml/badge.svg)
+# Minos CLI: Minos' microservices up and running
 
-Minos is a framework which helps you create [reactive](https://www.reactivemanifesto.org/) microservices in Python.
-Internally, it leverages Event Sourcing, CQRS and a message driven architecture to fulfil the commitments of an
-asynchronous environment.
+[![PyPI Latest Release](https://img.shields.io/pypi/v/minos-cli.svg?label=minos-cli)](https://pypi.org/project/minos-microservice-aggregate/)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/minos-framework/minos-python/pages%20build%20and%20deployment?label=docs)](https://minos-framework.github.io/minos-cli)
+[![License](https://img.shields.io/github/license/minos-framework/minos-python.svg)](https://github.com/minos-framework/minos-python/blob/main/LICENSE)
+[![Coverage](https://codecov.io/github/minos-framework/minos-cli/coverage.svg?branch=main)](https://codecov.io/gh/minos-framework/minos-cli)
+[![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-Ask%20a%20question-green)](https://stackoverflow.com/questions/tagged/minos)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/minos-framework/community)
+
+## Summary
+
+Minos CLI is a command line tool that helps you create and deploy Minos' microservices. Through its simple command
+structure, you'll get your microservices up and running as fast as you've coded your business logic.
+
+## Quickstart
+
+First, we need to create a project to host our microservices
+
+```shell
+minos new project sample_project
+cd sample_project/
+```
+
+We need to set some services that our project needs
+
+```shell
+minos set database postgres
+minos set broker kafka
+minos set apigateway minos
+minos set discovery minos
+```
+
+Once we've gone through all of these steps, the project is ready to accept a new microservice!
+
+```shell
+cd microservices/
+minos new microservice foo
+```
+
+Time to start coding! Yes, already!
 
 ## Documentation
 
-The official documentation as well as the API you can find it under https://clariteia.github.io/minos_cli/. 
-Please, submit any issue regarding documentation as well!
+Coming soon...
 
-## Set up a development environment
+## Source Code
 
-Minos uses `poetry` as its default package manager. Please refer to the
-[Poetry installation guide](https://python-poetry.org/docs/#installation) for instructions on how to install it.
+The source code of this project is hosted at [GitHub](https://github.com/minos-framework/minos-cli).
 
-Now you con install all the dependencies by running
-```bash
-make install
-```
+## Getting Help
 
-In order to make the pre-commits checks available to git, run
-```bash
-pre-commit install
-```
+For usage questions, the best place to go to is [StackOverflow](https://stackoverflow.com/questions/tagged/minos).
 
-Make yourself sure you are able to run the tests. Refer to the appropriate section in this guide.
+## Discussion and Development
 
-## Run the tests
-
-In order to run the tests, please make sure you have the [Docker Engine](https://docs.docker.com/engine/install/)
-and [Docker Compose](https://docs.docker.com/compose/install/) installed.
-
-Move into `tests/` directory
-
-```bash
-cd tests/
-```
-Run service dependencies:
-
-```bash
-docker-compose up -d
-```
-
-Install library dependencies:
-
-```bash
-make install
-```
-
-Run tests:
-
-```bash
-make test
-```
+Most development discussions take place over the [GitHub Issues](https://github.com/minos-framework/minos-python/issues)
+. In addition, a [Gitter channel](https://gitter.im/minos-framework/community) is available for development-related
+questions.
 
 ## How to contribute
 
-Minos being an open-source project, we are looking forward to having your contributions. No matter whether it is a pull
-request with new features, or the creation of an issue related to a bug you have found.
+We are looking forward to having your contributions. No matter whether it is a pull request with new features, or the
+creation of an issue related to a bug you have found.
 
 Please consider these guidelines before you submit any modification.
 
@@ -78,7 +82,7 @@ Please consider these guidelines before you submit any modification.
 4. Run the tests!
 5. Submit a pull request from your fork's branch.
 
-## Credits
+## License
 
-This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [Minos Package](https://github.com/Clariteia/minos-pypackage) project template.
-
+This project is distributed under the [MIT](https://raw.githubusercontent.com/minos-framework/minos-python/main/LICENSE)
+license.
