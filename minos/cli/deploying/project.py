@@ -3,6 +3,9 @@ from pathlib import (
     Path,
 )
 
+from ..pathlib import (
+    get_project_target_directory,
+)
 from .abc import (
     Deployer,
 )
@@ -17,13 +20,7 @@ class ProjectDeployer(Deployer):
 
         :return: A ``Path`` instance.
         """
-        current = self.path
-        while current != current.parent:
-            if (current / ".minos-project.yaml").exists():
-                return current
-            current = current.parent
-
-        raise ValueError(f"Unable to find the target directory from {self.path} origin.")
+        return get_project_target_directory(self.path)
 
     def deploy(self) -> None:
         """Deploy target.

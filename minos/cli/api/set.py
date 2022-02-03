@@ -8,6 +8,9 @@ import yaml
 from ..consoles import (
     console,
 )
+from ..pathlib import (
+    get_project_target_directory,
+)
 from ..templating import (
     TemplateFetcher,
     TemplateProcessor,
@@ -42,29 +45,32 @@ def api_gateway(backend: str = typer.Argument(...)) -> None:
 
 def set_service(service: str, backend: str) -> None:
     """Set configuration"""
-    path = Path.cwd() / ".minos-project.yaml"
 
-    if not path.exists():
+    try:
+        project_path = get_project_target_directory(Path.cwd())
+    except ValueError:
         console.print("No Minos project found. Consider 'minos project init'")
         raise typer.Exit(code=1)
 
-    with path.open() as project_file:
-        data = yaml.safe_load(project_file)
+    config_path = project_path / ".minos-project.yaml"
+
+    with config_path.open() as file:
+        data = yaml.safe_load(file)
         if "services" in data and not data["services"]:
             data["services"] = dict()
 
         if "services" in data and service in data["services"]:
             console.print(f"{service} already set")
             raise typer.Exit(code=1)
-        else:
-            console.print(f":wrench: Setting {service} config\n")
-            fetcher = TemplateFetcher.from_name(f"project-{service}-{backend}-init")
-            processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
-            processor.render()
 
-            with path.open("w") as project_file_write:
-                data["services"][service] = backend
-                yaml.dump(data, project_file_write, sort_keys=False)
+    console.print(f":wrench: Setting {service} config\n")
+    fetcher = TemplateFetcher.from_name(f"project-{service}-{backend}-init")
+    processor = TemplateProcessor.from_fetcher(fetcher, project_path, defaults={"project_name": project_path.name})
+    processor.render()
+
+    with config_path.open("w") as file:
+        data["services"][service] = backend
+        yaml.dump(data, file, sort_keys=False)
 
 
 @app.callback()
