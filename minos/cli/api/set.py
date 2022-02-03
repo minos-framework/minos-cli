@@ -13,8 +13,6 @@ from ..templating import (
     TemplateProcessor,
 )
 
-VERSION = "v0.1.0.dev7"
-
 app = typer.Typer(add_completion=False)
 
 
@@ -60,7 +58,7 @@ def set_service(service: str, backend: str) -> None:
             raise typer.Exit(code=1)
         else:
             console.print(f":wrench: Setting {service} config\n")
-            fetcher = TemplateFetcher.from_name(f"project-{service}-{backend}-init", VERSION)
+            fetcher = TemplateFetcher.from_name(f"project-{service}-{backend}-init")
             processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
             processor.render()
 
