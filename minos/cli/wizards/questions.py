@@ -92,6 +92,7 @@ class Question:
         choices = self.render_choices(*args, **kwargs)
 
         answer = self._ask(f":question: {title}\n", default, choices)
+
         console.print()
         return answer
 
@@ -149,6 +150,7 @@ class Question:
         return [self._render_value(value, *args, **kwargs) for value in data]
 
     # noinspection PyUnusedLocal
+
     @staticmethod
     def _render_value(
         value: Any, env: Optional[Environment] = None, context: Optional[dict[str, Any]] = None, **kwargs

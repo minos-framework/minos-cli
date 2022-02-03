@@ -16,6 +16,7 @@ from typing import (
 )
 
 import copier
+import yaml
 from cached_property import (
     cached_property,
 )
@@ -42,6 +43,9 @@ from ..consoles import (
 )
 from ..importlib import (
     FunctionLoader,
+)
+from ..pathlib import (
+    get_project_target_directory,
 )
 from ..wizards import (
     Form,
@@ -107,7 +111,10 @@ class TemplateProcessor:
 
         :return: A list of ``TemplateFetcher`` instances.
         """
-        return [TemplateFetcher(uri) for uri in self.form.get_template_uris(self.answers, env=self.env)]
+        return [
+            TemplateFetcher(uri)
+            for uri in self.form.get_template_uris(self._new_answers, context=self.answers, env=self.env)
+        ]
 
     @property
     def linked_questions(self) -> list[str]:
@@ -118,12 +125,49 @@ class TemplateProcessor:
         return self.form.links
 
     @cached_property
+    def _new_answers(self) -> dict[str, Any]:
+        return {k: v for k, v in self.answers.items() if k not in self._previous_answers}
+
+    @cached_property
     def answers(self) -> dict[str, Any]:
         """Get the answers of the form.
 
         :return: A mapping from question name to the answer value.
         """
-        return self.form.ask(context=self.context, env=self.env)
+        answers = self.context
+        answers |= self._previous_answers
+
+        answers = self.form.ask(context=answers, env=self.env)
+        self._store_new_answers(answers)
+        return answers
+
+    @cached_property
+    def _previous_answers(self) -> dict[str, str]:
+        answers = dict()
+        if self._answers_file_path.exists():
+            with self._answers_file_path.open() as file:
+                answers |= yaml.safe_load(file)
+
+        if self._project_answers_file_path is not None and self._project_answers_file_path.exists():
+            with self._project_answers_file_path.open() as file:
+                answers |= yaml.safe_load(file)
+
+        return answers
+
+    def _store_new_answers(self, answers) -> None:
+        with self._answers_file_path.open("w") as file:
+            yaml.dump(answers, file)
+
+    @property
+    def _answers_file_path(self) -> Path:
+        return self.destination / ".minos-answers.yml"
+
+    @cached_property
+    def _project_answers_file_path(self) -> Optional[Path]:
+        try:
+            return get_project_target_directory(self.destination) / ".minos-answers.yml"
+        except ValueError:
+            return None
 
     @cached_property
     def form(self) -> Form:

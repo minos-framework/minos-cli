@@ -6,6 +6,9 @@ from typing import (
     Optional,
 )
 
+from ..pathlib import (
+    get_microservice_target_directory,
+)
 from .abc import (
     Deployer,
 )
@@ -24,18 +27,7 @@ class MicroserviceDeployer(Deployer):
 
         :return: A ``Path`` instance.
         """
-        current = self.path
-        while current != current.parent:
-            if (current / ".minos-microservice.yaml").exists():
-                return current
-
-            if (current / ".minos-project.yaml").exists():
-                target = current / "microservices" / self._name
-                if (target / ".minos-microservice.yaml").exists():
-                    return target
-            current = current.parent
-
-        raise ValueError(f"Unable to find the target directory from {self.path} origin.")
+        return get_microservice_target_directory(self.path, self._name)
 
     def deploy(self) -> None:
         """Deploy target.
