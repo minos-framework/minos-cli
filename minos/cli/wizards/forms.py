@@ -38,9 +38,9 @@ class Form:
         :param kwargs: Additional named arguments to be passed to each question.
         :return: A mapping from the question names to the obtained answers.
         """
-        default_answers = dict() if context is None else context.copy()
+        answers = dict() if context is None else context.copy()
         previous_answers = self._read_previous_answers()
-        answers = default_answers.update(previous_answers)
+        answers.update(previous_answers)
 
         for question in self.questions:
             if question.name not in answers:
@@ -50,8 +50,11 @@ class Form:
 
     def _read_previous_answers(self) -> dict[str, str]:
         answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
-        with answers_file_path.open("r") as answers_file:
-            previous_answers = yaml.safe_load(answers_file)
+
+        previous_answers = dict()
+        if answers_file_path.exists():
+            with answers_file_path.open("r") as answers_file:
+                previous_answers = yaml.safe_load(answers_file)
 
         return previous_answers
 
