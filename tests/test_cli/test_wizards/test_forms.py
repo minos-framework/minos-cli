@@ -47,10 +47,14 @@ class TestForm(unittest.TestCase):
 
     def test_form_with_previous_answers(self):
         answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
-        with answers_file_path.open("w") as answers_file:
-            yaml.dump({"foo": "bar"}, answers_file)
+        with answers_file_path.open("a") as answers_file:
+            yaml.dump({"foo": "foo_answer", "bar": "bar_answer"}, answers_file)
 
-        observed = self.form.ask()
+        with patch("minos.cli.Question.ask", side_effect="bar") as mock:
+            observed = self.form.ask()
+            self.assertEqual({"foo": "foo_answer", "bar": "bar_answer"}, observed)
+
+        self.assertEqual(0, mock.call_count)
 
 
 if __name__ == "__main__":
