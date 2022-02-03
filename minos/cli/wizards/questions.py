@@ -2,6 +2,7 @@ from __future__ import (
     annotations,
 )
 
+import pathlib
 from contextlib import (
     suppress,
 )
@@ -15,6 +16,7 @@ from typing import (
     Union,
 )
 
+import yaml
 from jinja2 import (
     Environment,
 )
@@ -92,8 +94,16 @@ class Question:
         choices = self.render_choices(*args, **kwargs)
 
         answer = self._ask(f":question: {title}\n", default, choices)
+        self._store(answer)
+
         console.print()
         return answer
+
+    def _store(self, answer: str):
+        answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
+        with answers_file_path.open("a") as answers_file:
+            data = {self.name: answer}
+            yaml.dump(data, answers_file)
 
     def render_title(self, *args, **kwargs) -> str:
         """Render the title value.
@@ -149,6 +159,7 @@ class Question:
         return [self._render_value(value, *args, **kwargs) for value in data]
 
     # noinspection PyUnusedLocal
+
     @staticmethod
     def _render_value(
         value: Any, env: Optional[Environment] = None, context: Optional[dict[str, Any]] = None, **kwargs
