@@ -2,7 +2,6 @@ from __future__ import (
     annotations,
 )
 
-import pathlib
 from contextlib import (
     suppress,
 )
@@ -16,7 +15,6 @@ from typing import (
     Union,
 )
 
-import yaml
 from jinja2 import (
     Environment,
 )

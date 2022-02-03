@@ -5,7 +5,6 @@ from unittest.mock import (
     patch,
 )
 
-import yaml
 from jinja2 import (
     BaseLoader,
     Environment,
