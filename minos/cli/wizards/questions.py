@@ -99,7 +99,7 @@ class Question:
         console.print()
         return answer
 
-    def _store(self, answer: str):
+    def _store(self, answer: str) -> None:
         answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
         with answers_file_path.open("a") as answers_file:
             data = {self.name: answer}
