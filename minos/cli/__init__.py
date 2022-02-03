@@ -1,6 +1,6 @@
-__author__ = """Clariteia Devs"""
-__email__ = "devs@clariteia.com"
-__version__ = "0.0.1"
+__author__ = "Minos Framework Devs"
+__email__ = "hey@minos.run"
+__version__ = "0.1.0"
 
 from .api import (
     app,
