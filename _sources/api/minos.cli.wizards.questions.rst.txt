@@ -1,0 +1,7 @@
+minos.cli.wizards.questions module
+==================================
+
+.. automodule:: minos.cli.wizards.questions
+   :members:
+   :undoc-members:
+   :show-inheritance:

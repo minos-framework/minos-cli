@@ -1,7 +1,0 @@
-minos.cli.main.microservice module
-==================================
-
-.. automodule:: minos.cli.main.microservice
-   :members:
-   :undoc-members:
-   :show-inheritance:

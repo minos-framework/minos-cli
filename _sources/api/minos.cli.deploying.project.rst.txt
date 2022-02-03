@@ -1,0 +1,7 @@
+minos.cli.deploying.project module
+==================================
+
+.. automodule:: minos.cli.deploying.project
+   :members:
+   :undoc-members:
+   :show-inheritance:

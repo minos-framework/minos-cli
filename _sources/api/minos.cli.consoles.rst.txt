@@ -1,0 +1,7 @@
+minos.cli.consoles module
+=========================
+
+.. automodule:: minos.cli.consoles
+   :members:
+   :undoc-members:
+   :show-inheritance:

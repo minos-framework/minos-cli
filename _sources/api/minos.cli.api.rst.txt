@@ -1,0 +1,19 @@
+minos.cli.api package
+=====================
+
+.. automodule:: minos.cli.api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   minos.cli.api.deploy
+   minos.cli.api.init
+   minos.cli.api.new
+   minos.cli.api.set
+   minos.cli.api.utils

@@ -12,7 +12,10 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   minos.cli.main
+   minos.cli.api
+   minos.cli.deploying
+   minos.cli.templating
+   minos.cli.wizards
 
 Submodules
 ----------
@@ -20,5 +23,6 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   minos.cli.constants
-   minos.cli.generators
+   minos.cli.consoles
+   minos.cli.importlib
+   minos.cli.pathlib

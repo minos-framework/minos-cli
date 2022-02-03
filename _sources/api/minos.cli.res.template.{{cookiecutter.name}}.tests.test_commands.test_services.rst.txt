@@ -1,7 +1,0 @@
-minos.cli.res.template.\{\{cookiecutter.name\}\}.tests.test\_commands.test\_services module
-===========================================================================================
-
-.. automodule:: minos.cli.res.template.{{cookiecutter.name}}.tests.test_commands.test_services
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,7 +1,0 @@
-minos.cli.constants module
-==========================
-
-.. automodule:: minos.cli.constants
-   :members:
-   :undoc-members:
-   :show-inheritance:

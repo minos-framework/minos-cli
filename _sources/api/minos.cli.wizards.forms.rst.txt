@@ -1,0 +1,7 @@
+minos.cli.wizards.forms module
+==============================
+
+.. automodule:: minos.cli.wizards.forms
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+minos.cli.templating.fetchers module
+====================================
+
+.. automodule:: minos.cli.templating.fetchers
+   :members:
+   :undoc-members:
+   :show-inheritance:

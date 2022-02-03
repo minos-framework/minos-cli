@@ -1,0 +1,7 @@
+minos.cli.api.new module
+========================
+
+.. automodule:: minos.cli.api.new
+   :members:
+   :undoc-members:
+   :show-inheritance:

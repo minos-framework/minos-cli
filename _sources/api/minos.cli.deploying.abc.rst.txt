@@ -1,0 +1,7 @@
+minos.cli.deploying.abc module
+==============================
+
+.. automodule:: minos.cli.deploying.abc
+   :members:
+   :undoc-members:
+   :show-inheritance:

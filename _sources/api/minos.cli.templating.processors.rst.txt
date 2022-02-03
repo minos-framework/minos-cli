@@ -1,0 +1,7 @@
+minos.cli.templating.processors module
+======================================
+
+.. automodule:: minos.cli.templating.processors
+   :members:
+   :undoc-members:
+   :show-inheritance:

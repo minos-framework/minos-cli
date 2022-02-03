@@ -1,0 +1,17 @@
+minos.cli.deploying package
+===========================
+
+.. automodule:: minos.cli.deploying
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   minos.cli.deploying.abc
+   minos.cli.deploying.microservice
+   minos.cli.deploying.project

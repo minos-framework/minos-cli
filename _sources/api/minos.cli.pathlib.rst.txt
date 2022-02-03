@@ -1,0 +1,7 @@
+minos.cli.pathlib module
+========================
+
+.. automodule:: minos.cli.pathlib
+   :members:
+   :undoc-members:
+   :show-inheritance:

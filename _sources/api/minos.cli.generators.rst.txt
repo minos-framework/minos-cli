@@ -1,7 +1,0 @@
-minos.cli.generators module
-===========================
-
-.. automodule:: minos.cli.generators
-   :members:
-   :undoc-members:
-   :show-inheritance:
