@@ -1,9 +1,11 @@
+import pathlib
 import unittest
 from unittest.mock import (
     call,
     patch,
 )
 
+import yaml
 from jinja2 import (
     BaseLoader,
     Environment,
@@ -16,6 +18,11 @@ from minos.cli import (
 
 
 class TestQuestion(unittest.TestCase):
+    def tearDown(self) -> None:
+        answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
+        if answers_file_path.exists():
+            answers_file_path.unlink()
+
     def test_constructor(self) -> None:
         question = Question("foo", "str")
 
@@ -86,6 +93,17 @@ class TestQuestion(unittest.TestCase):
         self.assertEqual(
             [call(":question: foo\n", console=console, choices=None, password=False, default=None)], mock.call_args_list
         )
+
+    def test_ask_with_file_storage(self):
+        question = Question("foo", "str")
+        with patch("rich.prompt.Prompt.ask", return_value="bar") as mock:
+            answer = question.ask()
+            self.assertEqual("bar", answer)
+
+            answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
+            with answers_file_path.open("r") as answers_file:
+                previous_answer = yaml.safe_load(answers_file)
+            self.assertEqual({"foo": "bar"}, previous_answer)
 
     def test_ask_with_env(self):
         context = {"bar": "two"}
