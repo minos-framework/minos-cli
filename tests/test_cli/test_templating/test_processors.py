@@ -93,11 +93,19 @@ class TestTemplateProcessor(unittest.TestCase):
     def test_answers_with_previous_answers(self):
         expected_answers = {"foo": "foo_answer", "bar": "bar_answer"}
         with TemporaryDirectory() as tmp_dir_name:
-            destination = Path(tmp_dir_name)
-            processor = TemplateProcessor.from_fetcher(self.fetcher, destination)
+            project_destination = Path(tmp_dir_name)
+            (project_destination / ".minos-project.yaml").touch()
 
-            with (destination / ".minos-answers.yml").open("w") as file:
-                yaml.dump(expected_answers, file)
+            with (project_destination / ".minos-answers.yml").open("w") as file:
+                yaml.dump({"foo": "foo_answer"}, file)
+
+            microservice_destination = project_destination / "microservices" / "foo"
+            microservice_destination.mkdir(parents=True)
+
+            processor = TemplateProcessor.from_fetcher(self.fetcher, microservice_destination)
+
+            with (microservice_destination / ".minos-answers.yml").open("w") as file:
+                yaml.dump({"bar": "bar_answer"}, file)
 
             with patch("minos.cli.Form.ask", return_value=expected_answers) as mock:
                 self.assertEqual(expected_answers, processor.answers)
@@ -106,7 +114,7 @@ class TestTemplateProcessor(unittest.TestCase):
                 [call(context=processor.context | expected_answers, env=processor.env)], mock.call_args_list,
             )
 
-            with (destination / ".minos-answers.yml").open() as file:
+            with (microservice_destination / ".minos-answers.yml").open() as file:
                 answers = yaml.safe_load(file)
                 self.assertEqual(expected_answers, answers)
 

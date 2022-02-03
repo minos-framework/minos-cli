@@ -65,7 +65,9 @@ def set_service(service: str, backend: str) -> None:
 
     console.print(f":wrench: Setting {service} config\n")
     fetcher = TemplateFetcher.from_name(f"project-{service}-{backend}-init")
-    processor = TemplateProcessor.from_fetcher(fetcher, project_path, defaults={"project_name": project_path.name})
+    processor = TemplateProcessor.from_fetcher(
+        fetcher, project_path, defaults={"project_name": project_path.name, service: backend}
+    )
     processor.render()
 
     with config_path.open("w") as file:

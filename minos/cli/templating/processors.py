@@ -44,6 +44,9 @@ from ..consoles import (
 from ..importlib import (
     FunctionLoader,
 )
+from ..pathlib import (
+    get_project_target_directory,
+)
 from ..wizards import (
     Form,
 )
@@ -143,7 +146,12 @@ class TemplateProcessor:
         answers = dict()
         if self._answers_file_path.exists():
             with self._answers_file_path.open() as file:
-                answers = yaml.safe_load(file)
+                answers |= yaml.safe_load(file)
+
+        if self._project_answers_file_path is not None and self._project_answers_file_path.exists():
+            with self._project_answers_file_path.open() as file:
+                answers |= yaml.safe_load(file)
+
         return answers
 
     def _store_new_answers(self, answers) -> None:
@@ -153,6 +161,13 @@ class TemplateProcessor:
     @property
     def _answers_file_path(self) -> Path:
         return self.destination / ".minos-answers.yml"
+
+    @cached_property
+    def _project_answers_file_path(self) -> Optional[Path]:
+        try:
+            return get_project_target_directory(self.destination) / ".minos-answers.yml"
+        except ValueError:
+            return None
 
     @cached_property
     def form(self) -> Form:
