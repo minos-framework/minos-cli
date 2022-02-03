@@ -57,7 +57,7 @@ class TemplateFetcher:
         return cls(path.as_uri(), metadata)
 
     @classmethod
-    def from_name(cls, name: str, version: str) -> TemplateFetcher:
+    def from_name(cls, name: str, version: str = TEMPLATE_VERSION) -> TemplateFetcher:
         """Build a new instance from name and version.
 
         :param name: The name of the template.
@@ -113,7 +113,3 @@ class TemplateFetcher:
         with console.status(f"Extracting template into {path!r}...", spinner="moon"):
             tar.extractall(path=path)
         console.print(f":moon: Extracted template into {path!r}!\n")
-
-
-MICROSERVICE_INIT = TemplateFetcher.from_name("microservice-init", TEMPLATE_VERSION)
-PROJECT_INIT = TemplateFetcher.from_name("project-init", TEMPLATE_VERSION)

@@ -16,7 +16,6 @@ from jinja2 import (
 )
 
 from minos.cli import (
-    MICROSERVICE_INIT,
     Form,
     TemplateFetcher,
     TemplateProcessor,
@@ -30,7 +29,7 @@ from minos.cli.templating.fetchers import (
 class TestTemplateProcessor(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.fetcher = MICROSERVICE_INIT
+        cls.fetcher = TemplateFetcher.from_name("microservice-init")
 
     def test_constructor(self):
         with TemporaryDirectory() as tmp_dir_name:

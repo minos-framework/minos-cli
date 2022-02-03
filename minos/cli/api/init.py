@@ -8,8 +8,7 @@ from ..consoles import (
     console,
 )
 from ..templating import (
-    MICROSERVICE_INIT,
-    PROJECT_INIT,
+    TemplateFetcher,
     TemplateProcessor,
 )
 
@@ -21,7 +20,8 @@ def init_project() -> None:
     """Initialize a project on the current working directory."""
 
     console.print(":wrench: Initializing new Project...\n")
-    processor = TemplateProcessor.from_fetcher(PROJECT_INIT, Path.cwd(), defaults={"project_name": Path.cwd().name})
+    fetcher = TemplateFetcher.from_name("project-init")
+    processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"project_name": Path.cwd().name})
     processor.render()
 
 
@@ -30,7 +30,8 @@ def init_microservice() -> None:
     """Initialize a microservice on the current working directory."""
 
     console.print(":wrench: Initializing new Microservice...\n")
-    processor = TemplateProcessor.from_fetcher(MICROSERVICE_INIT, Path.cwd(), defaults={"name": Path.cwd().name})
+    fetcher = TemplateFetcher.from_name("microservice-init")
+    processor = TemplateProcessor.from_fetcher(fetcher, Path.cwd(), defaults={"name": Path.cwd().name})
     processor.render()
 
 
