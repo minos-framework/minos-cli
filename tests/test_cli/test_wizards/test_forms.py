@@ -56,6 +56,19 @@ class TestForm(unittest.TestCase):
 
         self.assertEqual(0, mock.call_count)
 
+    def test_form_without_previous_answers(self):
+        answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
+
+        with patch("minos.cli.Question.ask", return_value="resp") as mock:
+            observed = self.form.ask()
+            self.assertEqual({"foo": "resp", "bar": "resp"}, observed)
+
+        self.assertEqual(2, mock.call_count)
+
+        with answers_file_path.open("r") as answers_file:
+            answers = yaml.safe_load(answers_file)
+            self.assertEqual({"foo": "resp", "bar": "resp"}, answers)
+
 
 if __name__ == "__main__":
     unittest.main()

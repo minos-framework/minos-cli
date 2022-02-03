@@ -94,17 +94,6 @@ class TestQuestion(unittest.TestCase):
             [call(":question: foo\n", console=console, choices=None, password=False, default=None)], mock.call_args_list
         )
 
-    def test_ask_with_file_storage(self):
-        question = Question("foo", "str")
-        with patch("rich.prompt.Prompt.ask", return_value="bar"):
-            answer = question.ask()
-            self.assertEqual("bar", answer)
-
-            answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
-            with answers_file_path.open("r") as answers_file:
-                previous_answer = yaml.safe_load(answers_file)
-            self.assertEqual({"foo": "bar"}, previous_answer)
-
     def test_ask_with_env(self):
         context = {"bar": "two"}
 

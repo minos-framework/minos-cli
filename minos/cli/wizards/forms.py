@@ -42,11 +42,28 @@ class Form:
         previous_answers = self._read_previous_answers()
         answers.update(previous_answers)
 
+        new_answers = dict()
         for question in self.questions:
             if question.name not in answers:
-                answers[question.name] = question.ask(context=answers, **kwargs)
+                new_answers[question.name] = question.ask(context=answers, **kwargs)
 
+        self._store_new_answers(new_answers)
+
+        answers.update(new_answers)
         return answers
+
+    def _store_new_answers(self, new_answers) -> None:
+        answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
+        with answers_file_path.open("a") as answers_file:
+            yaml.dump(new_answers, answers_file)
+
+    @property
+    def links(self) -> list[str]:
+        """Get the list of question names that are links to another templates.
+
+        :return: A list of ``str`` values.
+        """
+        return [question.name for question in self.questions if question.link]
 
     def _read_previous_answers(self) -> dict[str, str]:
         answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
@@ -57,14 +74,6 @@ class Form:
                 previous_answers = yaml.safe_load(answers_file)
 
         return previous_answers
-
-    @property
-    def links(self) -> list[str]:
-        """Get the list of question names that are links to another templates.
-
-        :return: A list of ``str`` values.
-        """
-        return [question.name for question in self.questions if question.link]
 
     def get_template_uris(self, answers: dict[str, Any], *args, **kwargs) -> list[str]:
         """Get template uris.
