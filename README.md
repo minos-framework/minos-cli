@@ -21,8 +21,8 @@ structure, you'll get your microservices up and running as fast as you've coded 
 First, we need to create a project to host our microservices
 
 ```shell
-minos new project minos_project
-cd minos_project
+minos new project sample_project
+cd sample_project/
 ```
 
 We need to set some services that our project needs
@@ -37,8 +37,8 @@ minos set discovery minos
 Once we've gone through all of these steps, the project is ready to accept a new microservice!
 
 ```shell
-cd microservices
-minos new microservice minos_microservice
+cd microservices/
+minos new microservice foo
 ```
 
 Time to start coding! Yes, already!
