@@ -5,8 +5,8 @@
 # Minos CLI: Minos' microservices up and running
 
 [![PyPI Latest Release](https://img.shields.io/pypi/v/minos-cli.svg?label=minos-cli)](https://pypi.org/project/minos-microservice-aggregate/)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/minos-framework/minos-python/pages%20build%20and%20deployment?label=docs)](https://minos-framework.github.io/minos-cli)
-[![License](https://img.shields.io/github/license/minos-framework/minos-python.svg)](https://github.com/minos-framework/minos-python/blob/main/LICENSE)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/minos-framework/minos-cli/pages%20build%20and%20deployment?label=docs)](https://minos-framework.github.io/minos-cli)
+[![License](https://img.shields.io/github/license/minos-framework/minos-cli.svg)](https://github.com/minos-framework/minos-cli/blob/main/LICENSE)
 [![Coverage](https://codecov.io/github/minos-framework/minos-cli/coverage.svg?branch=main)](https://codecov.io/gh/minos-framework/minos-cli)
 [![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-Ask%20a%20question-green)](https://stackoverflow.com/questions/tagged/minos)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/minos-framework/community)
@@ -49,7 +49,7 @@ Coming soon...
 
 ## Source Code
 
-The source code of this project is hosted at [GitHub](https://github.com/minos-framework/minos-cli).
+The source code of this project is hosted at [GitHub Repository](https://github.com/minos-framework/minos-cli).
 
 ## Getting Help
 
@@ -57,7 +57,7 @@ For usage questions, the best place to go to is [StackOverflow](https://stackove
 
 ## Discussion and Development
 
-Most development discussions take place over the [GitHub Issues](https://github.com/minos-framework/minos-python/issues)
+Most development discussions take place over the [GitHub Issues](https://github.com/minos-framework/minos-cli/issues)
 . In addition, a [Gitter channel](https://gitter.im/minos-framework/community) is available for development-related
 questions.
 
@@ -84,5 +84,5 @@ Please consider these guidelines before you submit any modification.
 
 ## License
 
-This project is distributed under the [MIT](https://raw.githubusercontent.com/minos-framework/minos-python/main/LICENSE)
+This project is distributed under the [MIT](https://raw.githubusercontent.com/minos-framework/minos-cli/main/LICENSE)
 license.

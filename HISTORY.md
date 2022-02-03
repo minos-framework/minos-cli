@@ -18,3 +18,7 @@
 * Refactor `minos project init` command as `minos init project`.
 * Refactor `minos microservice new` command as `minos new microservice`.
 * Refactor `minos microservice init` command as `minos init microservice`.
+
+## 0.1.1 (2022-02-03)
+
+* Update links to the repository and website.
