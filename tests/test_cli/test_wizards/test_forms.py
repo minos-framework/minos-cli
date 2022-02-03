@@ -31,7 +31,7 @@ class TestForm(unittest.TestCase):
         self.assertEqual(["bar"], self.form.links)
 
     def test_get_template_uris(self):
-        self.assertEqual(['/path/to/template'], self.form.get_template_uris(answers={"bar": "one"}))
+        self.assertEqual(["/path/to/template"], self.form.get_template_uris(answers={"bar": "one"}))
 
     def test_ask(self):
         with patch("minos.cli.Question.ask", side_effect=["one", "two"]) as mock:
