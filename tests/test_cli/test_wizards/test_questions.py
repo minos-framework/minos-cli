@@ -96,7 +96,7 @@ class TestQuestion(unittest.TestCase):
 
     def test_ask_with_file_storage(self):
         question = Question("foo", "str")
-        with patch("rich.prompt.Prompt.ask", return_value="bar") as mock:
+        with patch("rich.prompt.Prompt.ask", return_value="bar"):
             answer = question.ask()
             self.assertEqual("bar", answer)
 
