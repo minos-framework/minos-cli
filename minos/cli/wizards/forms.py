@@ -2,10 +2,13 @@ from __future__ import (
     annotations,
 )
 
+import pathlib
 from typing import (
     Any,
     Optional,
 )
+
+import yaml
 
 from .questions import (
     Question,
@@ -35,13 +38,22 @@ class Form:
         :param kwargs: Additional named arguments to be passed to each question.
         :return: A mapping from the question names to the obtained answers.
         """
-        answers = dict() if context is None else context.copy()
+        default_answers = dict() if context is None else context.copy()
+        previous_answers = self._read_previous_answers()
+        answers = default_answers.update(previous_answers)
 
         for question in self.questions:
             if question.name not in answers:
                 answers[question.name] = question.ask(context=answers, **kwargs)
 
         return answers
+
+    def _read_previous_answers(self) -> dict[str, str]:
+        answers_file_path = pathlib.Path.cwd() / ".minos-answers.yml"
+        with answers_file_path.open("r") as answers_file:
+            previous_answers = yaml.safe_load(answers_file)
+
+        return previous_answers
 
     @property
     def links(self) -> list[str]:
