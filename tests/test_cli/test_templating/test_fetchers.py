@@ -18,10 +18,10 @@ from minos.cli import (
 
 class TestTemplateFetcher(unittest.TestCase):
     def setUp(self) -> None:
-        self.uri = "https://github.com/Clariteia/minos-templates/releases/download/0.1.0/foo.tar.gz"
+        self.uri = "https://github.com/minos-framework/minos-templates/releases/download/0.1.0/foo.tar.gz"
         self.metadata = {
             "template_name": "foo",
-            "template_registry": "https://github.com/Clariteia/minos-templates/releases/download/0.1.0",
+            "template_registry": "https://github.com/minos-framework/minos-templates/releases/download/0.1.0",
             "template_version": "0.1.0",
         }
         self.fetcher = TemplateFetcher(self.uri, self.metadata)
@@ -34,13 +34,15 @@ class TestTemplateFetcher(unittest.TestCase):
 
     def test_from_url(self):
         fetcher = TemplateFetcher.from_url(
-            "https://github.com/Clariteia/minos-templates/releases/download/0.1.0/foo.tar.gz"
+            "https://github.com/minos-framework/minos-templates/releases/download/0.1.0/foo.tar.gz"
         )
-        self.assertEqual("https://github.com/Clariteia/minos-templates/releases/download/0.1.0/foo.tar.gz", fetcher.uri)
+        self.assertEqual(
+            "https://github.com/minos-framework/minos-templates/releases/download/0.1.0/foo.tar.gz", fetcher.uri
+        )
         self.assertEqual(
             {
                 "template_name": "foo",
-                "template_registry": "https://github.com/Clariteia/minos-templates/releases/download/0.1.0",
+                "template_registry": "https://github.com/minos-framework/minos-templates/releases/download/0.1.0",
             },
             fetcher.metadata,
         )
@@ -54,11 +56,13 @@ class TestTemplateFetcher(unittest.TestCase):
 
     def test_from_name(self):
         fetcher = TemplateFetcher.from_name("foo", "0.1.0")
-        self.assertEqual("https://github.com/Clariteia/minos-templates/releases/download/0.1.0/foo.tar.gz", fetcher.uri)
+        self.assertEqual(
+            "https://github.com/minos-framework/minos-templates/releases/download/0.1.0/foo.tar.gz", fetcher.uri
+        )
         self.assertEqual(
             {
                 "template_name": "foo",
-                "template_registry": "https://github.com/Clariteia/minos-templates/releases/download/0.1.0",
+                "template_registry": "https://github.com/minos-framework/minos-templates/releases/download/0.1.0",
                 "template_version": "0.1.0",
             },
             fetcher.metadata,
