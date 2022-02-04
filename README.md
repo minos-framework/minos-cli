@@ -30,7 +30,7 @@ We need to set some services that our project needs
 ```shell
 minos set database postgres
 minos set broker kafka
-minos set apigateway minos
+minos set api-gateway minos
 minos set discovery minos
 ```
 
