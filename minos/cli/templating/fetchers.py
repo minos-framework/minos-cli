@@ -21,7 +21,7 @@ from ..consoles import (
 )
 
 TEMPLATE_URL: Final[str] = "https://github.com/minos-framework/minos-templates/releases/download"
-TEMPLATE_VERSION: Final[str] = "v0.1.0"
+TEMPLATE_VERSION: Final[str] = "v0.1.1"
 
 
 class TemplateFetcher:
