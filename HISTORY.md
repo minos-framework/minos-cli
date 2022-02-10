@@ -22,3 +22,8 @@
 ## 0.1.1 (2022-02-03)
 
 * Update links to the repository and website.
+
+## 0.1.2 (2022-02-10)
+
+* Docker as default deployer.
+* Fixed bugs.
