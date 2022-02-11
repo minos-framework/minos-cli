@@ -27,3 +27,8 @@
 
 * Docker as default deployer.
 * Fixed bugs.
+
+## 0.1.3 (2022-02-11)
+
+* Deploy command is no longer supported.
+* Quickstart updated for better user experience.
