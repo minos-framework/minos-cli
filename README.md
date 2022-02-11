@@ -21,24 +21,51 @@ structure, you'll get your microservices up and running as fast as you've coded 
 First, we need to create a project to host our microservices
 
 ```shell
-minos new project sample_project
-cd sample_project/
+minos new project testproject
+cd testproject/
 ```
 
-We need to set some services that our project needs
+Our project has dependencies from services that we need to set
 
 ```shell
 minos set database postgres
 minos set broker kafka
-minos set api-gateway minos
 minos set discovery minos
+minos set api-gateway minos
 ```
 
-Once we've gone through all of these steps, the project is ready to accept a new microservice!
+Now we can start these services using Docker
+
+```shell
+docker-compose up -d
+```
+
+Once we've the dependencies set, the project is ready to get a new microservice!
 
 ```shell
 cd microservices/
-minos new microservice foo
+minos new microservice testmicroservice
+```
+
+We're almost there! We now to create the microservice's databases
+
+```shell
+docker-compose exec postgres psql -U minos -tc 'CREATE database testmicroservice_db'
+docker-compose exec postgres psql -U minos -tc 'CREATE database testmicroservice_query_db'
+```
+
+It's time to deploy our microservice
+
+```shell
+cd ..
+docker-compose up -d microservice-testmicroservice
+```
+
+You can test the default endpoints through the `api-gateway` using
+
+```shell
+curl localhost:5566/testmicroservices
+curl -X POST localhost:5566/testmicroservices
 ```
 
 Time to start coding! Yes, already!
