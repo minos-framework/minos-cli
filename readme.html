@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Introduction &mdash; Minos CLI 0.1.2 documentation</title>
+  <title>Introduction &mdash; Minos CLI 0.1.3 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.2
+                0.1.3
               </div>
             
           
@@ -202,20 +202,39 @@ structure, you’ll get your microservices up and running as fast as you’ve co
 <div class="section" id="quickstart">
 <h3>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h3>
 <p>First, we need to create a project to host our microservices</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>minos new project sample_project
-<span class="nb">cd</span> sample_project/
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>minos new project testproject
+<span class="nb">cd</span> testproject/
 </pre></div>
 </div>
-<p>We need to set some services that our project needs</p>
+<p>Our project has dependencies from services that we need to set</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>minos <span class="nb">set</span> database postgres
 minos <span class="nb">set</span> broker kafka
-minos <span class="nb">set</span> api-gateway minos
 minos <span class="nb">set</span> discovery minos
+minos <span class="nb">set</span> api-gateway minos
 </pre></div>
 </div>
-<p>Once we’ve gone through all of these steps, the project is ready to accept a new microservice!</p>
+<p>Now we can start these services using Docker</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker-compose up -d
+</pre></div>
+</div>
+<p>Once we’ve the dependencies set, the project is ready to get a new microservice!</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> microservices/
-minos new microservice foo
+minos new microservice testmicroservice
+</pre></div>
+</div>
+<p>We’re almost there! We now to create the microservice’s databases</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker-compose <span class="nb">exec</span> postgres psql -U minos -tc <span class="s1">&#39;CREATE database testmicroservice_db&#39;</span>
+docker-compose <span class="nb">exec</span> postgres psql -U minos -tc <span class="s1">&#39;CREATE database testmicroservice_query_db&#39;</span>
+</pre></div>
+</div>
+<p>It’s time to deploy our microservice</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ..
+docker-compose up -d microservice-testmicroservice
+</pre></div>
+</div>
+<p>You can test the default endpoints through the <code class="docutils literal notranslate"><span class="pre">api-gateway</span></code> using</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>curl localhost:5566/testmicroservices
+curl -X POST localhost:5566/testmicroservices
 </pre></div>
 </div>
 <p>Time to start coding! Yes, already!</p>

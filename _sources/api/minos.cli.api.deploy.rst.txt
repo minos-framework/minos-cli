@@ -1,7 +1,0 @@
-minos.cli.api.deploy module
-===========================
-
-.. automodule:: minos.cli.api.deploy
-   :members:
-   :undoc-members:
-   :show-inheritance:

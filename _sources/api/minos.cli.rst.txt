@@ -13,7 +13,6 @@ Subpackages
    :maxdepth: 4
 
    minos.cli.api
-   minos.cli.deploying
    minos.cli.templating
    minos.cli.wizards
 

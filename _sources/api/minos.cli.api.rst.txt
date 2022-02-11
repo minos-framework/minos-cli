@@ -12,7 +12,6 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   minos.cli.api.deploy
    minos.cli.api.init
    minos.cli.api.new
    minos.cli.api.set

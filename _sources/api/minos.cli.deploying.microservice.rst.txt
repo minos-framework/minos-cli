@@ -1,7 +1,0 @@
-minos.cli.deploying.microservice module
-=======================================
-
-.. automodule:: minos.cli.deploying.microservice
-   :members:
-   :undoc-members:
-   :show-inheritance:
