@@ -3,7 +3,7 @@ from pathlib import (
 )
 
 MINOS_PROJECT_FILENAME = ".minos-project.yaml"
-MINOS_MICROSERVICE_FILE = ".minos-microservice.yaml"
+MINOS_MICROSERVICE_FILENAME = ".minos-microservice.yaml"
 MICROSERVICES_DIRECTORY = "microservices"
 
 
@@ -31,12 +31,12 @@ def get_microservice_target_directory(path: Path, name: str) -> Path:
     """
     current = path
     while current != current.parent:
-        if (current / MINOS_PROJECT_FILENAME).exists():
-            return current / "microservices"
+        if (current / MINOS_MICROSERVICE_FILENAME).exists():
+            return current
 
         if (current / MINOS_PROJECT_FILENAME).exists():
             target = current / MICROSERVICES_DIRECTORY / name
-            if (target / MINOS_MICROSERVICE_FILE).exists():
+            if (target / MINOS_MICROSERVICE_FILENAME).exists():
                 return target
         current = current.parent
 
