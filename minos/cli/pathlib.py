@@ -1,6 +1,4 @@
-from pathlib import (
-    Path,
-)
+from pathlib import Path
 
 MINOS_PROJECT_FILENAME = ".minos-project.yaml"
 MINOS_MICROSERVICE_FILE = ".minos-microservice.yaml"
