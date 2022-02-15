@@ -2,6 +2,10 @@ from pathlib import (
     Path,
 )
 
+MINOS_PROJECT_FILENAME = ".minos-project.yaml"
+MINOS_MICROSERVICE_FILE = ".minos-microservice.yaml"
+MICROSERVICES_DIRECTORY = "microservices"
+
 
 def get_project_target_directory(path: Path) -> Path:
     """Get the target directory for a project.
@@ -10,9 +14,10 @@ def get_project_target_directory(path: Path) -> Path:
     """
     current = path
     while current != current.parent:
-        if (current / ".minos-project.yaml").exists():
+        if (current / MINOS_PROJECT_FILENAME).exists():
             return current
-        current = current.parent
+        else:
+            current = current.parent
 
     raise ValueError(f"Unable to find the target directory from {path} origin.")
 
@@ -26,13 +31,18 @@ def get_microservice_target_directory(path: Path, name: str) -> Path:
     """
     current = path
     while current != current.parent:
-        if (current / ".minos-microservice.yaml").exists():
-            return current
+        if (current / MINOS_PROJECT_FILENAME).exists():
+            return current / "microservices"
 
-        if (current / ".minos-project.yaml").exists():
-            target = current / "microservices" / name
-            if (target / ".minos-microservice.yaml").exists():
+        if (current / MINOS_PROJECT_FILENAME).exists():
+            target = current / MICROSERVICES_DIRECTORY / name
+            if (target / MINOS_MICROSERVICE_FILE).exists():
                 return target
         current = current.parent
 
     raise ValueError(f"Unable to find the target directory for {name} from {path} origin.")
+
+
+def get_microservices_directory(path: Path) -> Path:
+    project_directory = get_project_target_directory(path)
+    return project_directory / MICROSERVICES_DIRECTORY
