@@ -7,7 +7,9 @@ import typer
 from ..consoles import (
     console,
 )
-from ..pathlib import get_microservices_directory
+from ..pathlib import (
+    get_microservices_directory,
+)
 from ..templating import (
     TemplateFetcher,
     TemplateProcessor,
