@@ -38,3 +38,4 @@
 * Microservices are now created within `microservices` directory.
 * `version` commands added.
 * Minos CLI no longer generates `__pycache__` archives.
+* `init` command is no longer supported.
