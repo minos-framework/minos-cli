@@ -49,7 +49,7 @@ def set_service(service: str, backend: str) -> None:
     try:
         project_path = get_project_target_directory(Path.cwd())
     except ValueError:
-        console.print("No Minos project found. Consider 'minos project init'")
+        console.print("No Minos project found. Consider 'minos new project'")
         raise typer.Exit(code=1)
 
     config_path = project_path / ".minos-project.yaml"

@@ -38,7 +38,7 @@ def new_microservice(name: str) -> None:
     try:
         microservice_path = get_microservices_directory(Path.cwd()) / name
     except ValueError:
-        console.print("No Minos project found. Consider 'minos project init'")
+        console.print("No Minos project found. Consider using 'minos new project'")
         raise typer.Exit(code=1)
 
     fetcher = TemplateFetcher.from_name("microservice-init")
