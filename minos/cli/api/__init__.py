@@ -1,5 +1,8 @@
 import typer
 
+from .. import (
+    __version__,
+)
 from ..consoles import (
     console,
 )
@@ -13,6 +16,12 @@ app.add_typer(init_app, name="init")
 app.add_typer(new_app, name="new")
 app.add_typer(utils_app, name="utils")
 app.add_typer(set_app, name="set")
+
+
+@app.command()
+def version():
+    """CLI's version"""
+    console.print(f"Minos CLI {__version__}")
 
 
 @app.callback()
