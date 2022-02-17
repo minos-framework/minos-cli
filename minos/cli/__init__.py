@@ -1,6 +1,8 @@
 __author__ = "Minos Framework Devs"
 __email__ = "hey@minos.run"
-__version__ = "0.1.3"
+__version__ = "0.2.0"
+
+import sys
 
 from .api import (
     app,
@@ -25,3 +27,5 @@ from .wizards import (
     Form,
     Question,
 )
+
+sys.dont_write_bytecode = True

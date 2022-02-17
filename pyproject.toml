@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "minos-cli"
-version = "0.1.3"
+version = "0.2.0"
 description = "Command Line Interface for the Minos framework"
 readme = "README.md"
 repository = "https://github.com/minos-framework/minos-cli"
