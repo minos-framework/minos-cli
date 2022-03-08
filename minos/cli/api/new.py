@@ -45,6 +45,8 @@ def new_microservice(name: str) -> None:
     processor = TemplateProcessor.from_fetcher(fetcher, microservice_path, defaults={"name": name})
     processor.render()
 
+    (microservice_path / ".build_docker_compose.txt").unlink()
+
 
 @app.callback()
 def callback():
