@@ -51,7 +51,9 @@ from ..wizards import (
     Form,
 )
 from .fetchers import (
-    TemplateFetcher, TEMPLATE_URL, TEMPLATE_VERSION,
+    TEMPLATE_URL,
+    TEMPLATE_VERSION,
+    TemplateFetcher,
 )
 
 logger = logging.getLogger(__name__)
