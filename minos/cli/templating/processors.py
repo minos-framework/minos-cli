@@ -51,7 +51,7 @@ from ..wizards import (
     Form,
 )
 from .fetchers import (
-    TemplateFetcher,
+    TemplateFetcher, TEMPLATE_URL, TEMPLATE_VERSION,
 )
 
 logger = logging.getLogger(__name__)
@@ -136,6 +136,7 @@ class TemplateProcessor:
         """
         answers = self.context
         answers |= self._previous_answers
+        answers |= {"template_registry": f"{TEMPLATE_URL}/{TEMPLATE_VERSION}", "template_version": TEMPLATE_VERSION}
 
         answers = self.form.ask(context=answers, env=self.env)
         self._store_new_answers(answers)
