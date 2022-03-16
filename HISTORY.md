@@ -39,3 +39,11 @@
 * `version` commands added.
 * Minos CLI no longer generates `__pycache__` archives.
 * `init` command is no longer supported.
+
+## 0.2.1 (2022-03-16)
+
+* Updated microservices' query repository.
+* Enhanced defaults Redis Docker container.
+* Automatic databases creation in script SQL file.
+* Fixed bugs
+* Improved versions compatibility.
