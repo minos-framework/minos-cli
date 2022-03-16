@@ -51,8 +51,6 @@ from ..wizards import (
     Form,
 )
 from .fetchers import (
-    TEMPLATE_URL,
-    TEMPLATE_VERSION,
     TemplateFetcher,
 )
 
