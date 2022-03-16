@@ -135,7 +135,7 @@ class TemplateProcessor:
         :return: A mapping from question name to the answer value.
         """
         answers = self.context
-        answers |= self._previous_answers
+        answers |= self._previous_answers_without_template_registry
 
         answers = self.form.ask(context=answers, env=self.env)
         self._store_new_answers(answers)
@@ -153,6 +153,14 @@ class TemplateProcessor:
                 answers |= yaml.safe_load(file)
 
         return answers
+
+    @cached_property
+    def _previous_answers_without_template_registry(self):
+        previous_answers_without_registry = self._previous_answers.copy()
+        previous_answers_without_registry.pop("template_registry", None)
+        previous_answers_without_registry.pop("template_version", None)
+
+        return previous_answers_without_registry
 
     def _store_new_answers(self, answers) -> None:
         with self._answers_file_path.open("w") as file:

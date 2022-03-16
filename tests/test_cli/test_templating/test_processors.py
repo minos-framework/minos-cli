@@ -118,6 +118,40 @@ class TestTemplateProcessor(unittest.TestCase):
                 answers = yaml.safe_load(file)
                 self.assertEqual(expected_answers, answers)
 
+    def test_answers_do_not_override_template_registry_and_version(self):
+        expected_answers = {
+            "foo": "foo_answer",
+            "template_registry": f"{TEMPLATE_URL}/{TEMPLATE_VERSION}",
+            "template_version": TEMPLATE_VERSION,
+        }
+        with TemporaryDirectory() as tmp_dir_name:
+            project_destination = Path(tmp_dir_name)
+            (project_destination / ".minos-project.yaml").touch()
+            minos_answers_file = project_destination / ".minos-answers.yml"
+            minos_answers_file.touch()
+
+            with minos_answers_file.open("w") as file:
+                answers_with_wrong_version = {
+                    "foo": "foo_answer",
+                    "template_registry": f"{TEMPLATE_URL}/wrong_version",
+                    "template_version": "wrong_version",
+                }
+                yaml.dump(
+                    answers_with_wrong_version, file,
+                )
+
+            microservice_destination = project_destination / "microservices" / "foo"
+            microservice_destination.mkdir(parents=True)
+
+            processor = TemplateProcessor.from_fetcher(self.fetcher, microservice_destination,)
+
+            with patch("minos.cli.Form.ask", return_value=expected_answers) as mock:
+                self.assertEqual(expected_answers, processor.answers)
+
+            self.assertEqual(
+                [call(context=processor.context | expected_answers, env=processor.env)], mock.call_args_list,
+            )
+
     def test_answers_without_previous_answers(self):
         with TemporaryDirectory() as tmp_dir_name:
             destination = Path(tmp_dir_name)
