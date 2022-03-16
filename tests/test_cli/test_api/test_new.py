@@ -45,6 +45,8 @@ class TestNew(unittest.TestCase):
     def test_new_microservice(self) -> None:
         with TemporaryDirectory() as tmp_dir_name:
             path = Path(tmp_dir_name) / "product"
+            path.mkdir()
+            (path / ".build_docker_compose.txt").touch()
             with patch("minos.cli.TemplateProcessor.render") as mock:
                 result = CliRunner().invoke(app, ["new", "microservice", str(path)])
 
