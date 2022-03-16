@@ -1,10 +1,6 @@
 import unittest
-from pathlib import (
-    Path,
-)
-from tempfile import (
-    TemporaryDirectory,
-)
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest.mock import (
     PropertyMock,
     call,
@@ -12,9 +8,7 @@ from unittest.mock import (
 )
 
 import yaml
-from jinja2 import (
-    Environment,
-)
+from jinja2 import Environment
 
 from minos.cli import (
     Form,
@@ -137,17 +131,13 @@ class TestTemplateProcessor(unittest.TestCase):
                     "template_version": "wrong_version",
                 }
                 yaml.dump(
-                    answers_with_wrong_version,
-                    file,
+                    answers_with_wrong_version, file,
                 )
 
             microservice_destination = project_destination / "microservices" / "foo"
             microservice_destination.mkdir(parents=True)
 
-            processor = TemplateProcessor.from_fetcher(
-                self.fetcher,
-                microservice_destination,
-            )
+            processor = TemplateProcessor.from_fetcher(self.fetcher, microservice_destination,)
 
             with patch("minos.cli.Form.ask", return_value=expected_answers) as mock:
                 self.assertEqual(expected_answers, processor.answers)
