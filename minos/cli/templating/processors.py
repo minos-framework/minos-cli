@@ -1,8 +1,14 @@
-from __future__ import annotations
+from __future__ import (
+    annotations,
+)
 
 import logging
-from collections.abc import Callable
-from pathlib import Path
+from collections.abc import (
+    Callable,
+)
+from pathlib import (
+    Path,
+)
 from typing import (
     Any,
     Optional,
@@ -11,22 +17,42 @@ from typing import (
 
 import copier
 import yaml
-from cached_property import cached_property
-
+from cached_property import (
+    cached_property,
+)
 # noinspection PyProtectedMember
-from copier.config.factory import filter_config
-from copier.config.objects import EnvOps
-from copier.config.user_data import load_config_data
-
+from copier.config.factory import (
+    filter_config,
+)
+from copier.config.objects import (
+    EnvOps,
+)
+from copier.config.user_data import (
+    load_config_data,
+)
 # noinspection PyProtectedMember
-from copier.tools import get_jinja_env
-from jinja2 import Environment
+from copier.tools import (
+    get_jinja_env,
+)
+from jinja2 import (
+    Environment,
+)
 
-from ..consoles import console
-from ..importlib import FunctionLoader
-from ..pathlib import get_project_target_directory
-from ..wizards import Form
-from .fetchers import TemplateFetcher
+from ..consoles import (
+    console,
+)
+from ..importlib import (
+    FunctionLoader,
+)
+from ..pathlib import (
+    get_project_target_directory,
+)
+from ..wizards import (
+    Form,
+)
+from .fetchers import (
+    TemplateFetcher,
+)
 
 logger = logging.getLogger(__name__)
 

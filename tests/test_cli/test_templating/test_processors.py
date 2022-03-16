@@ -1,6 +1,10 @@
 import unittest
-from pathlib import Path
-from tempfile import TemporaryDirectory
+from pathlib import (
+    Path,
+)
+from tempfile import (
+    TemporaryDirectory,
+)
 from unittest.mock import (
     PropertyMock,
     call,
@@ -8,7 +12,9 @@ from unittest.mock import (
 )
 
 import yaml
-from jinja2 import Environment
+from jinja2 import (
+    Environment,
+)
 
 from minos.cli import (
     Form,
