@@ -45,5 +45,9 @@
 * Updated microservices' query repository.
 * Enhanced defaults Redis Docker container.
 * Automatic databases creation in script SQL file.
-* Fixed bugs
+* Fixed bugs.
 * Improved versions compatibility.
+
+## 0.2.2 (2022-03-18)
+
+* Fixed bugs.
