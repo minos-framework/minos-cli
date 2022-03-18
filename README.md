@@ -34,31 +34,16 @@ minos set discovery minos
 minos set api-gateway minos
 ```
 
-Now we can start these services using Docker
-
-```shell
-docker-compose up -d
-```
-
 Once we've the dependencies set, the project is ready to get a new microservice!
 
 ```shell
-cd microservices/
 minos new microservice testmicroservice
 ```
 
-We're almost there! We now to create the microservice's databases
+It's time to deploy our system
 
 ```shell
-docker-compose exec postgres psql -U minos -tc 'CREATE database testmicroservice_db'
-docker-compose exec postgres psql -U minos -tc 'CREATE database testmicroservice_query_db'
-```
-
-It's time to deploy our microservice
-
-```shell
-cd ..
-docker-compose up -d microservice-testmicroservice
+docker-compose up -d
 ```
 
 You can test the default endpoints through the `api-gateway` using
