@@ -59,3 +59,8 @@
 ## 0.3.1 (2022-04-06)
 
 * Fixed bugs related to microservice testing.
+
+## 0.4.0 (2022-04-29)
+
+* Updated to Minos version `0.7`.
+* Used Confluent's Docker image.
